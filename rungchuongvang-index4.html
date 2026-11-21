@@ -1032,7 +1032,10 @@ body.kg .bl-bang .qr-hop img.qr-anh{width:auto; max-width:100%; min-height:0}
       <div class="the">
         <div class="hang" style="justify-content:space-between">
           <h3>Bộ câu hỏi <span class="chip" id="mc-so-cau">0 câu</span></h3>
-          <button class="b-nho" id="mc-mau">Nạp bộ 100 câu</button>
+          <div class="hang" style="gap:6px">
+            <button class="b-nho" id="mc-xao-ngay" title="Xáo ngẫu nhiên thứ tự toàn bộ câu hỏi">🔀 Xáo câu</button>
+            <button class="b-nho" id="mc-mau">Nạp bộ 100 câu</button>
+          </div>
         </div>
         <div class="ds-cau" id="mc-ds-cau" style="margin-top:10px"></div>
       </div>
@@ -1070,6 +1073,7 @@ D. Baht
             <input id="mc-tieu-de" maxlength="60" placeholder="GAI VÀNG AWARDS"></div>
           <label class="hang" style="gap:8px;font-weight:600"><input type="checkbox" id="mc-an-xh" style="width:auto"> Ẩn bảng xếp hạng trên màn khán giả</label>
           <label class="hang" style="gap:8px;font-weight:600"><input type="checkbox" id="mc-tu-khoa" checked style="width:auto"> Tự khóa chuông khi có đội rung</label>
+          <label class="hang" style="gap:8px;font-weight:600"><input type="checkbox" id="mc-xao" checked style="width:auto"> Xáo trộn thứ tự câu mỗi khi bắt đầu round mới</label>
           <div><label for="mc-giay">Tự sang câu mới sau khi công bố (giây)</label>
             <input id="mc-giay" inputmode="numeric" value="6"></div>
           <label class="hang" style="gap:8px;font-weight:600"><input type="checkbox" id="mc-an-tien" style="width:auto"> Ẩn số tiền donate trên màn khán giả</label>
@@ -4055,6 +4059,7 @@ function khoiDongMC(room, biMat) {
   /* đồng hồ chuông (xem phần ĐỒNG HỒ CHUÔNG) — khai báo sớm vì phat() dùng tới */
   const GIAY_CHO_MO = 3, GIAY_RUNG = 10, GIAY_TRA_LOI = 10;
   let tuMoChuong = false, khoaHan = '';
+  let xaoMoiRound = doc(KHOA + '.xao', true);     // xáo thứ tự câu mỗi khi bắt đầu round mới
   S.han = null; S.hanLoai = null;                  // tải lại trang: bỏ đồng hồ cũ, đếm lại theo pha hiện tại
   for (const id in S.doi) soMoCu[id] = TRO.filter((t, i) => daMo(S.doi[id], i, S.moc, S.mocLua)).length;
 
@@ -4655,16 +4660,31 @@ function khoiDongMC(room, biMat) {
 
   /* ---------- trạng thái trận: chưa bắt đầu → đang chơi ⇄ nghỉ giữa hiệp → kết thúc ---------- */
   function huyLuot() { S.rung = []; S.giu = null; S.chon = null; S.loai = []; }
+  /* ---------- xáo trộn thứ tự câu (Fisher–Yates, số ngẫu nhiên từ crypto) ---------- */
+  function xaoCauHoi() {
+    const r = new Uint32Array(1);
+    for (let i = cauHoi.length - 1; i > 0; i--) {
+      crypto.getRandomValues(r);
+      const j = r[0] % (i + 1);
+      [cauHoi[i], cauHoi[j]] = [cauHoi[j], cauHoi[i]];
+    }
+    luu(KHOA + '.cauhoi', cauHoi);
+    S.qi = 0; S.x2 = null; S.hs = null; S.cd = null; S.cuu = null; cuuChon = null; xongDemCuu();
+  }
+
   function batDauTran() {
     if (!cauHoi.length) { toast('Chưa có câu hỏi nào'); return; }
-    const choiLai = S.tran === 'xong';
+    const roundMoi = S.tran === 'chua' || S.tran === 'xong';
+    const daXao = roundMoi && xaoMoiRound && cauHoi.length > 1;
     S.tran = 'dang'; xoaDem();
+    if (daXao) { xaoCauHoi(); S.pha = 'cho'; huyLuot(); }  // round mới: thứ tự câu mới, chơi từ câu 1
     if (S.pha !== 'hien') { S.pha = 'cho'; huyLuot(); }
     tuMoChuong = true;
     if (S.pha === 'hien') { if (S.qi < cauHoi.length - 1) { doiCau(1); } else { S.pha = 'cho'; huyLuot(); phat(); } }
     else phat();
     Am.mo();
-    guiChatHeThong(choiLai ? '🎬 Trò chơi bắt đầu lại!' : '🎬 Trò chơi bắt đầu! Chuông mở sau ' + GIAY_CHO_MO + ' giây.');
+    guiChatHeThong((roundMoi ? '🎬 Round mới bắt đầu!' : '🎬 Trò chơi bắt đầu!') +
+      (daXao ? ' Thứ tự câu hỏi đã được xáo trộn.' : '') + ' Chuông mở sau ' + GIAY_CHO_MO + ' giây.');
   }
   function nghiTran() {
     if (S.tran !== 'dang') return;
@@ -4697,12 +4717,22 @@ function khoiDongMC(room, biMat) {
     const tt = S.tran || 'chua';
     $('mc-tran-tt').textContent = { chua: 'Chưa bắt đầu', dang: '● Đang chơi', nghi: '⏸ Nghỉ giữa hiệp', xong: '🏁 Đã kết thúc' }[tt];
     show($('mc-bat-dau'), tt === 'chua' || tt === 'xong');
-    $('mc-bat-dau').textContent = tt === 'xong' ? '▶ Chơi tiếp từ câu sau' : '▶ Bắt đầu trò chơi';
+    $('mc-bat-dau').textContent = tt === 'xong'
+      ? (xaoMoiRound ? '▶ Bắt đầu round mới (xáo câu)' : '▶ Chơi tiếp từ câu sau')
+      : '▶ Bắt đầu trò chơi' + (xaoMoiRound ? ' (xáo câu)' : '');
     show($('mc-nghi'), tt === 'dang');
     show($('mc-tiep'), tt === 'nghi');
     show($('mc-ket-thuc'), tt === 'dang' || tt === 'nghi');
   }
   $('mc-bat-dau').addEventListener('click', () => { Am.moKhoa(); batDauTran(); });
+  $('mc-xao').checked = !!xaoMoiRound;
+  $('mc-xao').addEventListener('change', e => { xaoMoiRound = e.target.checked; luu(KHOA + '.xao', xaoMoiRound); ve(); });
+  $('mc-xao-ngay').addEventListener('click', () => {
+    if (S.tran === 'dang') { toast('Đang chơi — bấm Nghỉ giữa hiệp hoặc Kết thúc trước khi xáo câu'); return; }
+    if (cauHoi.length < 2) { toast('Cần ít nhất 2 câu để xáo'); return; }
+    xaoCauHoi(); S.pha = 'cho'; huyLuot(); phat();
+    toast('Đã xáo trộn ' + cauHoi.length + ' câu — bắt đầu từ câu 1 của thứ tự mới');
+  });
   $('mc-nghi').addEventListener('click', nghiTran);
   $('mc-tiep').addEventListener('click', () => { Am.moKhoa(); tiepTran(); });
   $('mc-ket-thuc').addEventListener('click', ketThucTran);
