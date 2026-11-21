@@ -540,15 +540,15 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
     <div class="the">
       <div class="bieu">🎙️</div>
       <h3>Quản trò (MC)</h3>
-      <p class="phu">Tạo phòng, soạn câu hỏi, mở chuông và chấm điểm. Chỉ cần <b>một người</b> làm việc này.</p>
+      <p class="phu">Tạo phòng, soạn câu hỏi và mở chuông.</p>
       <button class="b-chinh b-khoi b-to" id="btn-tao-phong">Tạo phòng mới</button>
       <button class="b-nho b-khoi" id="btn-mo-lai">Mở lại phòng gần nhất</button>
     </div>
 
     <div class="the">
       <div class="bieu">🙋</div>
-      <h3>Tôi là một đội</h3>
-      <p class="phu">Nhập <b>mã đội</b> do quản trò đưa, đặt tên đội rồi vào phòng.</p>
+      <h3>Đội chơi</h3>
+      <p class="phu">Nhập <b>mã đội</b> do quản trò đưa, chọn đúng tên đội của bạn để vào phòng.</p>
       <div style="width:100%" class="cot">
         <input class="o-ma" id="in-ma-doi" maxlength="7" inputmode="latin" autocomplete="off" placeholder="MÃ ĐỘI">
         <select id="in-nha"></select>
@@ -560,7 +560,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
     <div class="the">
       <div class="bieu">📺</div>
       <h3>Màn hình khán giả</h3>
-      <p class="phu">Dành cho máy chiếu / TV. Nhập <b>mã khán giả</b> để hiện câu hỏi, đáp án và bảng xếp hạng.</p>
+      <p class="phu">Màn hình stream. Nhập <b>mã khán giả</b> để xem bảng xếp hạng và theo dõi trực tiếp cuộc thi.</p>
       <div style="width:100%" class="cot">
         <input class="o-ma" id="in-ma-kg" maxlength="7" inputmode="latin" autocomplete="off" placeholder="MÃ KHÁN GIẢ">
         <button class="b-chinh b-khoi b-to" id="btn-vao-kg">Trình chiếu</button>
@@ -569,12 +569,12 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
   </div>
 
   <div class="the" style="margin-top:18px">
-    <h3>Cách chơi trong 4 bước</h3>
+    <h3>Cách chơi</h3>
     <div class="phu" style="margin-top:10px">
       <b>1.</b> Quản trò bấm <i>Tạo phòng mới</i> → nhận <b>3 mã</b>: mã đội, mã khán giả và mã quản trị.<br>
-      <b>2.</b> Gửi mã đội riêng cho các nhà, chiếu mã khán giả lên màn hình, giữ kín mã quản trị.<br>
+      <b>2.</b> Gửi mã đội riêng cho các nhà giữ kín mã quản trị.<br>
       <b>3.</b> Quản trò soạn/dán bộ câu hỏi, chọn câu rồi bấm <i>Mở chuông</i>.<br>
-      <b>4.</b> Đội rung nhanh nhất được quyền trả lời — quản trò bấm <i>Đúng</i> hoặc <i>Sai</i>.
+      <b>4.</b> Đội rung nhanh nhất được quyền trả lời.
     </div>
     <hr class="tach">
     <div class="canh">
@@ -618,7 +618,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
         </div>
       </div>
       <div class="ma-hop">
-        <div class="nhan">🔑 Mã quản trị — chỉ bạn và người duyệt</div>
+        <div class="nhan">🔑 Mã quản trị — chỉ bạn và ban kiểm duyệt</div>
         <div class="gt" id="mc-ma-duyet">----</div>
         <div class="hang" style="gap:6px;margin-top:8px">
           <button class="b-nho" data-sao="duyet-ma">Chép mã</button>
@@ -627,7 +627,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
         </div>
       </div>
       <div class="ma-hop">
-        <div class="nhan">📺 Mã khán giả — chiếu lên màn hình thoải mái</div>
+        <div class="nhan">📺 Mã khán giả</div>
         <div class="gt" id="mc-ma-kg">----</div>
         <div class="hang" style="gap:6px;margin-top:8px">
           <button class="b-nho" data-sao="kg-ma">Chép mã</button>
