@@ -495,7 +495,14 @@ body.doi .toast{bottom:auto; top:10px; max-width:94vw}
 .cuu-hop{text-align:center; border-color:#2E7D32; box-shadow:0 10px 0 #1B5E20}
 .cuu-dau{background:linear-gradient(180deg,#C8F5CE,#8FE39B); margin:-20px -20px 0;
   padding:18px 20px 14px; border-bottom:3px solid #2E7D32; border-radius:var(--r) var(--r) 0 0}
-.cuu-bieu{font-size:42px; line-height:1}
+.cuu-hop{position:relative}
+.cuu-dau{position:relative}
+.cuu-x{position:absolute; top:10px; right:10px; width:38px; height:38px; padding:0; border-radius:50%;
+  background:#fff; border:2.5px solid #1B5E20; color:#1B5E20; font-size:26px; line-height:1; font-weight:800;
+  display:grid; place-items:center; cursor:pointer; box-shadow:0 3px 0 #1B5E20; z-index:2}
+.cuu-x:hover{background:#E8FBEB}
+.cuu-hop button.cuu-x{font-size:30px; padding:0 0 3px; font-family:Arial, sans-serif; font-weight:700}
+.cuu-hop h2{padding:0 40px}
 .cuu-hop h2{font-size:clamp(17px,4.4vw,22px); margin-top:6px; color:#14401A}
 .cuu-nha{font-family:var(--font-tt); font-size:clamp(22px,6vw,32px); color:#0E2F12; margin-top:2px;
   word-break:break-word}
@@ -1092,10 +1099,10 @@ D. Baht
 <div class="lop-phu hidden" id="cuu-lop">
   <div class="hop-thoai cuu-hop">
     <div class="cuu-dau">
-      <div class="cuu-bieu">🫂</div>
+      <button type="button" class="cuu-x" id="cuu-dong" aria-label="Đóng">×</button>
       <h2 id="cuu-tieu">Bạn Đã Được Chọn Để Giải Cứu Nhà</h2>
       <div class="cuu-nha" id="cuu-nha">—</div>
-      <p class="cuu-nhac">Hãy chọn câu trả lời đúng cho câu hỏi sau</p>
+      <p class="cuu-nhac">Vận mệnh nhà này đang ở trong tay bạn</p>
       <div class="cuu-dong-ho" id="cuu-dong-ho"><span id="cuu-giay">25</span>s</div>
     </div>
     <h3 class="cau-hoi" id="cuu-cau-hoi" style="margin-top:14px">…</h3>
@@ -4577,13 +4584,19 @@ function khoiDongKhanGia(room) {
   window.addEventListener('beforeunload', () => { try { net.gui(T + 'kgco/' + kgId, ''); } catch (e) {} });
 
   /* ---------- được gọi làm người thân hỗ trợ ---------- */
-  let cuuDaGui = null, cuuChon = null, cuuDangVe = null;
+  let cuuDaGui = null, cuuChon = null, cuuDangVe = null, cuuDaDong = null;
+  /* nút × : đóng lượt giải cứu này, không bật lại mỗi giây nữa */
+  $('cuu-dong').addEventListener('click', () => {
+    const c = S && S.cuu;
+    if (c) cuuDaDong = c.teamId + '|' + c.qi;
+    show($('cuu-lop'), false);
+  });
   function veCuu() {
     const c = S && S.cuu;
     const cuaToi = c && c.kgId === kgId;
-    show($('cuu-lop'), !!cuaToi);
+    const khoa = cuaToi ? c.teamId + '|' + c.qi : null;
+    show($('cuu-lop'), !!cuaToi && cuuDaDong !== khoa);
     if (!cuaToi) { cuuDangVe = null; return; }
-    const khoa = c.teamId + '|' + c.qi;
     const xong = cuuDaGui === khoa;
 
     /* đồng hồ nhảy mỗi giây — chỉ sửa mấy chữ này thôi */
