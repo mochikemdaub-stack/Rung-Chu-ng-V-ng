@@ -1687,7 +1687,7 @@ function veKhungQR(khung, nha, tuy) {
     img.loading = 'eager'; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
     img.className = 'qr-anh';
     img.src = anh;
-    const goiY = el('p', 'qr-goi-y', '👆 Bấm vào ảnh để thấy hình mã QR to');
+    const goiY = el('p', 'qr-goi-y', '👇 Bấm vào ảnh để thấy hình mã QR to');
     khung.appendChild(goiY);
     img.title = 'Bấm để phóng to mã QR';
     img.addEventListener('click', () => { $('phong-to-img').src = img.currentSrc || img.src; $('phong-to-img').alt = img.alt; show($('phong-to'), true); });
