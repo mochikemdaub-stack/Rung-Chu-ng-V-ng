@@ -503,6 +503,14 @@ body.doi .toast{bottom:auto; top:10px; max-width:94vw}
 .cuu-x:hover{background:#E8FBEB}
 .cuu-hop button.cuu-x{font-size:30px; padding:0 0 3px; font-family:Arial, sans-serif; font-weight:700}
 .cuu-hop h2{padding:0 40px}
+/* ---- đồng hồ đếm ngược chuông ---- */
+.dem-nguoc{display:inline-flex; align-items:center; gap:6px; padding:4px 14px; border-radius:999px;
+  background:#fff; border:var(--vien); font-family:var(--font-tt); font-weight:800; font-size:15px;
+  color:var(--nau); white-space:nowrap}
+.dem-nguoc.gap{background:linear-gradient(180deg,#FF8A93,var(--do)); color:#fff; animation:dem-nhay .5s ease-in-out infinite alternate}
+@keyframes dem-nhay{from{transform:scale(1)}to{transform:scale(1.07)}}
+@media(prefers-reduced-motion:reduce){.dem-nguoc.gap{animation:none}}
+body.kg .dem-nguoc{font-size:clamp(14px,1.3vw,20px)}
 .cuu-hop h2{font-size:clamp(17px,4.4vw,22px); margin-top:6px; color:#14401A}
 .cuu-nha{font-family:var(--font-tt); font-size:clamp(22px,6vw,32px); color:#0E2F12; margin-top:2px;
   word-break:break-word}
@@ -600,7 +608,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
     <div class="the">
       <div class="bieu">🎙️</div>
       <h3>Quản trò (MC)</h3>
-      <p class="phu">Tạo phòng, soạn câu hỏi và mở chuông.</p>
+      <p class="phu">Tạo phòng, soạn câu hỏi và điều khiển trận đấu.</p>
       <button class="b-chinh b-khoi b-to" id="btn-tao-phong">Tạo phòng mới</button>
       <button class="b-nho b-khoi" id="btn-mo-lai">Mở lại phòng gần nhất</button>
     </div>
@@ -633,7 +641,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
     <div class="phu" style="margin-top:10px">
       <b>1.</b> Quản trò bấm <i>Tạo phòng mới</i> → nhận <b>3 mã</b>: mã đội, mã khán giả và mã quản trị.<br>
       <b>2.</b> Gửi mã đội riêng cho các nhà giữ kín mã quản trị.<br>
-      <b>3.</b> Quản trò soạn/dán bộ câu hỏi, chọn câu rồi bấm <i>Mở chuông</i>.<br>
+      <b>3.</b> Quản trò soạn/dán bộ câu hỏi rồi chọn câu — chuông <i>tự mở sau 3 giây</i>, các đội có 10 giây để rung.<br>
       <b>4.</b> Đội rung nhanh nhất được quyền trả lời.
     </div>
     <hr class="tach">
@@ -714,16 +722,16 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 
         <hr class="tach">
         <div class="hang">
-          <button class="b-xanh b-to" id="mc-mo-chuong">🔔 Mở chuông</button>
-          <button class="b-nho" id="mc-khoa">Khóa chuông</button>
+          <span class="dem-nguoc hidden" id="mc-dem"></span>
           <button class="b-chinh" id="mc-hien">Công bố &amp; sang câu</button>
           <button class="b-nho" id="mc-xoa-rung">Xóa lượt rung</button>
         </div>
+        <p class="phu" style="margin-top:8px">Chuông <b>tự mở 3 giây</b> sau khi chuyển câu · <b>10 giây</b> để rung chuông · <b>10 giây</b> để trả lời. Bắt đầu trận: bấm <b>Câu 1</b> trong Bộ câu hỏi (hoặc Sau ›).</p>
       </div>
 
       <div class="the">
         <h3>Lượt rung chuông</h3>
-        <p class="phu" id="mc-rung-trong" style="margin-top:8px">Chưa có đội nào rung. Bấm <b>Mở chuông</b> để các đội bắt đầu rung.</p>
+        <p class="phu" id="mc-rung-trong" style="margin-top:8px">Chưa có đội nào rung. Chuông tự mở 3 giây sau khi chuyển câu.</p>
         <div class="xh" id="mc-rung-ds" style="margin-top:10px"></div>
         <div class="hang" id="mc-cham" style="margin-top:12px"></div>
       </div>
@@ -750,7 +758,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
           <h3>🔮 Dự đoán nhà vô địch <span class="chip" id="mc-dd-tt">Chưa mở</span></h3>
           <span class="chip" id="mc-dd-so">0 lượt</span>
         </div>
-        <p class="phu" style="margin-top:8px">Mở trước khi bắt đầu thi: mọi khán giả thấy popup chọn nhà sẽ thắng chung cuộc. Bấm <b>Mở chuông</b> lần đầu thì dự đoán tự khoá. Cuối trận công bố nhà vô địch — ai đoán đúng sẽ thấy pháo hoa.</p>
+        <p class="phu" style="margin-top:8px">Mở trước khi bắt đầu thi: mọi khán giả thấy popup chọn nhà sẽ thắng chung cuộc. Chuông mở lần đầu thì dự đoán tự khoá. Cuối trận công bố nhà vô địch — ai đoán đúng sẽ thấy pháo hoa.</p>
         <div class="hang" style="margin-top:10px;gap:6px">
           <button class="b-chinh" id="mc-dd-mo">Mở dự đoán</button>
           <button class="b-nho" id="mc-dd-khoa">Khoá dự đoán</button>
@@ -953,6 +961,7 @@ D. Baht
   </div>
 
   <div class="chuong-vung">
+    <span class="dem-nguoc hidden" id="doi-dem" style="margin-bottom:8px"></span>
     <button class="nut-chuong" id="doi-chuong" disabled>
       <span class="glyph">🔔</span>
       <span id="doi-chuong-chu">CHỜ CÂU HỎI</span>
@@ -993,7 +1002,7 @@ D. Baht
 
   <div class="kg-luoi">
     <div class="the">
-      <span class="cau-so" id="kg-cau-so">Chờ quản trò</span>
+      <div class="hang" style="gap:8px"><span class="cau-so" id="kg-cau-so">Chờ quản trò</span><span class="dem-nguoc hidden" id="kg-dem"></span></div>
       <h2 class="cau-hoi" id="kg-cau-hoi">Chờ câu hỏi đầu tiên…</h2>
       <div class="dap-an" id="kg-dap-an"></div>
     </div>
@@ -1582,6 +1591,36 @@ function taoHangLog(phong, khoaLuu, layKhoa, onTrangThai) {
     },
     xa,
     con: () => Object.values(hang).reduce((a, d) => a + d.length, 0),
+  };
+}
+
+/* ---------- đồng hồ đếm ngược chuông (dùng chung cho MC / đội / khán giả) ---------- */
+function nhanDemNguoc(loai, con, tenDoi, laToi) {
+  if (loai === 'cho') return '🔔 Chuông mở sau ' + con + 's';
+  if (loai === 'mo')  return '⏱ ' + con + 's để rung chuông';
+  if (loai === 'tl')  return '⏱ ' + (laToi ? 'Bạn' : (tenDoi || 'Đội')) + ' còn ' + con + 's trả lời';
+  return '';
+}
+/* state mang "han" = số ms còn lại lúc quản trò gửi; máy này tự đếm theo đồng hồ của nó */
+function taoDemNguoc(node, layTen) {
+  let den = 0, loai = null, S = null;
+  function ve() {
+    if (!node) return;
+    if (!den || !loai) { show(node, false); return; }
+    const con = Math.max(0, Math.ceil((den - Date.now()) / 1000));
+    const t = layTen(S) || {};
+    node.textContent = nhanDemNguoc(loai, con, t.ten, t.laToi);
+    node.classList.toggle('gap', con <= 3);
+    show(node, true);
+  }
+  setInterval(ve, 250);
+  return {
+    nhan(s) {
+      S = s;
+      if (s && s.han != null && s.hanLoai) { den = Date.now() + Math.max(0, Number(s.han) || 0); loai = s.hanLoai; }
+      else { den = 0; loai = null; }
+      ve();
+    },
   };
 }
 
@@ -2913,6 +2952,10 @@ function khoiDongMC(room, biMat) {
   const hangLog = taoHangLog(codes.kg, KHOA + '.hanglog', () => doc('logkey', ''), veLogTT);
   /* số quyền đã mở của từng nhà -> phát hiện lúc vừa mở thêm quyền */
   const soMoCu = {};
+  /* đồng hồ chuông (xem phần ĐỒNG HỒ CHUÔNG) — khai báo sớm vì phat() dùng tới */
+  const GIAY_CHO_MO = 3, GIAY_RUNG = 10, GIAY_TRA_LOI = 10;
+  let tuMoChuong = false, khoaHan = '';
+  S.han = null; S.hanLoai = null;                  // tải lại trang: bỏ đồng hồ cũ, đếm lại theo pha hiện tại
   for (const id in S.doi) soMoCu[id] = TRO.filter((t, i) => daMo(S.doi[id], i, S.moc, S.mocLua)).length;
 
   /* chỉ gọi người thân trong số khán giả ĐÃ NHẬP TÊN — màn chiếu không nhập tên
@@ -3011,11 +3054,14 @@ function khoiDongMC(room, biMat) {
              chatMo: S.chatMo !== false, chatTu: S.chatTu || 0, cho: S.cho || [], daCK: S.daCK || [],
              dem: S.dem, micMo: S.micMo || [], rxMo: S.rxMo !== false, khoaPhong: !!S.khoaPhong,
              kieuThoai: S.kieuThoai === 'p2p' ? 'p2p' : 'mc', cuu: S.cuu || null,
-             mocLua: S.mocLua, duDoan: S.duDoan || null };
+             mocLua: S.mocLua, duDoan: S.duDoan || null,
+             /* thời gian CÒN LẠI (ms) chứ không gửi mốc giờ: đồng hồ máy khán giả có thể lệch */
+             han: S.han ? Math.max(0, S.han - Date.now()) : null, hanLoai: S.han ? S.hanLoai : null };
              /* KHÔNG gửi token đối soát: nó chỉ được lưu ở máy quản trò */
   }
 
   function phat() {
+    capNhatHan();
     S.seq++;
     luu(KHOA + '.state', S);
     net.gui(T + 'state', catState(), true);
@@ -3432,6 +3478,7 @@ function khoiDongMC(room, biMat) {
     xoaDem();
     S.qi = moi; S.pha = 'cho'; S.rung = []; S.giu = null; S.chon = null; S.loai = [];
     S.x2 = null; S.hs = null; S.cd = null; S.cuu = null; cuuChon = null; xongDemCuu();
+    tuMoChuong = true;                                 // câu mới -> chuông tự mở sau GIAY_CHO_MO
     phat();
   }
   function nhayCau(i) {
@@ -3439,8 +3486,57 @@ function khoiDongMC(room, biMat) {
     xoaDem();
     S.qi = i; S.pha = 'cho'; S.rung = []; S.giu = null; S.chon = null; S.loai = [];
     S.x2 = null; S.hs = null; S.cd = null; S.cuu = null; cuuChon = null; xongDemCuu();
+    tuMoChuong = true;
     phat();
   }
+
+  /* ============================================================
+     ĐỒNG HỒ CHUÔNG (bàn quản trò là nơi duy nhất tính giờ)
+     cho : chuông tự mở sau GIAY_CHO_MO giây khi sang câu mới
+     mo  : các đội có GIAY_RUNG giây để rung; hết giờ không ai rung -> công bố
+     tl  : đội giữ quyền có GIAY_TRA_LOI giây để chọn; hết giờ -> tính sai, chuyển lượt
+     ============================================================ */
+  function datHan(loai, giay) { S.han = Date.now() + giay * 1000; S.hanLoai = loai; }
+  function xoaHan() { S.han = null; S.hanLoai = null; }
+  /* gọi trong phat(): nhìn trạng thái hiện tại để đặt lại đồng hồ khi pha / đội giữ quyền đổi */
+  function capNhatHan() {
+    const k = S.pha + '|' + (S.giu || '') + '|' + S.luot + '|' + S.qi;
+    if (k === khoaHan && !tuMoChuong) return;          // chuyển câu (kể cả bấm lại câu đang đứng) luôn đặt lại
+    khoaHan = k;
+    if (S.pha === 'cho' && tuMoChuong && cauHoi.length) datHan('cho', GIAY_CHO_MO);
+    else if (S.pha === 'mo') datHan('mo', GIAY_RUNG);
+    else if (S.pha === 'khoa' && S.giu) datHan('tl', GIAY_TRA_LOI);
+    else xoaHan();
+    tuMoChuong = false;
+  }
+  /* đang gọi người thân hỗ trợ: dừng đồng hồ trả lời, xong lượt cứu thì đếm lại từ đầu */
+  const dangCuu = () => !!(S.cuu && !S.cuu.daTraLoi && !S.cuu.hetGio && (Number(S.cuu.con) || 0) > 0);
+  setInterval(() => {
+    if (!S.han) return;
+    if (S.hanLoai === 'tl' && dangCuu()) { S.han = Date.now() + GIAY_TRA_LOI * 1000; return; }
+    if (Date.now() < S.han) return;
+    const loai = S.hanLoai; xoaHan();
+    if (loai === 'cho' && S.pha === 'cho') { moChuong(); return; }
+    if (loai === 'mo' && S.pha === 'mo') {
+      if (S.rung.some(r => S.loai.indexOf(r.teamId) < 0)) { khoaChuong(); return; }   // có đội rung (khi tắt tự khoá)
+      toast('Hết ' + GIAY_RUNG + ' giây — không đội nào rung chuông');
+      hienDapAn(); return;
+    }
+    if (loai === 'tl' && S.pha === 'khoa' && S.giu && S.doi[S.giu]) {
+      toast(S.doi[S.giu].ten + ' hết ' + GIAY_TRA_LOI + ' giây trả lời');
+      chamTuDong(S.giu, -1); return;                   // -1: không có đáp án -> tính là sai
+    }
+    phat();
+  }, 250);
+  /* đồng hồ hiển thị trên bàn quản trò */
+  setInterval(() => {
+    const o = $('mc-dem');
+    if (!S.han) { show(o, false); return; }
+    const con = Math.max(0, Math.ceil((S.han - Date.now()) / 1000));
+    o.textContent = nhanDemNguoc(S.hanLoai, con, S.giu && S.doi[S.giu] ? S.doi[S.giu].ten : '', false);
+    o.classList.toggle('gap', con <= 3);
+    show(o, true);
+  }, 250);
 
   /* ---------- hệ thống tự chấm ----------
      Đáp án đúng đã nằm sẵn trong bộ câu hỏi nên không cần quản trò phán xử. */
@@ -3513,7 +3609,6 @@ function khoiDongMC(room, biMat) {
     const tenPha = { cho:'Chờ', mo:'Chuông đang mở', khoa:'Đã khóa', hien:'Đã công bố' }[S.pha];
     const p = $('mc-pha'); p.className = 'pha ' + S.pha; p.textContent = tenPha;
 
-    $('mc-mo-chuong').disabled = !cauHoi.length;
     $('mc-truoc').disabled = S.qi <= 0;
     $('mc-sau').disabled = S.qi >= cauHoi.length - 1;
     $('mc-so-cau').textContent = cauHoi.length + ' câu';
@@ -3973,8 +4068,6 @@ function khoiDongMC(room, biMat) {
   /* ---------- quyền trợ giúp từng nhà (việc của ván đấu, không phải của tiền) ---------- */
 
   /* ---------- gắn sự kiện ---------- */
-  $('mc-mo-chuong').addEventListener('click', () => { Am.moKhoa(); moChuong(); });
-  $('mc-khoa').addEventListener('click', khoaChuong);
   $('mc-hien').addEventListener('click', hienDapAn);
   $('mc-xoa-rung').addEventListener('click', xoaRung);
   $('mc-truoc').addEventListener('click', () => doiCau(-1));
@@ -4156,8 +4249,7 @@ function khoiDongMC(room, biMat) {
   /* bàn phím cho quản trò */
   document.addEventListener('keydown', e => {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.code === 'Space') { e.preventDefault(); Am.moKhoa(); S.pha === 'mo' ? khoaChuong() : moChuong(); }
-    else if (e.key === 'ArrowRight') doiCau(1);
+    if (e.key === 'ArrowRight') doiCau(1);
     else if (e.key === 'ArrowLeft')  doiCau(-1);
     else if (e.key === 'h' || e.key === 'H') hienDapAn();
   });
@@ -4195,6 +4287,8 @@ function khoiDongDoi(room, ten) {
   /* máy có bàn phím thật thì nhắc phím cách; điện thoại thì không */
   const coBanPhim = (() => { try { return matchMedia('(hover:hover) and (pointer:fine)').matches; } catch (e) { return false; } })();
   show($('doi-space'), coBanPhim);
+  const demDoi = taoDemNguoc($('doi-dem'), s => ({
+    ten: s && s.giu && s.doi && s.doi[s.giu] ? s.doi[s.giu].ten : '', laToi: !!(s && s.giu === id) }));
 
   net.theo(T + 'state', (_t, body) => {
     if (!body) return;
@@ -4203,6 +4297,7 @@ function khoiDongDoi(room, ten) {
     if (S && typeof m.seq === 'number' && typeof S.seq === 'number' && m.seq < S.seq) return;  // tin cũ
     const truoc = S;
     S = m;
+    demDoi.nhan(S);
     /* ghi mốc thời gian ngay khi thấy chuông mở cho một lượt mới */
     if (S.pha === 'mo' && S.luot !== luotDaThay) {
       luotDaThay = S.luot; mocMo = performance.now(); rtCuaToi = null;
@@ -4447,13 +4542,13 @@ function khoiDongDoi(room, ten) {
     else if (S.giu === id)                 { t1 = 'MỜI BẠN TRẢ LỜI!'; t2 = goiYCuaToi ? 'Người thân mách ' + CHU[goiYCuaToi.chon] + ' — bạn quyết' : 'Chạm vào đáp án bạn chọn'; }
     else if (S.giu)                        { const g = (S.doi || {})[S.giu]; t1 = 'ĐỘI KHÁC TRẢ LỜI'; t2 = g ? g.ten : ''; }
     else if (coTheRung())                  { bat = true; t1 = 'RUNG CHUÔNG'; t2 = coBanPhim ? 'Nhấn phím cách ␣' : 'Bấm thật nhanh!'; nutChuong.classList.add('san-sang'); }
+    else if (S.pha === 'cho')              { t1 = 'CHỜ MỞ CHUÔNG'; t2 = 'Chuông tự mở sau vài giây'; }
     else if (daRungLuot === S.luot || (S.rung || []).some(r => r.teamId === id)) {
       const v = (S.rung || []).findIndex(r => r.teamId === id);
       const rt = v >= 0 ? S.rung[v].rt : rtCuaToi;
       t1 = 'ĐÃ RUNG' + (v >= 0 ? ' · #' + (v + 1) : '');
       t2 = rt != null ? (rt / 1000).toFixed(2) + ' giây' : 'Đang gửi…';
     }
-    else if (S.pha === 'cho')              { t1 = 'CHỜ MỞ CHUÔNG'; t2 = 'Quản trò sắp mở chuông'; }
     else                                   { t1 = 'CHUÔNG ĐÃ KHÓA'; t2 = ''; }
 
     chu.textContent = t1; phu.textContent = t2;
@@ -4525,6 +4620,7 @@ function khoiDongKhanGia(room) {
   const net = taoNet();
   document.body.classList.add('kg');
   let S = null, rungTruoc = 0;
+  const demKg = taoDemNguoc($('kg-dem'), s => ({ ten: s && s.giu && s.doi && s.doi[s.giu] ? s.doi[s.giu].ten : '', laToi: false }));
 
   net.theo(T + 'state', (_t, body) => {
     if (!body) return;
@@ -4532,6 +4628,7 @@ function khoiDongKhanGia(room) {
     if (!m || typeof m !== 'object') return;
     if (S && typeof m.seq === 'number' && typeof S.seq === 'number' && m.seq < S.seq) return;
     const truoc = S; S = m;
+    demKg.nhan(S);
     const soRung = (S.rung || []).length;
     if (soRung > rungTruoc) Am.chuong();
     rungTruoc = soRung;
