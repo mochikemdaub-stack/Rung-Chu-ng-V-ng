@@ -1391,9 +1391,6 @@ D. Baht
     <label style="margin-top:14px">Tên của bạn</label>
     <input id="buff-ten" maxlength="24" autocomplete="off" placeholder="Để quản trò biết ai buff">
 
-    <label for="buff-lk" style="margin-top:14px">Link biên lai sau khi chuyển (nên có)</label>
-    <input id="buff-lk" autocomplete="off" placeholder="Dán link biên lai từ app ngân hàng">
-    <p class="phu" id="buff-lk-ghi" style="margin-top:6px">Chuyển xong, bấm “Chia sẻ biên lai” trong app ngân hàng rồi dán link vào đây — quản trò mở ra đối chiếu là duyệt ngay. Mỗi biên lai chỉ dùng được một lần.</p>
 
     <label for="buff-anh" style="margin-top:14px">Ảnh chụp màn hình chuyển khoản</label>
     <input type="file" id="buff-anh" accept="image/*">
@@ -4162,7 +4159,7 @@ function khoiDongMC(room, biMat) {
     const trung = !!(bl && (S.daCK || []).indexOf(bl.khoa) >= 0);
     S.cho.push({ bid, ten: String(m.ten == null ? '' : m.ten).trim().slice(0, 24) || 'Khán giả',
                  so, teamId: d.id, t: Date.now(),
-                 lk: bl ? bl.url : '', lkNh: bl ? bl.nh : '', trung, anh: !!m.anh });
+                 lk: bl ? bl.url : '', lkNh: bl ? bl.nh : '', trung, anh: !!m.anh, anhSo: !!m.anhSo });
     Am.hien(); phat();
   });
 
@@ -6156,10 +6153,12 @@ function khoiDongKhanGia(room) {
   let anhDaChon = null;
   function ghiAnh() {
     const o = $('buff-anh-ghi');
-    if (!coCrypto()) { o.textContent = 'Trình duyệt này không hỗ trợ mã hoá nên không gửi ảnh được. Bạn vẫn có thể dán link biên lai.'; $('buff-anh').disabled = true; return; }
-    if (!khoaCong) { o.textContent = 'Trang duyệt chưa mở nên chưa gửi được ảnh. Bạn vẫn có thể dán link biên lai.'; $('buff-anh').disabled = true; return; }
+    /* ảnh luôn gửi được: luôn lưu vào sổ giao dịch (Google Drive riêng, qua HTTPS);
+       nếu trang duyệt đang mở thì gửi thêm bản mã hoá cho người duyệt xem ngay */
     $('buff-anh').disabled = false;
-    o.innerHTML = 'Ảnh được <b>mã hoá</b> trước khi gửi, chỉ người duyệt mở được.';
+    o.innerHTML = (coCrypto() && khoaCong)
+      ? 'Ảnh được <b>mã hoá</b> gửi cho người duyệt và lưu vào sổ giao dịch.'
+      : 'Ảnh được lưu riêng tư vào sổ giao dịch để ban kiểm duyệt đối chiếu.';
   }
 
   $('buff-anh').addEventListener('change', async e => {
@@ -6201,19 +6200,10 @@ function khoiDongKhanGia(room) {
     if (!so || so <= 0) { toast('Số tiền không hợp lệ'); return; }
     const ten = $('buff-ten').value.trim().slice(0, 24) || 'Khán giả';
     luu(khoaTen, ten);
-    const lkRaw = $('buff-lk').value.trim();
-    let lk = '';
-    if (lkRaw) {
-      const bl = docBienLai(lkRaw);
-      if (!bl) { toast('Link biên lai không hợp lệ'); $('buff-lk').focus(); return; }
-      if (((S && S.daCK) || []).indexOf(bl.khoa) >= 0) {
-        toast('Biên lai này đã được dùng rồi'); $('buff-lk').focus(); return;
-      }
-      lk = bl.url;
-    }
+    const lk = '';                                   // đã bỏ trường link biên lai, đối chiếu bằng ảnh
     const bid = 'b' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
     const guiAnh = !!(anhDaChon && khoaCong && coCrypto());
-    net.gui(T + 'buff', { bid, ten, so, teamId: buffNha, lk, anh: guiAnh });
+    net.gui(T + 'buff', { bid, ten, so, teamId: buffNha, lk, anh: guiAnh, anhSo: !!anhDaChon });
     if (guiAnh) {
       maHoaAnh(anhDaChon, khoaCong)
         .then(goi => net.gui(T + 'anh/' + bid, goi, true))
@@ -6232,7 +6222,7 @@ function khoiDongKhanGia(room) {
       if (!r.ok && r.status !== 503) toast('Đã gửi cho quản trò, nhưng chưa lưu được vào sổ giao dịch — nếu cần hãy báo ban kiểm duyệt.');
     })();
     anhDaChon = null;
-    $('buff-anh').value = ''; $('buff-lk').value = ''; show($('buff-anh-xem'), false);
+    $('buff-anh').value = ''; show($('buff-anh-xem'), false);
     show($('buff-lop'), false);
     $('buff-khac').value = '';
     toast('Đã gửi! Quản trò sẽ xác nhận sau khi nhận được chuyển khoản.');
@@ -6589,6 +6579,8 @@ function khoiDongDuyet(room, biMat) {
         trai.appendChild(el('div', 'duyet-khong', 'Có ảnh nhưng không giải mã được — ảnh gửi cho một phiên duyệt khác'));
       } else if (y.anh) {
         trai.appendChild(el('div', 'duyet-khong', 'Đang nhận ảnh…'));
+      } else if (y.anhSo) {
+        trai.appendChild(el('div', 'duyet-khong', 'Ảnh đã lưu vào Google Drive — xem ở cột “Ảnh chuyển khoản”, sheet Buff (Mã GD ' + y.bid + ')'));
       } else {
         trai.appendChild(el('div', 'duyet-khong', 'Không kèm ảnh'));
       }
@@ -6610,7 +6602,7 @@ function khoiDongDuyet(room, biMat) {
         return a;
       };
       if (y.lk) hangLink.appendChild(lamNut('🧾 Mở biên lai', y.lk));
-      if (nha && nha.lkSao) hangLink.appendChild(lamNut('📊 Sao kê quỹ ' + nha.ten, nha.lkSao));
+      if (nha && nha.lkSao) hangLink.appendChild(lamNut('📊 Sao kê quỹ ' + tenBuff(nha), nha.lkSao));
       if (hangLink.children.length) phai.appendChild(hangLink);
       if (nha && !nha.lkSao) phai.appendChild(el('div', 'lech',
         'Quỹ nhà này chưa có link sao kê — quản trò thêm ở mục “Quỹ & quyền trợ giúp”'));
