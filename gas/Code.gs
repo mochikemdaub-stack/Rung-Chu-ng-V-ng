@@ -107,3 +107,10 @@ function markBuff_(rows) {
     if (hit) sh.getRange(hit.getRow(), cSt).setValue(kq + ' · ' + r[0]);
   });
 }
+
+/* Run once from the editor to create the Drive folder and grant permissions. */
+function setup() {
+  folder_(PropertiesService.getScriptProperties());
+  sheet_('Buff', ['Thời gian', 'Phòng', 'Mã GD', 'Người gửi', 'Nhà', 'Số tiền', 'Link biên lai',
+                  'Ảnh chuyển khoản', 'Trạng thái', 'IP (băm)', 'Trình duyệt']);
+}
