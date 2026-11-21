@@ -513,6 +513,170 @@ body.doi .toast{bottom:auto; top:10px; max-width:94vw}
 @keyframes dem-nhay{from{transform:scale(1)}to{transform:scale(1.07)}}
 @media(prefers-reduced-motion:reduce){.dem-nguoc.gap{animation:none}}
 body.kg .dem-nguoc{font-size:clamp(14px,1.3vw,20px)}
+
+/* =====================================================================
+   BỐ CỤC GỌN (v2): dải thông báo ~1/2, khung nhỏ lại, màn đội 2 cột
+   ===================================================================== */
+/* dải "X rung trước!", "người thân đã mách", kết quả dự đoán, trạng thái trận: còn ~1/2 */
+.bang-rung{padding:7px 12px; gap:8px; border-radius:var(--r-nho); box-shadow:var(--do-bong-nho)}
+.bang-rung .ten{font-size:clamp(14px,1.6vw,19px)}
+.bang-rung .tg{font-size:12px; padding:2px 9px}
+.cuu-dai{padding:5px 10px; gap:8px; margin-bottom:8px; font-size:clamp(12px,1vw,14px); box-shadow:0 3px 0 #1B5E20}
+.cuu-dai .bi{font-size:1.1em}
+.cuu-dai .dh{padding:0 9px; border-width:2px}
+.dd-ket{padding:5px 10px; gap:8px; margin-bottom:8px; font-size:13px; box-shadow:var(--do-bong-nho)}
+.tran-ket{padding:6px 12px; margin-bottom:8px; border:var(--vien); border-radius:var(--r-nho); font-weight:800;
+  font-size:14px; background:#fff; box-shadow:var(--do-bong-nho)}
+.tran-ket.nghi{background:linear-gradient(180deg,#E3F2FD,#BBDEFB)}
+.tran-ket.xong{background:linear-gradient(180deg,#FFF3B0,#FFD54A)}
+body.doi .bang-rung{padding:6px 10px}
+body.doi .bang-rung .ten{font-size:clamp(14px,3.6vw,18px)}
+#kg-bang-rung, #doi-bang-rung{margin-bottom:8px !important}
+
+/* ---- khán giả: mọi khung nhỏ lại ---- */
+body.kg .the{padding:10px 12px}
+body.kg .wrap{padding:10px 14px 14px}
+body.kg h3{font-size:16px}
+body.kg .cau-hoi{font-size:clamp(16px,1.55vw,24px)}
+body.kg #kg-dap-an{margin-top:8px; gap:8px; grid-auto-rows:minmax(40px,1fr)}
+body.kg .da{font-size:clamp(13px,1vw,17px); min-height:40px; padding:7px 11px; gap:9px}
+body.kg .da .chu{width:clamp(28px,2vw,34px); height:clamp(28px,2vw,34px); font-size:clamp(14px,1.1vw,18px)}
+body.kg .xh-hang{padding:5px 10px; grid-template-columns:36px 1fr auto; gap:8px}
+body.kg .xh-hang .ten{font-size:clamp(13px,1vw,16px)}
+body.kg .xh-hang .sd{font-size:clamp(18px,1.4vw,22px)}
+body.kg .xh-hang .hang-so{font-size:17px}
+body.kg .xh{gap:6px}
+body.kg .kg-luoi, body.kg .kg-duoi{gap:12px}
+body.kg .kg-duoi{margin-top:10px}
+body.kg .kg-trai{gap:12px}
+body.kg .tt#kg-tieu-de{font-size:clamp(18px,2vw,26px) !important}
+body.kg #v-kg > .hang:first-child{margin-bottom:8px !important}
+body.kg #v-kg > .hang:first-child .b-nho, body.kg #v-kg > .hang:first-child .th-nut{padding:5px 10px; font-size:12px}
+body.kg .lua-hang{padding:4px 8px; font-size:13px}
+body.kg .chat-dong{font-size:13px}
+
+/* ---- màn đội ---- */
+body.doi .wrap{max-width:1500px}
+.doi-khung{flex:1; min-height:0; display:grid; gap:12px;
+  grid-template-columns:minmax(270px,330px) minmax(0,1fr); grid-template-areas:"trai giua"}
+.doi-giua{grid-area:giua; min-height:0; overflow-y:auto; padding:2px 2px 4px}
+.doi-trai{grid-area:trai; min-height:0; display:flex; flex-direction:column; gap:10px}
+.doi-trai > .the{padding:10px}
+body.doi .doi-duoi{margin-top:0}
+body.doi .tro-thanh{grid-template-columns:1fr 1fr}                 /* quyền trợ giúp: 2 trên 2 dưới */
+body.doi .tro-o{padding:8px 4px; font-size:11.5px}
+body.doi .chuong-vung{padding:0; gap:6px}
+body.doi .nut-chuong{width:140px; font-size:20px; padding:8px; border-width:4px;
+  box-shadow:0 8px 0 var(--do-dam),0 12px 20px rgba(0,0,0,.25)}
+body.doi .nut-chuong:disabled{box-shadow:0 8px 0 #7E7869}
+body.doi .nut-chuong .glyph{font-size:1.2em}
+body.doi .nut-chuong small{font-size:.5em}
+.chat-phu{flex:1 1 auto; min-height:180px}
+.chat-phu h3{font-size:15px}
+.chat-phu .chat-ds{min-height:90px}
+.chat-gui-gon{grid-template-columns:1fr auto !important}
+/* =====================================================================
+   ĐIỆN THOẠI / MÀN HẸP
+   ===================================================================== */
+/* khán giả: bỏ khoá 1 khung hình, cuộn dọc theo từng "frame":
+   1 câu hỏi + đáp án · 2 BXH · 3 Buff Luck + chat · 4 BXH Buff Luck */
+@media(max-width:900px){
+  body.kg{overflow:auto}
+  body.kg .wrap{height:auto; max-height:none; overflow:visible; display:block; padding:8px 10px 28px}
+  body.kg #v-kg{display:block}
+  body.kg .kg-luoi{max-height:none; display:flex; flex-direction:column; gap:12px}
+  body.kg .kg-luoi > .the{height:auto; max-height:none; overflow:visible}
+  body.kg #kg-dap-an{overflow:visible; grid-auto-rows:auto}
+  body.kg #kg-xh{overflow:visible; max-height:none}
+  body.kg .kg-duoi{display:flex; flex-direction:column; gap:12px; min-height:0}
+  body.kg .kg-trai{display:contents}
+  body.kg #kg-buff-bang{display:flex !important; order:1; overflow:visible}
+  body.kg .chat-khung{order:2; min-height:440px}
+  body.kg .chat-khung .chat-ds{min-height:280px}
+  body.kg #kg-bxh-buff{order:3; max-height:none}
+  body.kg #kg-bxh-buff .lua-ds{overflow:visible}
+  #kg-buff{display:none !important}
+  body.kg #kg-bl-gui{position:static}
+  body.kg .bl-bang .qr-hop img{max-height:none}
+}
+body{overflow-x:clip}                                  /* không bao giờ có thanh cuộn ngang */
+@media(max-width:600px){
+  .wrap{padding:10px 10px 32px}
+  .ghim{margin:-10px -10px 10px; padding:8px 10px}       /* khớp với lề .wrap mới */
+  h2{font-size:18px}
+  h3{font-size:15px}
+  .phu{font-size:12.5px; line-height:1.45}
+  label{font-size:12.5px; margin-bottom:4px}
+  button{padding:9px 13px; font-size:13px}
+  .b-nho{padding:6px 10px; font-size:12px}
+  .b-to{padding:12px 18px; font-size:16px}
+  input,select{padding:9px 11px}                     /* giữ font 16px: iPhone không tự phóng to khi gõ */
+  .the{padding:12px; border-radius:16px}
+  .den{font-size:11px; padding:3px 8px}
+  .cau-so{font-size:12px; padding:3px 11px}
+  .toast{font-size:13px; padding:9px 14px}
+  /* header khán giả gọn: tiêu đề một dòng, nút nhỏ */
+  body.kg #v-kg > .hang:first-child{gap:6px !important}
+  body.kg #v-kg > .hang:first-child > .hang{gap:5px !important}
+  body.kg #kg-tieu-de{font-size:17px !important}
+  body.kg #v-kg > .hang:first-child .b-nho, body.kg #v-kg > .hang:first-child .th-nut{padding:4px 8px; font-size:11px}
+  body.kg #kg-full{display:none}
+  body.kg .cau-hoi{font-size:17px}
+  body.kg .da{font-size:14px; min-height:40px}
+  body.kg .dem-nguoc{font-size:12px; padding:3px 10px}
+  /* popup buff luck / dự đoán */
+  .lop-phu{padding:8px; align-items:start}
+  .hop-thoai{padding:14px; max-height:94vh; border-radius:16px}
+  .hop-dau{top:-14px; padding:14px 0 8px; margin-top:-14px}
+  .hop-thoai h2{font-size:18px}
+  .chon-tien{grid-template-columns:repeat(3,1fr); gap:6px}
+  .chon-tien button, .chon-nha button{padding:7px 4px; font-size:12.5px}
+  .qr-hop img{width:min(260px,72vw); max-height:none}
+  .ve-bo{font-size:14px; padding:12px}
+  .dd-ket, .tran-ket{font-size:12.5px}
+  .bang-rung .ten{font-size:15px}
+  /* màn đội */
+  body.doi .ghim{padding:6px 10px}
+  body.doi #doi-ten{font-size:16px !important}
+  body.doi .diem-thanh .diem-to{font-size:26px}
+  body.doi .cau-hoi{font-size:16px}
+  body.doi .da{font-size:13.5px; min-height:40px}
+  body.doi .tro-o{font-size:10.5px; padding:6px 3px}
+}
+
+/* trang kiểm duyệt: PC chat bên trái (dính khi cuộn), điện thoại chat ở cuối */
+.duyet-khung{display:grid; grid-template-columns:minmax(260px,320px) minmax(0,1fr); gap:14px; align-items:start;
+  grid-template-areas:"chat noi"}
+.duyet-noi{grid-area:noi; min-width:0}
+.duyet-chat{grid-area:chat; position:sticky; top:10px; height:calc(100vh - 40px); min-height:320px}
+@media(max-width:899px){
+  .duyet-khung{grid-template-columns:1fr; grid-template-areas:"noi" "chat"}
+  .duyet-chat{position:static; height:auto; min-height:360px; margin-top:14px}
+}
+/* PC: câu hỏi và đáp án to, rộng */
+@media(min-width:900px){
+  body.doi .doi-cau{padding:18px 20px}
+  body.doi .cau-hoi{font-size:clamp(20px,2vw,30px); margin-top:10px}
+  body.doi .dap-an{gap:12px; margin-top:16px}
+  body.doi .da{font-size:clamp(15px,1.25vw,20px); min-height:58px; padding:10px 14px; gap:12px}
+  body.doi .da .chu{width:38px; height:38px; font-size:19px}
+}
+/* điện thoại / màn hẹp: 1 cột, cuộn dọc: câu hỏi → chuông → quyền trợ giúp → chat */
+@media(max-width:899px){
+  body.doi{overflow:auto}
+  body.doi .wrap{height:auto; max-height:none; overflow:visible; padding-bottom:24px}
+  body.doi #v-doi{display:block}
+  .doi-khung{display:flex; flex-direction:column; gap:10px}
+  .doi-giua{overflow:visible}
+  .doi-trai{display:contents}
+  body.doi .chuong-vung{order:2; position:static}
+  #doi-tro-khung{order:3}
+  #doi-chat-the{order:4; min-height:340px}
+  .doi-giua{order:1}
+  body.doi .nut-chuong{width:100%; aspect-ratio:auto; min-height:58px; border-radius:18px; font-size:17px;
+    flex-direction:row; display:flex; justify-content:center; gap:8px; padding:8px 12px}
+  body.doi .nut-chuong small{font-size:.62em}
+}
 .cuu-hop h2{font-size:clamp(17px,4.4vw,22px); margin-top:6px; color:#14401A}
 .cuu-nha{font-family:var(--font-tt); font-size:clamp(22px,6vw,32px); color:#0E2F12; margin-top:2px;
   word-break:break-word}
@@ -576,6 +740,9 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 .lua-hang.tinh:hover{border-color:rgba(59,42,5,.35)}
 .lua-hang .vach i.tien{background:linear-gradient(90deg,#8FE39B,#2E7D32)}
 .qr-hop img{cursor:zoom-in}
+.qr-hop img.qr-anh{width:min(260px,70vw); min-height:140px; height:auto; object-fit:contain; background:#fff}
+body.kg .bl-bang .qr-hop img.qr-anh{width:auto; max-width:100%; min-height:0}
+@media(max-width:900px){ body.kg .bl-bang .qr-hop img.qr-anh{width:min(280px,76vw); min-height:140px} }
 #phong-to img{width:min(92vw,88vh,760px); height:auto; object-fit:contain; background:#fff}
 #phong-to button.phong-to-x{position:fixed; top:max(14px, env(safe-area-inset-top)); right:14px; z-index:91;
   width:48px; height:48px; padding:0 0 4px; border-radius:50%; background:#fff; color:#3B2A05;
@@ -623,11 +790,13 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
     <div class="the">
       <div class="bieu">🙋</div>
       <h3>Đội chơi</h3>
-      <p class="phu">Nhập <b>mã đội</b> do quản trò đưa, chọn đúng tên đội của bạn để vào phòng.</p>
+      <p class="phu">Nhập <b>mã đội</b> do quản trò đưa, điền tên và chọn nhà nhận buff luck để vào phòng.</p>
       <div style="width:100%" class="cot">
         <input class="o-ma" id="in-ma-doi" maxlength="7" inputmode="latin" autocomplete="off" placeholder="MÃ ĐỘI">
+        <label for="in-ten-doi" style="margin-bottom:-6px">1. Nhập tên</label>
+        <input id="in-ten-doi" maxlength="24" autocomplete="off" placeholder="Tên của bạn / đội của bạn">
+        <label for="in-nha" style="margin-bottom:-6px">2. Chọn nhà để nhận buff luck</label>
         <select id="in-nha"></select>
-        <input id="in-ten-doi" class="hidden" maxlength="24" autocomplete="off" placeholder="Tên đội của bạn">
         <button class="b-chinh b-khoi b-to" id="btn-vao-doi">Vào phòng</button>
       </div>
     </div>
@@ -728,12 +897,19 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
         <div class="dap-an" id="mc-dap-an"></div>
 
         <hr class="tach">
-        <div class="hang">
+        <div class="hang tran-hang">
+          <span class="chip" id="mc-tran-tt">Chưa bắt đầu</span>
+          <button class="b-xanh" id="mc-bat-dau">▶ Bắt đầu trò chơi</button>
+          <button class="b-nho" id="mc-nghi">⏸ Nghỉ giữa hiệp</button>
+          <button class="b-xanh" id="mc-tiep">▶ Tiếp tục trò chơi</button>
+          <button class="b-do" id="mc-ket-thuc">⏹ Kết thúc trò chơi</button>
+        </div>
+        <div class="hang" style="margin-top:10px">
           <span class="dem-nguoc hidden" id="mc-dem"></span>
           <button class="b-chinh" id="mc-hien">Công bố &amp; sang câu</button>
           <button class="b-nho" id="mc-xoa-rung">Xóa lượt rung</button>
         </div>
-        <p class="phu" style="margin-top:8px">Chuông <b>tự mở 3 giây</b> sau khi chuyển câu · <b>10 giây</b> để rung chuông · <b>10 giây</b> để trả lời. Bắt đầu trận: bấm <b>Câu 1</b> trong Bộ câu hỏi (hoặc Sau ›).</p>
+        <p class="phu" style="margin-top:8px">Khi đang chơi: chuông <b>tự mở 3 giây</b> sau mỗi câu · <b>10 giây</b> để rung chuông · <b>10 giây</b> để trả lời. Nghỉ giữa hiệp sẽ dừng đồng hồ; Tiếp tục sẽ mở lại chuông ở câu đang đứng.</p>
       </div>
 
       <div class="the">
@@ -785,7 +961,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
             <button class="b-chinh" id="mc-th-vao">Vào phòng thoại</button>
           </div>
         </div>
-        <p class="phu" style="margin-top:8px">Nói trực tiếp với các đội. Mic của đội <b>mặc định khoá</b> — bấm 🎙️ ở từng đội để mở.
+        <p class="phu" style="margin-top:8px">Nói trực tiếp với các đội. Mic của đội <b>mặc định mở</b> khi vào phòng — bấm 🎙️ ở từng đội để khoá / mở lại.
           Nên đeo tai nghe để khỏi hú tiếng.</p>
         <div style="margin-top:10px">
           <label for="mc-th-kieu">Kiểu truyền tiếng</label>
@@ -850,7 +1026,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
       <div class="the">
         <div class="hang" style="justify-content:space-between">
           <h3>Bộ câu hỏi <span class="chip" id="mc-so-cau">0 câu</span></h3>
-          <button class="b-nho" id="mc-mau">Dùng bộ mẫu</button>
+          <button class="b-nho" id="mc-mau">Nạp bộ 100 câu</button>
         </div>
         <div class="ds-cau" id="mc-ds-cau" style="margin-top:10px"></div>
       </div>
@@ -943,38 +1119,55 @@ D. Baht
     </div>
   </div>
 
-  <div class="doi-giua">
-    <div class="cuu-dai hidden" id="doi-cuu">
-      <span class="bi">🫂</span>
-      <span id="doi-cuu-chu"></span>
-      <span class="dh" id="doi-cuu-giay"></span>
+  <!-- PC: [cột trái: quyền trợ giúp 2x2 · chuông · chat] [câu hỏi + đáp án rộng]
+       Điện thoại: câu hỏi → chuông → quyền trợ giúp → chat (cuộn dọc) -->
+  <div class="doi-khung">
+    <div class="doi-giua">
+      <div class="tran-ket hidden" id="doi-tran"></div>
+      <div class="cuu-dai hidden" id="doi-cuu">
+        <span class="bi">📞</span>
+        <span id="doi-cuu-chu"></span>
+        <span class="dh" id="doi-cuu-giay"></span>
+      </div>
+      <div id="doi-bang-rung" class="hidden" style="margin-bottom:8px"></div>
+      <div class="the doi-cau">
+        <span class="cau-so" id="doi-cau-so">Chờ quản trò</span>
+        <h2 class="cau-hoi" id="doi-cau-hoi">Chờ câu hỏi đầu tiên…</h2>
+        <div class="dap-an" id="doi-dap-an"></div>
+        <p class="phu hidden" id="doi-goi-chon" style="margin-top:8px;font-weight:700">👆 Bạn được quyền trả lời — chạm vào đáp án bạn chọn.</p>
+      </div>
     </div>
-    <div id="doi-bang-rung" class="hidden" style="margin-bottom:10px"></div>
-    <div class="the">
-      <span class="cau-so" id="doi-cau-so">Chờ quản trò</span>
-      <h2 class="cau-hoi" id="doi-cau-hoi">Chờ câu hỏi đầu tiên…</h2>
-      <div class="dap-an" id="doi-dap-an"></div>
-      <p class="phu hidden" id="doi-goi-chon" style="margin-top:8px;font-weight:700">👆 Bạn được quyền trả lời — chạm vào đáp án bạn chọn.</p>
-    </div>
-  </div>
 
-  <div class="doi-duoi" id="doi-tro-khung">
-    <div class="tro-thanh" id="doi-tro"></div>
-    <div class="tro-dong">
-      <span id="doi-moc">Chưa có quyền trợ giúp nào</span>
-      <b class="tien-nho" id="doi-tien">0đ</b>
-    </div>
-    <div class="thanh-moc" id="doi-thanh"><i style="width:0"></i></div>
-  </div>
+    <aside class="doi-trai">
+      <div class="chuong-vung">
+        <span class="dem-nguoc hidden" id="doi-dem"></span>
+        <button class="nut-chuong" id="doi-chuong" disabled>
+          <span class="glyph">🔔</span>
+          <span id="doi-chuong-chu">CHỜ CÂU HỎI</span>
+          <small id="doi-chuong-phu"></small>
+        </button>
+        <p class="phu hidden" id="doi-space">Hoặc nhấn phím <b>cách</b> để rung</p>
+      </div>
 
-  <div class="chuong-vung">
-    <span class="dem-nguoc hidden" id="doi-dem" style="margin-bottom:8px"></span>
-    <button class="nut-chuong" id="doi-chuong" disabled>
-      <span class="glyph">🔔</span>
-      <span id="doi-chuong-chu">CHỜ CÂU HỎI</span>
-      <small id="doi-chuong-phu"></small>
-    </button>
-    <p class="phu hidden" id="doi-space">Hoặc nhấn phím <b>cách</b> để rung — không cần chuột</p>
+      <div class="doi-duoi the" id="doi-tro-khung">
+        <div class="tro-thanh" id="doi-tro"></div>
+        <div class="tro-dong">
+          <span id="doi-moc">Chưa có quyền trợ giúp nào</span>
+          <b class="tien-nho" id="doi-tien">0đ</b>
+        </div>
+        <div class="thanh-moc" id="doi-thanh"><i style="width:0"></i></div>
+      </div>
+
+      <div class="the chat-khung chat-phu" id="doi-chat-the">
+        <h3>💬 Chat trực tiếp</h3>
+        <div class="chat-ds" id="doi-chat"></div>
+        <div class="chat-gui chat-gui-gon" id="doi-chat-gui">
+          <input id="doi-chat-noi" maxlength="140" autocomplete="off" placeholder="Nhắn với mọi người…">
+          <button class="b-chinh" id="doi-chat-nut">Gửi</button>
+        </div>
+        <p class="phu hidden" id="doi-chat-tat" style="margin-top:6px">Quản trò đang tắt chat.</p>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -996,12 +1189,13 @@ D. Baht
   </div>
 
   <div class="cuu-dai hidden" id="kg-cuu">
-    <span class="bi">🫂</span>
+    <span class="bi">📞</span>
     <span id="kg-cuu-chu"></span>
     <span class="dh" id="kg-cuu-giay"></span>
   </div>
   <div id="kg-bang-rung" class="hidden" style="margin-bottom:14px"></div>
   <div class="hang hidden" id="kg-tro" style="margin-bottom:14px"></div>
+  <div class="tran-ket hidden" id="kg-tran"></div>
   <div class="dd-ket hidden" id="kg-dd-ket"></div>
   <div class="hang hidden" id="kg-dd-hang" style="margin-bottom:14px">
     <button class="tro-chip dd-chip" id="kg-dd-chip" type="button">🔮 Dự đoán nhà vô địch</button>
@@ -1067,6 +1261,8 @@ D. Baht
 
 <!-- ======================= TRANG DUYỆT GIAO DỊCH ======================= -->
 <section id="v-duyet" class="hidden">
+  <div class="duyet-khung">
+  <div class="duyet-noi">
   <div class="the" id="du-thoai-the" style="margin-bottom:14px">
     <div class="hang" style="justify-content:space-between">
       <h3>🎙️ Phòng thoại với quản trò</h3>
@@ -1107,6 +1303,17 @@ D. Baht
     <h3>Đã xử lý gần đây</h3>
     <div class="nhat-ky" id="duyet-log" style="max-height:200px">Chưa có.</div>
   </div>
+  </div><!-- /duyet-noi -->
+  <aside class="the chat-khung chat-phu duyet-chat" id="duyet-chat-the">
+    <h3>💬 Chat trực tiếp</h3>
+    <div class="chat-ds" id="duyet-chat"></div>
+    <div class="chat-gui chat-gui-gon" id="duyet-chat-gui">
+      <input id="duyet-chat-noi" maxlength="140" autocomplete="off" placeholder="Nhắn với mọi người (tên: Kiểm duyệt)…">
+      <button class="b-chinh" id="duyet-chat-nut">Gửi</button>
+    </div>
+    <p class="phu hidden" id="duyet-chat-tat" style="margin-top:6px">Quản trò đang tắt chat.</p>
+  </aside>
+  </div><!-- /duyet-khung -->
 </section>
 
 <div class="phong-to hidden" id="phong-to"><button type="button" class="phong-to-x" id="phong-to-dong" aria-label="Đóng">×</button><img id="phong-to-img" alt="Ảnh chuyển khoản"></div>
@@ -1409,7 +1616,7 @@ const NHA_SAN = [
   { ten: 'Con của cha Chung',           drive: '', lk: 'https://docs.google.com/spreadsheets/d/1DwYag-od0yYGH6ZaZP5FVlPVBKmxdQU78cDHFiojtwk/edit?gid=1919768403#gid=1919768403' },
   { ten: 'Minties',                     drive: '14IvrP4ASNS1-Lz9pXbwvJa9zqAFxNVwS', lk: '' },
   { ten: 'Ánthesis',                    drive: '1379lAj_zgBudiEC67kTI1w-avG1vLYPh', lk: 'https://share.timo.vn/VN/transaction/rhjc7gs99w6t' },
-  { ten: 'Chesse bộ Đông Cháu',         drive: '17P4ivSTt9P3UesNiSEAIj7GKiu0GZQY5', lk: '' },
+  { ten: 'Cheese bộ Đông Cháu',         drive: '17P4ivSTt9P3UesNiSEAIj7GKiu0GZQY5', lk: '' },
   { ten: 'LUMIDUST.LAYLUNG',            drive: '1vm86htZAuMHMxw59ruWAC_Yy7gJEFXWR', lk: '' },
   { ten: 'Gai Con Trộm Vía',            drive: '1aQxVh_vnwrNTv7PfxTZkKZeSGOuAI2Uj', lk: 'https://quy.momo.vn/v2/SJUemwzkLB?cover=da0c' },
   { ten: 'LASIDO',                      drive: '1j2hyDmmWwPWGxWC5ciNk_syd-5PgLRKb', lk: '' },
@@ -1429,9 +1636,14 @@ const NHA_SAN = [
 const qrAnh = id => 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1000';
 const qrMo  = id => 'https://drive.google.com/file/d/' + id + '/view';
 const VE_BO_CHU = 'Đã về bờ, hữu duyên mời quẹo lựa các nhà còn lại nhớ~';
-const nhaVeBo = nha => { const s = nha && nhaSan(nha.ten); return !!(s && s.veBo); };
+const nhaVeBo = nha => { const s = nha && nhaSan(nhaCua(nha)); return !!(s && s.veBo); };
+/* đội = {ten: tên người chơi nhập, nha: nhà nhận buff luck} */
+const nhaCua = d => (d && (d.nha || d.ten)) || '';
+const tenBuff = d => (d ? (d.nha && chuanTen(d.nha) !== chuanTen(d.ten) ? d.nha + ' (' + d.ten + ')' : (d.nha || d.ten)) : '');
 const chuanTen = t => String(t == null ? '' : t).toLowerCase().replace(/\s+/g, ' ').trim();
-const nhaSan = ten => NHA_SAN.find(n => chuanTen(n.ten) === chuanTen(ten)) || null;
+/* tên cũ đã đổi -> tên mới (phòng/đội tạo trước khi đổi vẫn khớp đúng nhà) */
+const NHA_DOI_TEN = { 'chesse bộ đông cháu': 'Cheese bộ Đông Cháu' };
+const nhaSan = ten => { const k = NHA_DOI_TEN[chuanTen(ten)] || ten; return NHA_SAN.find(n => chuanTen(n.ten) === chuanTen(k)) || null; };
 
 /* Link quỹ KHÁC link biên lai: giữ nguyên ?query và #hash vì nhiều link
    (bảng tính Google, quỹ MoMo) cần chúng mới mở đúng chỗ. */
@@ -1449,7 +1661,7 @@ function docLinkQuy(v) {
 function veKhungQR(khung, nha, tuy) {
   khung.innerHTML = '';
   if (!nha) { khung.appendChild(el('p', 'phu', 'Chưa chọn nhà.')); return; }
-  const san = nhaSan(nha.ten);
+  const san = nhaSan(nhaCua(nha));
   if (san && san.veBo) { khung.appendChild(el('p', 've-bo', VE_BO_CHU)); return; }   // nhà đã đủ quỹ
   /* ảnh QR nhúng sẵn (data:) không đi qua state cho nhẹ — lấy lại từ NHA_SAN theo tên nhà */
   const anh = nha.qr || (san && (san.qr || (san.drive ? qrAnh(san.drive) : ''))) || '';
@@ -1460,11 +1672,17 @@ function veKhungQR(khung, nha, tuy) {
   if (anh) {
     const img = el('img');
     img.alt = 'Mã QR chuyển khoản của ' + nha.ten;
-    img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
+    /* KHÔNG lazy: ảnh nằm trong popup/khung cuộn có kích thước 0 lúc đầu, webview (Discord, Zalo…)
+       và Safari có thể không bao giờ tải. Giữ sẵn khung bằng CSS .qr-hop img. */
+    img.loading = 'eager'; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
+    img.className = 'qr-anh';
     img.src = anh;
     img.title = 'Bấm để phóng to mã QR';
-    img.addEventListener('click', () => { $('phong-to-img').src = img.src; $('phong-to-img').alt = img.alt; show($('phong-to'), true); });
+    img.addEventListener('click', () => { $('phong-to-img').src = img.currentSrc || img.src; $('phong-to-img').alt = img.alt; show($('phong-to'), true); });
+    const idDrive = (/drive\.google\.com\/thumbnail\?id=([^&]+)/.exec(anh) || [])[1];
+    let daThuLai = false;
     img.addEventListener('error', () => {
+      if (idDrive && !daThuLai) { daThuLai = true; img.src = 'https://lh3.googleusercontent.com/d/' + idDrive + '=w1000'; return; }   // đường dự phòng của Drive
       img.remove();
       loi.textContent = 'Không tải được ảnh QR ở đây — bấm “Mở mã QR” bên dưới.';
       if (!loi.parentNode) khung.insertBefore(loi, khung.firstChild);   // lúc đầu chưa gắn vì chưa có lỗi
@@ -1503,7 +1721,7 @@ const KG_HAN  = 30000;          // khán giả im quá lâu thì coi như đã r
 const TRO = [
   { ma:'chiadoi',   bi:'✂️', ten:'50/50',         mo:'Ẩn 2 đáp án sai, chỉ máy đội bạn thấy' },
   { ma:'x2',        bi:'✖️', ten:'Nhân đôi điểm', mo:'Câu này trả lời đúng được 2 điểm' },
-  { ma:'hoisinh',   bi:'🫂', ten:'Người thân hỗ trợ', mo:'Một khán giả được chọn ngẫu nhiên sẽ mách bạn đáp án họ cho là đúng' },
+  { ma:'hoisinh',   bi:'📞', ten:'Người thân hỗ trợ', mo:'Một khán giả được chọn ngẫu nhiên sẽ mách bạn đáp án họ cho là đúng' },
   { ma:'cuopquyen', bi:'⚡', ten:'Cướp quyền',    mo:'Giành quyền trả lời ngay, kể cả khi đội khác rung trước' },
 ];
 const troTheoMa = ma => TRO.find(t => t.ma === ma) || null;
@@ -1632,6 +1850,22 @@ function taoDemNguoc(node, layTen) {
   };
 }
 
+/* ---------- dải trạng thái trận trên màn đội / khán giả ---------- */
+function veBangTran(node, S) {
+  if (!node) return;
+  const tt = S && S.tran;
+  let chu = '';
+  if (tt === 'nghi') chu = '⏸ Nghỉ giữa hiệp — trò chơi sẽ tiếp tục sau ít phút';
+  else if (tt === 'chua') chu = '⏳ Trò chơi sắp bắt đầu — chờ quản trò nhé';
+  else if (tt === 'xong') {
+    const top = xepHang((S && S.doi) || {})[0];
+    chu = '🏁 Trò chơi kết thúc' + (top ? ' · Dẫn đầu: ' + top.ten + ' (' + top.diem + ' điểm)' : '');
+  }
+  node.textContent = chu;
+  node.className = 'tran-ket' + (tt === 'nghi' ? ' nghi' : tt === 'xong' ? ' xong' : '');
+  show(node, !!chu);
+}
+
 /* ---------- pháo hoa (canvas, nhẹ cho máy yếu) ---------- */
 function phaoHoa(giay) {
   /* người bật "giảm chuyển động" vẫn được pháo hoa, nhưng ngắn hơn */
@@ -1714,6 +1948,38 @@ const Am = (() => {
     dung:    () => { [784, 988, 1319, 1568].forEach((f, i) => ton(f, i * .085, .4, 'triangle', .2)); },
     sai:     () => { ton(233, 0, .3, 'sawtooth', .14); ton(175, .14, .42, 'sawtooth', .14); },
     hien:    () => { ton(523, 0, .2, 'triangle', .16); ton(698, .1, .3, 'triangle', .16); },
+  };
+})();
+
+/* ---------- mở khoá âm thanh trên điện thoại ----------
+   - Trình duyệt chỉ cho phát tiếng sau lần chạm đầu tiên -> mỗi lần chạm đều "đánh thức" lại.
+   - iPhone gạt im lặng sẽ tắt tiếng web: đặt audioSession = playback và giữ một đoạn âm câm chạy lặp,
+     iOS coi trang là "đang phát nhạc" nên tiếng phòng thoại không bị nút im lặng chặn. */
+const MoAm = (() => {
+  const viec = []; let daCham = false, theCam = null;
+  function wavCam() {                         // 0,5 giây im lặng, 8 kHz 8-bit mono
+    const n = 4000, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
+    const s = (o, t) => { for (let i = 0; i < t.length; i++) b[o + i] = t.charCodeAt(i); };
+    s(0, 'RIFF'); v.setUint32(4, 36 + n, true); s(8, 'WAVE'); s(12, 'fmt ');
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+    s(36, 'data'); v.setUint32(40, n, true); b.fill(128, 44);
+    return URL.createObjectURL(new Blob([b], { type: 'audio/wav' }));
+  }
+  function moKhoa(ev) {
+    try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) {}
+    try {
+      if (!theCam) { theCam = new Audio(wavCam()); theCam.loop = true; theCam.setAttribute('playsinline', ''); }
+      if (theCam.paused) { const p = theCam.play(); if (p && p.catch) p.catch(() => {}); }
+    } catch (e) {}
+    try { Am.moKhoa(); } catch (e) {}
+    viec.forEach(f => { try { f(ev); } catch (e) {} });
+  }
+  ['pointerdown', 'touchend', 'keydown'].forEach(ten =>
+    document.addEventListener(ten, ev => { daCham = true; moKhoa(ev); }, { capture: true, passive: true }));
+  return {
+    khiCham(f) { viec.push(f); if (daCham) { try { f(); } catch (e) {} } },
+    daCham: () => daCham,
   };
 })();
 
@@ -2479,11 +2745,20 @@ function taoTiengMayChu(o) {
     const mau = new Float32Array(byte.length);
     for (let i = 0; i < byte.length; i++) mau[i] = giaiMu(byte[i]);
     let b;
-    try { b = a.createBuffer(1, mau.length, AM_HZ); } catch (e) { return; }
-    b.getChannelData(0).set(mau);
+    try { b = a.createBuffer(1, mau.length, AM_HZ); b.getChannelData(0).set(mau); }
+    catch (e) {
+      /* Safari/iOS đời cũ không nhận buffer 16 kHz -> nội suy lên đúng tần số của máy */
+      const ti = a.sampleRate / AM_HZ, n = Math.max(1, Math.floor(mau.length * ti));
+      try { b = a.createBuffer(1, n, a.sampleRate); } catch (e2) { return; }
+      const d = b.getChannelData(0);
+      for (let i = 0; i < n; i++) {
+        const v = i / ti, j = Math.floor(v), k = v - j;
+        d[i] = j + 1 < mau.length ? mau[j] * (1 - k) + mau[j + 1] * k : mau[Math.min(j, mau.length - 1)];
+      }
+    }
     const ng = nguoi[ai] || (nguoi[ai] = { ten: '', keTiep: 0, noiToi: 0 });
     ng.ten = String(m.t || '').slice(0, 24) || ai;
-    const dai = mau.length / AM_HZ;
+    const dai = b.duration;
     const bayGio = a.currentTime;
     /* đến sớm thì xếp hàng, đến trễ quá thì bỏ cho khỏi dồn ứ */
     if (ng.keTiep < bayGio + AM_DEM_MS / 1000) ng.keTiep = bayGio + AM_DEM_MS / 1000;
@@ -2670,61 +2945,706 @@ function vietLaiCauHoi(qs) {
     '*' + CHU[q.dung]].join('\n')).join('\n\n');
 }
 
-const BO_MAU = `Thủ đô của Việt Nam là thành phố nào?
-A. Hà Nội
-B. Huế
-C. Đà Nẵng
-D. Cần Thơ
+/* bộ câu hỏi mặc định: 100 câu "inside joke" (thay toàn bộ bộ mẫu cũ) */
+const BO_MAU = `Câu 1. Fandom của Đinh Mạnh Ninh tên là gì?
+A. Quán Nước Mía
+B. Quán Cà Phê
+C. Quán Trà Đá
+D. Quán Trà Chanh
+*C
+
+Câu 2. "Tuner" là fandom của anh tài nào?
+A. Hoàng Dũng
+B. Hoàng Rob
+C. Hoàng Tôn
+D. Hoàng Thùy Linh
+*C
+
+Câu 3. Fandom của Huỳnh Lập tên là gì?
+A. Silverfam
+B. Goldfam
+C. Ironfam
+D. Bronzefam
+*B
+
+Câu 4. "Cục Cưng" là fandom của ai?
+A. Thái VG
+B. Thái Lê Minh Hiếu
+C. Lê Xuân Tiền
+D. Phùng Minh Cương
+*B
+
+Câu 5. Fandom của OSAD tên là gì?
+A. Ô Long
+B. Ô Môi
+C. Ô Mai
+D. Ô Mây
+*C
+
+Câu 6. "Cẩm Chướng" là fandom của anh tài nào?
+A. Thanh Duy
+B. Mew Amazing
+C. Neko Lê
+D. Jun Phạm
+*C
+
+Câu 7. Fandom của Trịnh Thăng Bình tên là gì?
+A. Partner
+B. Patrol
+C. Pattern
+D. Pioneer
 *A
 
-Trong kế toán, tài sản bằng nợ phải trả cộng với gì?
-A. Doanh thu
-B. Vốn chủ sở hữu
-C. Chi phí
-D. Lợi nhuận gộp
+Câu 8. "Lì Xì" là fandom của ai?
+A. Duy Khánh Zhou Zhou
+B. Lê Xuân Tiền
+C. Will
+D. Tùng Mint
 *B
 
-Lạm phát tăng cao thường khiến sức mua của đồng tiền thay đổi thế nào?
-A. Tăng lên
-B. Giảm xuống
-C. Không đổi
-D. Tăng rồi giảm
-*B
-
-Cơ quan nào ở Việt Nam có quyền phát hành tiền?
-A. Bộ Tài chính
-B. Ngân hàng Nhà nước Việt Nam
-C. Quốc hội
-D. Kho bạc Nhà nước
-*B
-
-Đơn vị tiền tệ của Nhật Bản là gì?
-A. Won
-B. Yên
-C. Nhân dân tệ
-D. Baht
-*B
-
-Trong kinh tế học, "cầu" thể hiện điều gì?
-A. Lượng hàng người bán muốn bán
-B. Lượng hàng người mua muốn và có khả năng mua
-C. Tổng hàng tồn kho
-D. Giá bán lẻ của hàng hóa
-*B
-
-Biển nào tiếp giáp với bờ biển Việt Nam?
-A. Biển Đông
-B. Biển Đỏ
-C. Biển Đen
-D. Biển Baltic
+Câu 9. Fandom của BB Trần tên là gì?
+A. BBQ
+B. BBC
+C. BBB
+D. BBS
 *A
 
-Nếu doanh thu 100 triệu và chi phí 70 triệu thì lợi nhuận là bao nhiêu?
-A. 170 triệu
-B. 70 triệu
-C. 30 triệu
-D. 100 triệu
-*C`;
+Câu 10. "Khủng long con" là fandom của anh tài nào?
+A. Đông Hùng
+B. Nguyễn Văn Chung
+C. Dũng DT
+D. Thuận Nguyễn
+*D
+
+Câu 11. Fandom của Mew Amazing tên là gì?
+A. VOICES
+B. ECHOES
+C. WAVES
+D. SHADOWS
+*B
+
+Câu 12. "Bim Bim" là fandom của ai?
+A. Cheng
+B. K.O
+C. Hồ Đông Quan
+D. Toki Thành Thỏ
+*A
+
+Câu 13. Fandom của Hoàng Rob tên là gì?
+A. Ánh Trăng
+B. Ánh Sao
+C. Ánh Dương
+D. Ánh Lửa
+*C
+
+Câu 14. "Miêu Bang" là fandom của ai trong chương trình?
+A. MC Trần Ngọc
+B. Neko Lê
+C. Mew Amazing
+D. Jun Phạm
+*A
+
+Câu 15. Fandom của Hà An Huy tên là gì?
+A. Thong Dong
+B. Rong Chơi
+C. Thung Dung
+D. Ung Dung
+*D
+
+Câu 16. Fandom của Vương Anh Tú tên là gì?
+A. Jump Jump
+B. Jet Jet
+C. Jazz Jazz
+D. Joy Joy
+*B
+
+Câu 17. "Carrot Farm" là fandom của anh tài nào?
+A. Jun Phạm
+B. Thỏ (Da LAB)
+C. Will
+D. Toki Thành Thỏ
+*D
+
+Câu 18. Fandom của Thanh Duy tên là gì?
+A. WATER
+B. EARTH
+C. WIND
+D. FIRE
+*D
+
+Câu 19. "Cục Pin" là fandom của ai?
+A. Hồ Đông Quan
+B. K.O
+C. It's CHARLES.
+D. Phùng Minh Cương
+*C
+
+Câu 20. Fandom của Nguyễn Văn Chung tên là gì?
+A. MIFASOL
+B. DOREMI
+C. FASOLA
+D. LASIDO
+*D
+
+Câu 21. Fandom của Phùng Minh Cương tên là gì?
+A. Lửa nhỏ
+B. Hỏa con
+C. Hỏa nhi
+D. Lửa con
+*D
+
+Câu 22. "Đồng Hương" là fandom của anh tài nào?
+A. Đại Nghĩa
+B. Đinh Mạnh Ninh
+C. Đông Hùng
+D. Dũng DT
+*C
+
+Câu 23. Fandom của Hoàng Dũng tên là gì?
+A. Bạn Đường
+B. Bạn Thân
+C. Bạn Nhạc
+D. Bạn Hiền
+*C
+
+Câu 24. "Fan-fia" là fandom của ai?
+A. Thái VG
+B. Thái Lê Minh Hiếu
+C. Hồ Đông Quan
+D. Neko Lê
+*A
+
+Câu 25. Fandom của Hồ Đông Quan tên là gì?
+A. QUANderful
+B. QUANtum
+C. QUANtity
+D. QUANmania
+*A
+
+Câu 26. Fandom của K.O tên là gì?
+A. Đường Fam
+B. Ớt Fam
+C. Tiêu Fam
+D. Muối Fam
+*D
+
+Câu 27. "ZhouFam" là fandom của ai?
+A. Cheng
+B. Jun Phạm
+C. Will
+D. Duy Khánh Zhou Zhou
+*D
+
+Câu 28. Fandom của Đại Nghĩa tên là gì?
+A. Cô Nụi
+B. Chú Nụi
+C. Bác Nụi
+D. Cháu Nụi
+*D
+
+Câu 29. "Vita-mint" là fandom của anh tài nào?
+A. Toki Thành Thỏ
+B. Thanh Duy
+C. Tùng Dương
+D. Tùng Mint
+*D
+
+Câu 30. Fandom của Will tên là gì?
+A. Windy
+B. Sunny
+C. Rainy
+D. Cloudy
+*A
+
+Câu 31. Hai nhóm fan của Da LAB trong chương trình là "Chim Cá" và tên nào nữa?
+A. PHANTOM
+B. FANTOM
+C. FANDOM
+D. FANTASY
+*B
+
+Câu 32. Cả Thỏ và Thơm của Da LAB cùng chung một fandom tên là gì?
+A. Fan Mua
+B. Fan Nhà
+C. Fan Mượn
+D. Fan Thuê
+*D
+
+Câu 33. "SÚP BƠ" là fandom của anh tài nào?
+A. 14 Casper
+B. BB Trần
+C. Hoàng Dũng
+D. Tùng Mint
+*A
+
+Câu 34. Fandom của Jun Phạm tên là gì?
+A. Carrot
+B. Cabbage
+C. Potato
+D. Tomato
+*A
+
+Câu 35. Biệt danh "Robot hút bụi" là của anh tài nào?
+A. Dũng DT
+B. Đinh Mạnh Ninh
+C. Tùng Mint
+D. Hoàng Tôn
+*B
+
+Câu 36. "Thỏ Rolls Royce" là biệt danh của ai?
+A. Toki Thành Thỏ
+B. Thỏ (Da LAB)
+C. Jun Phạm
+D. Will
+*B
+
+Câu 37. Biệt danh "Omaga Dracula" thuộc về anh tài nào?
+A. Hoàng Tôn
+B. Hoàng Rob
+C. Hoàng Dũng
+D. Thanh Duy
+*A
+
+Câu 38. "Quách Văn Thơm" và "Mr Smell" là biệt danh của ai?
+A. Thỏ (Da LAB)
+B. Tùng Mint
+C. OSAD
+D. Thơm (Da LAB)
+*D
+
+Câu 39. Biệt danh "Thái Viên Chiên" là của ai?
+A. Thái Lê Minh Hiếu
+B. Thái VG
+C. Thanh Duy
+D. Thuận Nguyễn
+*B
+
+Câu 40. "Giáo sư Xoay" và "Cù Trọng Xoay" là biệt danh của anh tài nào?
+A. MC Trần Ngọc
+B. Đông Hùng
+C. Neko Lê
+D. Dũng DT
+*D
+
+Câu 41. Biệt danh "Cụ Chung" là của ai?
+A. Hoàng Rob
+B. Đông Hùng
+C. Đại Nghĩa
+D. Nguyễn Văn Chung
+*D
+
+Câu 42. "Trụ trì Chùa" và "Hoàng Wifi" là biệt danh của ai?
+A. Hoàng Tôn
+B. Hoàng Dũng
+C. Hoàng Rob
+D. Huỳnh Lập
+*C
+
+Câu 43. Biệt danh "Kevin Nguyễn" là của anh tài nào?
+A. Hoàng Tôn
+B. Hoàng Dũng
+C. Thuận Nguyễn
+D. Neko Lê
+*B
+
+Câu 44. "Mỹ Nam" và "Mai Cát Lượng" là biệt danh của ai?
+A. Will
+B. OSAD
+C. K.O
+D. Hồ Đông Quan
+*B
+
+Câu 45. Biệt danh "Cán bộ" và "Hùng treo gió" là của ai?
+A. Đại Nghĩa
+B. Đông Hùng
+C. Dũng DT
+D. Nguyễn Văn Chung
+*B
+
+Câu 46. "Đại đế" và "CEO tập đoàn TTB" là biệt danh của anh tài nào?
+A. Trịnh Thăng Bình
+B. Thanh Duy
+C. Mew Amazing
+D. Neko Lê
+*D
+
+Câu 47. Biệt danh "Trịnh tổng" và "công chúa" là của ai?
+A. Duy Khánh Zhou Zhou
+B. Thanh Duy
+C. Trịnh Thăng Bình
+D. BB Trần
+*C
+
+Câu 48. "Rái cá", "Mít" và "An Hy" là biệt danh của ai?
+A. K.O
+B. Hoàng Dũng
+C. Tùng Mint
+D. Hà An Huy
+*D
+
+Câu 49. Biệt danh "Dương đá tảng" và "Tùng Bạc Hà" là của anh tài nào?
+A. Thanh Duy
+B. Tùng Dương
+C. Thuận Nguyễn
+D. Tùng Mint
+*D
+
+Câu 50. "Kim Anh", "Delilah" và "Út Lý" là biệt danh của ai?
+A. BB Trần
+B. Thanh Duy
+C. Duy Khánh Zhou Zhou
+D. Huỳnh Lập
+*B
+
+Câu 51. Biệt danh "MC Trần Cheng" và "Cá Nóc" là của ai?
+A. MC Trần Ngọc
+B. Cheng
+C. K.O
+D. It's CHARLES.
+*B
+
+Câu 52. "Hoả thần" và "Út cưng" là biệt danh của anh tài nào?
+A. Thái VG
+B. Thái Lê Minh Hiếu
+C. Hoàng Rob
+D. Phùng Minh Cương
+*D
+
+Câu 53. Biệt danh "Thầy giám thị" và "Bang chủ" là của ai?
+A. Dũng DT
+B. MC Trần Ngọc
+C. Neko Lê
+D. Đại Nghĩa
+*B
+
+Câu 54. "Má Bảo" và "Thái Tử" là biệt danh của ai?
+A. Duy Khánh Zhou Zhou
+B. Hồ Đông Quan
+C. BB Trần
+D. K.O
+*C
+
+Câu 55. Biệt danh "Thiếu gia Minh Hiếu" và "chuông bé" là của ai?
+A. Thái Lê Minh Hiếu
+B. Thái VG
+C. Lê Xuân Tiền
+D. Phùng Minh Cương
+*A
+
+Câu 56. "Bà bán cá" và "Thỏ mắt nước" là biệt danh của anh tài nào?
+A. Thỏ (Da LAB)
+B. Toki Thành Thỏ
+C. Jun Phạm
+D. Will
+*B
+
+Câu 57. Biệt danh "Bánh Khé" và "Bé Thu" là của ai?
+A. Duy Khánh Zhou Zhou
+B. BB Trần
+C. Huỳnh Lập
+D. Thanh Duy
+*A
+
+Câu 58. "Chú 6", "Thỏ Trắng" và "Chun Chíp" là biệt danh của ai?
+A. Toki Thành Thỏ
+B. Thỏ (Da LAB)
+C. Jun Phạm
+D. Will
+*C
+
+Câu 59. Biệt danh "Tiên tử" và "Thập tứ ca" là của anh tài nào?
+A. Thanh Duy
+B. 14 Casper
+C. Hoàng Tôn
+D. Hà An Huy
+*B
+
+Câu 60. "Tổng tài" và "Bông tuyết" là biệt danh của ai?
+A. Hồ Đông Quan
+B. Trịnh Thăng Bình
+C. Neko Lê
+D. K.O
+*A
+
+Câu 61. Biệt danh "Sơn Sò" và "Chó cỏ" là của ai?
+A. Cheng
+B. OSAD
+C. K.O
+D. Will
+*C
+
+Câu 62. "Anh Chạc" và "CEO tập đoàn bán vớ" là biệt danh của anh tài nào?
+A. Neko Lê
+B. Cheng
+C. It's CHARLES.
+D. Trịnh Thăng Bình
+*C
+
+Câu 63. Biệt danh "Nụi" và "Selena" là của ai?
+A. Duy Khánh Zhou Zhou
+B. Đông Hùng
+C. Thanh Duy
+D. Đại Nghĩa
+*D
+
+Câu 64. Biệt danh "cô Lập" và "Lập Lờ" là của ai?
+A. Duy Khánh Zhou Zhou
+B. Đại Nghĩa
+C. BB Trần
+D. Huỳnh Lập
+*D
+
+Câu 65. "Money" là biệt danh của anh tài nào?
+A. Trịnh Thăng Bình
+B. Hoàng Rob
+C. Neko Lê
+D. Lê Xuân Tiền
+*D
+
+Câu 66. Biệt danh "Bờ a" và "chú Khủng Long" là của ai?
+A. Đông Hùng
+B. Thuận Nguyễn
+C. Nguyễn Văn Chung
+D. Dũng DT
+*B
+
+Câu 67. "Quiu" là biệt danh của ai?
+A. Will
+B. K.O
+C. Cheng
+D. Jun Phạm
+*A
+
+Câu 68. "Jet Jet chúa" và "Jet Đại Bàng" là biệt danh của anh tài nào?
+A. Vương Anh Tú
+B. Hoàng Tôn
+C. Thái VG
+D. Hồ Đông Quan
+*A
+
+Câu 69. Câu "Trả tiền chưa?" là câu cửa miệng của ai?
+A. Trịnh Thăng Bình
+B. Mew Amazing
+C. Lê Xuân Tiền
+D. Neko Lê
+*B
+
+Câu 70. "Phao cứu sinh = Mông to = Mẩy" là joke gắn với anh tài nào?
+A. Đinh Mạnh Ninh
+B. Đông Hùng
+C. Thuận Nguyễn
+D. Tùng Mint
+*A
+
+Câu 71. Ai là chủ nhân câu "Anh chưa bao giờ né ai, so you know?"
+A. Thái VG
+B. Thái Lê Minh Hiếu
+C. Hoàng Tôn
+D. Dũng DT
+*A
+
+Câu 72. Câu "Thịt kho dưa" gắn với anh tài nào?
+A. K.O
+B. Will
+C. OSAD
+D. BB Trần
+*C
+
+Câu 73. "ĐỪNG TIN EKIP!!!!!" là lời cảnh báo của ai?
+A. Thỏ (Da LAB)
+B. Mew Amazing
+C. Soobin
+D. MC Trần Ngọc
+*C
+
+Câu 74. Câu "Chưa tài rồi" là của ai?
+A. Hoàng Rob
+B. Hoàng Tôn
+C. Hoàng Dũng
+D. Thái VG
+*C
+
+Câu 75. Ai nói "Cái bà nào mà bả bào dữ dậy em"?
+A. Hồ Đông Quan
+B. OSAD
+C. Vương Anh Tú
+D. Cheng
+*C
+
+Câu 76. Câu "Tôi không trốn" là của ai?
+A. Hoàng Rob
+B. Conmegai
+C. Thuận Nguyễn
+D. Đông Hùng
+*B
+
+Câu 77. "Lập đã nói thế thì cho Lập đi" là câu của ai?
+A. Huỳnh Lập
+B. Thơm (Da LAB)
+C. BB Trần
+D. Thỏ (Da LAB)
+*B
+
+Câu 78. Câu "Ôi con vợ" là phản ứng giữa Hoàng Tôn và ai?
+A. Đinh Mạnh Ninh
+B. Hoàng Dũng
+C. Đông Hùng
+D. Thơm (Da LAB)
+*A
+
+Câu 79. "Kệ tao" là câu nói của anh tài nào?
+A. Hoàng Rob
+B. Hoàng Tôn
+C. Dũng DT
+D. Thái VG
+*A
+
+Câu 80. Câu "Và tôi là MC Trần Cheng!" là của ai?
+A. K.O
+B. MC Trần Ngọc
+C. Cheng
+D. Will
+*C
+
+Câu 81. "Tao hát nhép đấy" là câu của ai?
+A. Thanh Duy
+B. Hoàng Dũng
+C. Đông Hùng
+D. Hà An Huy
+*C
+
+Câu 82. Câu "Đừng áp lực tao" là của anh tài nào?
+A. Phùng Minh Cương
+B. Hoàng Tôn
+C. Hoàng Dũng
+D. Hà An Huy
+*C
+
+Câu 83. "Hi, can I join?" là câu cửa miệng của ai?
+A. It's CHARLES.
+B. Cheng
+C. K.O
+D. Hồ Đông Quan
+*A
+
+Câu 84. Câu "Ngựa ngựa" gắn với anh tài nào?
+A. Thái VG
+B. Hà An Huy
+C. Hồ Đông Quan
+D. Jun Phạm
+*C
+
+Câu 85. "Vậy mới là chương trình sống còn" là câu của ai?
+A. Mew Amazing
+B. Dũng DT
+C. MC Trần Ngọc
+D. Neko Lê
+*A
+
+Câu 86. Câu "Bước xuống thang" là của ai?
+A. Hồ Đông Quan
+B. K.O
+C. Will
+D. Cheng
+*D
+
+Câu 87. "Gel gel" là câu cửa miệng của anh tài nào?
+A. Thanh Duy
+B. Đông Hùng
+C. Đại Nghĩa
+D. Duy Khánh Zhou Zhou
+*C
+
+Câu 88. Câu "Thấy chưa, BB Trần ơi" là của ai?
+A. Huỳnh Lập
+B. Thanh Duy
+C. Mew Amazing
+D. Jun Phạm
+*C
+
+Câu 89. "Phiền lắm" là câu nói của ai?
+A. It's CHARLES.
+B. Vương Anh Tú
+C. Thỏ (Da LAB)
+D. OSAD
+*B
+
+Câu 90. Câu "Chạc ơi em đã mua bảo hiểm nhân thọ chưa" là của ai?
+A. Mew Amazing
+B. Đinh Mạnh Ninh
+C. Thơm (Da LAB)
+D. Hoàng Tôn
+*B
+
+Câu 91. Ai nói "Chương trình bê được anh Hoàng Rob từ chùa ra"?
+A. Mew Amazing
+B. Thái VG
+C. Dũng DT
+D. Phùng Minh Cương
+*D
+
+Câu 92. Câu "Tiếng cười vực dậy nền kinh tế nước nhà" là của ai?
+A. BB Trần
+B. Đại Nghĩa
+C. MC Trần Ngọc
+D. Đông Hùng
+*D
+
+Câu 93. "Xin lỗi nhé, đội em thua rồi" là câu của ai?
+A. Dũng DT
+B. OSAD
+C. Thỏ (Da LAB)
+D. Hoàng Dũng
+*A
+
+Câu 94. Câu "Nấu xói còn làm được nói chi là nấu ăn" là của ai?
+A. BB Trần
+B. Huỳnh Lập
+C. Duy Khánh Zhou Zhou
+D. Thanh Duy
+*A
+
+Câu 95. "Đi tìm Hoàng Tôn" là màn kết hợp của Thơm với ai?
+A. BB Trần
+B. Huỳnh Lập
+C. Mew Amazing
+D. Đại Nghĩa
+*B
+
+Câu 96. Câu "Muốn chiến thì tránh – hơi ngại chông gai" là của anh tài nào?
+A. Thái VG
+B. Will
+C. OSAD
+D. Tùng Mint
+*C
+
+Câu 97. "Anh đi chợ mua Yeah1" là câu của ai?
+A. Neko Lê
+B. Hoàng Tôn
+C. Trịnh Thăng Bình
+D. Mew Amazing
+*B
+
+Câu 98. "Aura chói lọi mấy con gà biết gì" gắn với tên tác giả nào?
+A. Hồ Đông Quan
+B. Hoàng Dũng
+C. Thỏ (Da LAB)
+D. Mew Amazing
+*A
+
+Câu 99. Câu "Xuân = Đỉnh" là joke của ai?
+A. Đinh Mạnh Ninh
+B. Lê Xuân Tiền
+C. Thái VG
+D. Hoàng Tôn
+*A
+
+Câu 100. "Rap cải lương" là joke gắn với anh tài nào?
+A. Thơm (Da LAB)
+B. OSAD
+C. Hà An Huy
+D. Thái VG
+*D`;
 
 /* "100k", "100.000", "100 000", "1tr" -> số */
 function docSoTien(v) {
@@ -2796,6 +3716,41 @@ function veChat(khung, ds, nodeTrong) {
     khung.appendChild(d);
   });
   if (duoi) khung.scrollTop = khung.scrollHeight;
+}
+
+/* Gắn một khung chat dùng chung topic rcvang/<phòng>/chat — chat đồng bộ ở mọi phòng
+   (khán giả, đội, kiểm duyệt, quản trò). o: {net, T, layS, khung, oNoi, nut, gui, tat, layTen} */
+function ganChat(o) {
+  const chat = taoChat();
+  const trong = () => el('div', 'chat-trong', 'Chưa có tin nhắn nào.');
+  function ve() {
+    const S = o.layS();
+    veChat(o.khung, chat.ds(S ? (S.chatTu || 0) : 0), trong());
+    const mo = !S || S.chatMo !== false;
+    if (o.gui) show(o.gui, mo);
+    if (o.tat) show(o.tat, !mo);
+  }
+  o.net.theo(o.T + 'chat', (_t, body) => {
+    let m; try { m = JSON.parse(body); } catch (e) { return; }
+    const S = o.layS();
+    if (S && S.chatMo === false && m && m.loai === 'nguoi') return;
+    if (chat.them(m)) ve();
+  });
+  function gui() {
+    const noi = o.oNoi.value.replace(/\s+/g, ' ').trim();
+    if (!noi) return;
+    const S = o.layS();
+    if (S && S.chatMo === false) { toast('Quản trò đang tắt chat'); return; }
+    if (!chat.duocGui()) { toast('Nhắn chậm thôi — chờ ' + Math.ceil(chat.conCho() / 1000) + 's nữa'); return; }
+    const m = { id: 'k' + Math.random().toString(36).slice(2, 9), ten: String(o.layTen() || 'Ẩn danh').slice(0, 18),
+                noi: noi.slice(0, CHAT_DAI), loai: 'nguoi', t: Date.now() };
+    o.net.gui(o.T + 'chat', m);
+    chat.them(m); ve();
+    o.oNoi.value = '';
+  }
+  o.nut.addEventListener('click', gui);
+  o.oNoi.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); gui(); } });
+  return { ve() { const S = o.layS(); chat.cat(S ? (S.chatTu || 0) : 0); ve(); } };
 }
 
 /* ============================================================
@@ -2885,7 +3840,7 @@ function veDapAn(khung, cau, tuy) {
     const node = el(tuy.moChon ? 'button' : 'div', cls);
     node.appendChild(el('span', 'chu', CHU[i]));
     node.appendChild(el('span', null, noi + (laDung ? '  ✓' : '')));
-    if (laMach) node.appendChild(el('span', 'mach-nhan', '🫂 người thân mách'));
+    if (laMach) node.appendChild(el('span', 'mach-nhan', '📞 người thân mách'));
     if (tuy.moChon && tuy.onChon) node.addEventListener('click', () => tuy.onChon(i));
     khung.appendChild(node);
   });
@@ -2923,12 +3878,13 @@ function khoiDongMC(room, biMat) {
                  moc: MOC_MAC_DINH.slice(), x2: null, hs: null, cd: null, anTien: false,
                  chatMo: true, chatTu: 0, cho: [], soNha: 0, daCK: [], dem: null,
                  micMo: [], rxMo: true, khoaPhong: false, kieuThoai: 'mc', cuu: null,
-                 mocLua: MOC_LUA_MAC_DINH.slice(), duDoan: null };
+                 mocLua: MOC_LUA_MAC_DINH.slice(), duDoan: null, tran: 'chua' };
   let S = Object.assign({}, mdOn, doc(KHOA + '.state', {}));
   if (!Array.isArray(S.moc) || S.moc.length !== 4) S.moc = MOC_MAC_DINH.slice();
   if (!Array.isArray(S.mocLua) || S.mocLua.length !== 4) S.mocLua = MOC_LUA_MAC_DINH.slice();
   if (S.duDoan && typeof S.duDoan.v !== 'number') S.duDoan = null;
   if (!S.tieuDe || S.tieuDe === 'Rung Chuông Vàng') S.tieuDe = 'GAI VÀNG AWARDS';   // phòng tạo trước khi đổi tên
+  if (['chua', 'dang', 'nghi', 'xong'].indexOf(S.tran) < 0) S.tran = 'chua';
   S.soNha = Number(S.soNha) || 0;
   if (!Array.isArray(S.daCK)) S.daCK = [];
   if (!Array.isArray(S.micMo)) S.micMo = [];
@@ -2940,7 +3896,8 @@ function khoiDongMC(room, biMat) {
     if (d.tien == null) d.tien = 0;
     if (d.lua == null) d.lua = 0;
     /* QR tự gắn từ danh sách nhà (ảnh nhúng / thumbnail Drive) -> cập nhật theo danh sách mới nhất */
-    const sanQR = nhaSan(d.ten);
+    const sanQR = nhaSan(nhaCua(d));
+    if (sanQR) d.nha = sanQR.ten;                     // chuẩn hoá theo tên nhà hiện tại
     if (sanQR && (!d.qr || /^data:|^https:\/\/drive\.google\.com\/thumbnail/i.test(d.qr))) {
       if (sanQR.drive) { d.qr = qrAnh(sanQR.drive); d.qrMo = qrMo(sanQR.drive); }
       else { d.qr = ''; d.qrMo = ''; }               // nhà không còn QR trong danh sách (về bờ / đang cập nhật)
@@ -2951,6 +3908,12 @@ function khoiDongMC(room, biMat) {
   }
   let nhatKy = doc(KHOA + '.nhatky', {});          // {teamId: [{so, nguoi, t}]} — chỉ lưu ở máy quản trò
   let cauHoi = doc(KHOA + '.cauhoi', []);
+  /* phòng chưa có câu hỏi, hoặc vẫn đang dùng bộ mẫu cũ -> tự nạp bộ 100 câu mặc định */
+  if (!Array.isArray(cauHoi) || !cauHoi.length || (cauHoi[0] && /^Thủ đô của Việt Nam/.test(cauHoi[0].noiDung || ''))) {
+    const kqMau = phanTichCauHoi(BO_MAU);
+    if (kqMau.questions.length) { cauHoi = kqMau.questions; luu(KHOA + '.cauhoi', cauHoi); }
+  }
+  if (!(S.qi >= 0 && S.qi < cauHoi.length)) S.qi = 0;
   let tuKhoa = doc(KHOA + '.tukhoa', true);
   let giayChuyen = doc(KHOA + '.giay', 6);
   let nhipCuoi = {};   // teamId -> thời điểm nhận tin cuối
@@ -3070,7 +4033,8 @@ function khoiDongMC(room, biMat) {
              kieuThoai: S.kieuThoai === 'p2p' ? 'p2p' : 'mc', cuu: S.cuu || null,
              mocLua: S.mocLua, duDoan: S.duDoan || null,
              /* thời gian CÒN LẠI (ms) chứ không gửi mốc giờ: đồng hồ máy khán giả có thể lệch */
-             han: S.han ? Math.max(0, S.han - Date.now()) : null, hanLoai: S.han ? S.hanLoai : null };
+             han: S.han ? Math.max(0, S.han - Date.now()) : null, hanLoai: S.han ? S.hanLoai : null,
+             tran: S.tran || 'chua' };
              /* KHÔNG gửi token đối soát: nó chỉ được lưu ở máy quản trò */
   }
 
@@ -3090,16 +4054,29 @@ function khoiDongMC(room, biMat) {
     const ten = String(m.ten == null ? '' : m.ten).trim().slice(0, 24) || 'Đội không tên';
     nhipCuoi[id] = Date.now();
     const cu = S.doi[id];
+    /* nhà nhận buff luck do đội chọn (bản cũ không gửi: dùng tên đội nếu trùng tên nhà) */
+    const san = nhaSan(String(m.nha == null ? '' : m.nha)) || nhaSan(ten);
+    const nha = san ? san.ten : '';
+    const ganQR = d => {
+      d.nha = nha;
+      d.lkSao = (san && san.lk) || '';
+      d.qr = (san && (san.qr || (san.drive && qrAnh(san.drive)))) || '';
+      d.qrMo = (san && (san.qrMo || (san.drive && qrMo(san.drive)))) || '';
+    };
     if (!cu) {
       if (S.khoaPhong) { daTuChoi.add(id); net.gui(T + 'rieng/' + id, { khoaPhong: true }, true); return; }
-      const san = nhaSan(ten);
-      S.doi[id] = { id, ten, dung: 0, sai: 0, diem: 0, tien: 0, lua: 0, daDung: [], online: true, ma: maNha(++S.soNha),
-                    lkSao: (san && san.lk) || '',
-                    qr:   (san && (san.qr   || (san.drive && qrAnh(san.drive)))) || '',
-                    qrMo: (san && (san.qrMo || (san.drive && qrMo(san.drive)))) || '' };
-      phat(); toast(ten + ' đã vào phòng' + (san ? ' — đã gắn sẵn QR và link quỹ' : ''));
+      S.doi[id] = { id, ten, dung: 0, sai: 0, diem: 0, tien: 0, lua: 0, daDung: [], online: true, ma: maNha(++S.soNha) };
+      ganQR(S.doi[id]);
+      if (S.micMo.indexOf(id) < 0) S.micMo.push(id);   // mặc định mở mic cho đội mới (quản trò vẫn khoá được)
+      phat(); toast(ten + ' đã vào phòng' + (nha ? ' — nhận buff cho ' + nha : ''));
     }
-    else { cu.online = true; if (cu.ten !== ten) { cu.ten = ten; phat(); } else ve(); }
+    else {
+      cu.online = true;
+      let doi = false;
+      if (cu.ten !== ten) { cu.ten = ten; doi = true; }
+      if (nha && cu.nha !== nha) { ganQR(cu); doi = true; }
+      doi ? phat() : ve();
+    }
   });
 
   net.theo(T + 'rung', (_t, body) => {
@@ -3303,7 +4280,7 @@ function khoiDongMC(room, biMat) {
     S.cho.splice(i, 1);
     const d = S.doi[y.teamId];
     const ghiDuyet = kq => hangLog.them('duyet', {
-      bid: y.bid, ketQua: kq, ten: y.ten, nha: d ? d.ten : '(nhà đã rời)', so: y.so,
+      bid: y.bid, ketQua: kq, ten: y.ten, nha: d ? tenBuff(d) : '(nhà đã rời)', so: y.so,
       tongNha: d ? (Number(d.tien) || 0) : 0, luc: Date.now() });
     if (!nhan) { ghiDuyet('Từ chối'); phat(); toast('Đã bỏ yêu cầu buff'); return; }
     if (!d) { ghiDuyet('Từ chối'); phat(); toast('Nhà này không còn trong phòng'); return; }
@@ -3316,7 +4293,7 @@ function khoiDongMC(room, biMat) {
     }
     themTien(y.teamId, y.so, y.ten, y.lk);           /* themTien đã gọi phat() */
     ghiDuyet('Duyệt');                                /* sau themTien: tổng quỹ đã cộng */
-    guiChatHeThong('🍀 ' + y.ten + ' vừa buff ' + tienVN(y.so) + ' cho ' + d.ten + '!');
+    guiChatHeThong('🍀 ' + y.ten + ' vừa buff ' + tienVN(y.so) + ' cho ' + tenBuff(d) + '!');
   }
 
   /* ============================================================
@@ -3514,10 +4491,11 @@ function khoiDongMC(room, biMat) {
   function xoaHan() { S.han = null; S.hanLoai = null; }
   /* gọi trong phat(): nhìn trạng thái hiện tại để đặt lại đồng hồ khi pha / đội giữ quyền đổi */
   function capNhatHan() {
-    const k = S.pha + '|' + (S.giu || '') + '|' + S.luot + '|' + S.qi;
+    const k = S.tran + '|' + S.pha + '|' + (S.giu || '') + '|' + S.luot + '|' + S.qi;
     if (k === khoaHan && !tuMoChuong) return;          // chuyển câu (kể cả bấm lại câu đang đứng) luôn đặt lại
     khoaHan = k;
-    if (S.pha === 'cho' && tuMoChuong && cauHoi.length) datHan('cho', GIAY_CHO_MO);
+    if (S.tran !== 'dang') xoaHan();                   // chưa bắt đầu / nghỉ / kết thúc: không đếm giờ
+    else if (S.pha === 'cho' && cauHoi.length) datHan('cho', GIAY_CHO_MO);
     else if (S.pha === 'mo') datHan('mo', GIAY_RUNG);
     else if (S.pha === 'khoa' && S.giu) datHan('tl', GIAY_TRA_LOI);
     else xoaHan();
@@ -3551,6 +4529,60 @@ function khoiDongMC(room, biMat) {
     o.classList.toggle('gap', con <= 3);
     show(o, true);
   }, 250);
+
+  /* ---------- trạng thái trận: chưa bắt đầu → đang chơi ⇄ nghỉ giữa hiệp → kết thúc ---------- */
+  function huyLuot() { S.rung = []; S.giu = null; S.chon = null; S.loai = []; }
+  function batDauTran() {
+    if (!cauHoi.length) { toast('Chưa có câu hỏi nào'); return; }
+    const choiLai = S.tran === 'xong';
+    S.tran = 'dang'; xoaDem();
+    if (S.pha !== 'hien') { S.pha = 'cho'; huyLuot(); }
+    tuMoChuong = true;
+    if (S.pha === 'hien') { if (S.qi < cauHoi.length - 1) { doiCau(1); } else { S.pha = 'cho'; huyLuot(); phat(); } }
+    else phat();
+    Am.mo();
+    guiChatHeThong(choiLai ? '🎬 Trò chơi bắt đầu lại!' : '🎬 Trò chơi bắt đầu! Chuông mở sau ' + GIAY_CHO_MO + ' giây.');
+  }
+  function nghiTran() {
+    if (S.tran !== 'dang') return;
+    S.tran = 'nghi'; xoaDem(); xoaHan();
+    if (S.pha === 'mo' || S.pha === 'khoa') { S.pha = 'cho'; huyLuot(); }   // huỷ lượt đang dở, tiếp tục sẽ hỏi lại câu này
+    S.cuu = null; cuuChon = null; xongDemCuu();
+    phat();
+    guiChatHeThong('⏸ Nghỉ giữa hiệp — trò chơi sẽ tiếp tục sau ít phút.');
+  }
+  function tiepTran() {
+    if (S.tran !== 'nghi') return;
+    S.tran = 'dang'; tuMoChuong = true;
+    if (S.pha === 'hien' && S.qi < cauHoi.length - 1) doiCau(1);
+    else { if (S.pha === 'hien') { S.pha = 'cho'; huyLuot(); } phat(); }
+    Am.mo();
+    guiChatHeThong('▶ Trò chơi tiếp tục! Chuông mở sau ' + GIAY_CHO_MO + ' giây.');
+  }
+  function ketThucTran() {
+    if (S.tran === 'xong') return;
+    if (!confirm('Kết thúc trò chơi? Đồng hồ dừng, bảng xếp hạng chốt lại.')) return;
+    S.tran = 'xong'; xoaDem(); xoaHan();
+    if (S.pha === 'mo' || S.pha === 'khoa') { S.pha = 'cho'; huyLuot(); }
+    S.cuu = null; cuuChon = null; xongDemCuu();
+    if (S.duDoan && S.duDoan.mo) khoaDuDoan(true);
+    const top = xepHang(S.doi)[0];
+    phat(); Am.dung();
+    guiChatHeThong('🏁 Trò chơi kết thúc!' + (top ? ' Dẫn đầu: ' + top.ten + ' với ' + top.diem + ' điểm.' : ''));
+  }
+  function veTranMC() {
+    const tt = S.tran || 'chua';
+    $('mc-tran-tt').textContent = { chua: 'Chưa bắt đầu', dang: '● Đang chơi', nghi: '⏸ Nghỉ giữa hiệp', xong: '🏁 Đã kết thúc' }[tt];
+    show($('mc-bat-dau'), tt === 'chua' || tt === 'xong');
+    $('mc-bat-dau').textContent = tt === 'xong' ? '▶ Chơi tiếp từ câu sau' : '▶ Bắt đầu trò chơi';
+    show($('mc-nghi'), tt === 'dang');
+    show($('mc-tiep'), tt === 'nghi');
+    show($('mc-ket-thuc'), tt === 'dang' || tt === 'nghi');
+  }
+  $('mc-bat-dau').addEventListener('click', () => { Am.moKhoa(); batDauTran(); });
+  $('mc-nghi').addEventListener('click', nghiTran);
+  $('mc-tiep').addEventListener('click', () => { Am.moKhoa(); tiepTran(); });
+  $('mc-ket-thuc').addEventListener('click', ketThucTran);
 
   /* ---------- hệ thống tự chấm ----------
      Đáp án đúng đã nằm sẵn trong bộ câu hỏi nên không cần quản trò phán xử. */
@@ -3599,6 +4631,7 @@ function khoiDongMC(room, biMat) {
     clearInterval(demHen);
     const giay = Math.max(1, Math.min(60, Number(giayChuyen) || 6));
     if (S.qi >= cauHoi.length - 1) { S.dem = null; return; }   // câu cuối thì dừng lại
+    if (S.tran !== 'dang') { S.dem = null; return; }           // nghỉ / chưa bắt đầu: không tự sang câu
     S.dem = giay;
     demHen = setInterval(() => {
       S.dem = (Number(S.dem) || 0) - 1;
@@ -3667,7 +4700,7 @@ function khoiDongMC(room, biMat) {
     /* hệ thống tự chấm: chỗ này chỉ báo tình hình, không còn nút phán xử */
     const ch = $('mc-cham'); ch.innerHTML = '';
     if (S.cuu) {
-      ch.appendChild(el('b', null, '🫂 Đang gọi người thân cho “' + S.cuu.tenDoi + '”: '
+      ch.appendChild(el('b', null, '📞 Đang gọi người thân cho “' + S.cuu.tenDoi + '”: '
         + S.cuu.tenKg + ' · còn ' + S.cuu.con + 's'));
       if (!S.cuu.daTraLoi) {
         const bb = el('button', 'b-nho', 'Thôi, không chờ nữa');
@@ -3709,6 +4742,7 @@ function khoiDongMC(room, biMat) {
     show($('mc-chua-doi'), Object.keys(S.doi).length === 0);
     veQuyMC();
     veDuDoanMC();
+    veTranMC();
     veCho();
     veThoaiMC();
   }
@@ -3735,7 +4769,7 @@ function khoiDongMC(room, biMat) {
 
       const dau = el('div', 'hang');
       dau.style.justifyContent = 'space-between';
-      dau.appendChild(el('b', null, t.ten));
+      dau.appendChild(el('b', null, tenBuff(t)));
       dau.appendChild(el('span', 'tien-to', tienVN(t.tien)));
       o.appendChild(dau);
       const keLua = CO_HOA_LUC ? mocLuaKeTiep(t, S.moc, S.mocLua) : null;
@@ -4280,7 +5314,7 @@ function khoiDongMC(room, biMat) {
 /* ============================================================
    MÀN HÌNH ĐỘI
    ============================================================ */
-function khoiDongDoi(room, ten) {
+function khoiDongDoi(room, ten, nha) {
   const T = 'rcvang/' + room + '/';
   const net = taoNet();
   const slug = String(ten).toLowerCase().replace(/\s+/g, ' ').trim();
@@ -4301,6 +5335,8 @@ function khoiDongDoi(room, ten) {
   /* máy có bàn phím thật thì nhắc phím cách; điện thoại thì không */
   const coBanPhim = (() => { try { return matchMedia('(hover:hover) and (pointer:fine)').matches; } catch (e) { return false; } })();
   show($('doi-space'), coBanPhim);
+  const chatDoi = ganChat({ net, T, layS: () => S, khung: $('doi-chat'), oNoi: $('doi-chat-noi'), nut: $('doi-chat-nut'),
+                            gui: $('doi-chat-gui'), tat: $('doi-chat-tat'), layTen: () => ten });
   const demDoi = taoDemNguoc($('doi-dem'), s => ({
     ten: s && s.giu && s.doi && s.doi[s.giu] ? s.doi[s.giu].ten : '', laToi: !!(s && s.giu === id) }));
 
@@ -4312,6 +5348,9 @@ function khoiDongDoi(room, ten) {
     const truoc = S;
     S = m;
     demDoi.nhan(S);
+    veBangTran($('doi-tran'), S);
+    chatDoi.ve();
+    if (!truoc) setTimeout(tuVaoThoai, 600);          // lần đầu có state: tự vào phòng thoại, mở mic
     /* ghi mốc thời gian ngay khi thấy chuông mở cho một lượt mới */
     if (S.pha === 'mo' && S.luot !== luotDaThay) {
       luotDaThay = S.luot; mocMo = performance.now(); rtCuaToi = null;
@@ -4335,7 +5374,7 @@ function khoiDongDoi(room, ten) {
     if (m && m.goiY) {
       goiYCuaToi = m.goiY;
       net.gui(T + 'rieng/' + id, '', true);        // dọn khỏi máy chủ, khỏi dính sang câu sau
-      toast('🫂 ' + m.goiY.tenKg + ' mách đáp án ' + CHU[m.goiY.chon]);
+      toast('📞 ' + m.goiY.tenKg + ' mách đáp án ' + CHU[m.goiY.chon]);
       Am.moKhoa(); Am.chuong();
       ve(); return;
     }
@@ -4417,7 +5456,22 @@ function khoiDongDoi(room, ten) {
     toast(tuTat ? 'Đã tắt mic' : 'Mic đang mở — cả phòng nghe được');
     veThoai();
   }
-  $('doi-th-nut').addEventListener('click', bamThoai);
+  $('doi-th-nut').addEventListener('click', () => { if (!dangTuVao) bamThoai(); });
+
+  /* ---------- mặc định tự vào phòng thoại + mở mic ----------
+     Thử ngay khi có state. Trình duyệt chặn (chưa có lần chạm / chưa cấp quyền) thì
+     thử lại một lần ở lần chạm đầu tiên — trừ khi chính lần chạm đó là nút phòng thoại. */
+  let dangTuVao = false, soLanTuVao = 0;
+  async function tuVaoThoai() {
+    if (dangTuVao || dangTrongThoai() || !S || soLanTuVao >= 2) return;
+    dangTuVao = true; soLanTuVao++;
+    try { tuTat = false; await bamThoai(); } finally { dangTuVao = false; }
+  }
+  MoAm.khiCham(ev => {
+    try { tiengMC.layAc(); } catch (e) {}
+    const laNutThoai = ev && ev.target && ev.target.closest && ev.target.closest('#doi-th-nut');
+    if (!laNutThoai && !dangTrongThoai()) tuVaoThoai();
+  });
   document.addEventListener('keydown', e => {
     if (e.repeat || /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     if ((e.key === 'm' || e.key === 'M') && dangTrongThoai()) { e.preventDefault(); bamThoai(); }
@@ -4460,7 +5514,7 @@ function khoiDongDoi(room, ten) {
   veThoai();
 
   net.batDau(tt => { veDen($('doi-den'), tt); if (tt === 'on') nhip(); });
-  const nhip = () => net.gui(T + 'vao', { id, ten });
+  const nhip = () => net.gui(T + 'vao', { id, ten, nha });
   setInterval(() => { if (net.dangNoi()) nhip(); }, 12000);
   window.addEventListener('beforeunload', () => net.gui(T + 'roi', { id }));
 
@@ -4556,7 +5610,8 @@ function khoiDongDoi(room, ten) {
     else if (S.giu === id)                 { t1 = 'MỜI BẠN TRẢ LỜI!'; t2 = goiYCuaToi ? 'Người thân mách ' + CHU[goiYCuaToi.chon] + ' — bạn quyết' : 'Chạm vào đáp án bạn chọn'; }
     else if (S.giu)                        { const g = (S.doi || {})[S.giu]; t1 = 'ĐỘI KHÁC TRẢ LỜI'; t2 = g ? g.ten : ''; }
     else if (coTheRung())                  { bat = true; t1 = 'RUNG CHUÔNG'; t2 = coBanPhim ? 'Nhấn phím cách ␣' : 'Bấm thật nhanh!'; nutChuong.classList.add('san-sang'); }
-    else if (S.pha === 'cho')              { t1 = 'CHỜ MỞ CHUÔNG'; t2 = 'Chuông tự mở sau vài giây'; }
+    else if (S.pha === 'cho')              { t1 = 'CHỜ MỞ CHUÔNG';
+      t2 = S.tran === 'dang' ? 'Chuông tự mở sau vài giây' : S.tran === 'nghi' ? 'Đang nghỉ giữa hiệp' : S.tran === 'xong' ? 'Trò chơi đã kết thúc' : 'Chờ quản trò bắt đầu'; }
     else if (daRungLuot === S.luot || (S.rung || []).some(r => r.teamId === id)) {
       const v = (S.rung || []).findIndex(r => r.teamId === id);
       const rt = v >= 0 ? S.rung[v].rt : rtCuaToi;
@@ -4643,6 +5698,8 @@ function khoiDongKhanGia(room) {
     if (S && typeof m.seq === 'number' && typeof S.seq === 'number' && m.seq < S.seq) return;
     const truoc = S; S = m;
     demKg.nhan(S);
+    veBangTran($('kg-tran'), S);
+    if (!truoc) setTimeout(tuBatNghe, 300);           // lần đầu có state: tự bật loa
     const soRung = (S.rung || []).length;
     if (soRung > rungTruoc) Am.chuong();
     rungTruoc = soRung;
@@ -4770,18 +5827,21 @@ function khoiDongKhanGia(room) {
     n.className = 'th-nut' + (tt === 'on' ? ' song' : (tt === 'het' || tt === 'khong' || tt === 'loi') ? ' khoa' : '');
     show($('kg-am'), tt === 'on');
   }
+  let kgTuTatNghe = false;            // người xem tự tắt thì không tự bật lại
   $('kg-nghe').addEventListener('click', async () => {
     if (kgKieu() === 'mc') {
-      if (tiengMCk.dangNghe()) { tiengMCk.tatNghe(); toast('Đã tắt tiếng'); }
+      if (tiengMCk.dangNghe()) { tiengMCk.tatNghe(); kgTuTatNghe = true; toast('Đã tắt tiếng'); }
       else {
+        kgTuTatNghe = false;
         try { await tiengMCk.batNghe(); toast('Đang nghe phòng thoại'); }
         catch (e) { toast(String(e && e.message || e)); }
       }
       veNghe(); return;
     }
     if (nghe.trangThai() === 'tat') {
+      kgTuTatNghe = false;
       try { await nghe.bat(); } catch (e) { toast(String(e && e.message || e)); }
-    } else { nghe.tat(); toast('Đã tắt tiếng'); }
+    } else { nghe.tat(); kgTuTatNghe = true; toast('Đã tắt tiếng'); }
     veNghe();
   });
   $('kg-am').addEventListener('input', e => {
@@ -4789,6 +5849,21 @@ function khoiDongKhanGia(room) {
     nghe.datAm(v); tiengMCk.datAm(v);
   });
   veNghe();
+
+  /* ---------- tự bật loa cho khán giả ----------
+     Bật nghe ngay khi có state; trình duyệt chỉ thật sự phát tiếng sau lần chạm đầu tiên,
+     nên mỗi lần chạm đều đánh thức lại bộ phát (và nhắc người xem chạm một lần). */
+  let daNhacCham = false;
+  async function tuBatNghe() {
+    if (kgTuTatNghe || !S) return;
+    try {
+      if (kgKieu() === 'mc') { if (!tiengMCk.dangNghe()) await tiengMCk.batNghe(); }
+      else if (nghe.trangThai() === 'tat') await nghe.bat();
+    } catch (e) { return; }
+    veNghe();
+    if (!MoAm.daCham() && !daNhacCham) { daNhacCham = true; toast('🔈 Chạm màn hình một lần để bật âm thanh'); }
+  }
+  MoAm.khiCham(() => { try { tiengMCk.layAc(); } catch (e) {} tuBatNghe(); });
 
   /* ---------- thả cảm xúc ---------- */
   const cx = taoCamXuc({ toiDa: 110, to: 1.25 });
@@ -4863,7 +5938,7 @@ function khoiDongKhanGia(room) {
       const tien = Number(t.tien) || 0;
       const h = el('div', 'lua-hang tinh');
       h.appendChild(el('span', 'hs', tien > 0 && i < 3 ? ['🥇', '🥈', '🥉'][i] : String(i + 1)));
-      h.appendChild(el('span', 'ten', t.ten));
+      h.appendChild(el('span', 'ten', tenBuff(t)));
       h.appendChild(el('span', 'so', S.anTien ? '' : tienVN(tien)));
       const vach = el('div', 'vach'); const v = el('i', 'tien'); v.style.width = (tien * 100 / max) + '%';
       vach.appendChild(v); h.appendChild(vach);
@@ -5019,7 +6094,7 @@ function khoiDongKhanGia(room) {
     const ds = xepHang((S && S.doi) || {});
     const cu = dangChon || kn.value;
     kn.innerHTML = '';
-    ds.forEach(d => { const o = el('option', null, d.ten); o.value = d.id; kn.appendChild(o); });
+    ds.forEach(d => { const o = el('option', null, tenBuff(d)); o.value = d.id; kn.appendChild(o); });
     kn.value = ds.some(d => d.id === cu) ? cu : ((ds[0] && ds[0].id) || '');
     return kn.value;
   }
@@ -5133,7 +6208,7 @@ function khoiDongKhanGia(room) {
         .catch(() => toast('Không mã hoá được ảnh — hãy báo quản trò'));
     }
     /* lưu đơn + ảnh lên backend (Google Sheets + Drive riêng) qua HTTPS, không qua máy chủ công cộng */
-    const nhaTen = ((S && S.doi) || {})[buffNha] ? S.doi[buffNha].ten : '';
+    const nhaTen = ((S && S.doi) || {})[buffNha] ? tenBuff(S.doi[buffNha]) : '';
     const anhGui = anhDaChon;
     (async () => {
       let r = null;
@@ -5248,6 +6323,8 @@ function khoiDongDuyet(room, biMat) {
   let nhatKy = [];
 
   document.title = 'Duyệt giao dịch — GAI VÀNG AWARDS';
+  const chatDuyet = ganChat({ net, T, layS: () => S, khung: $('duyet-chat'), oNoi: $('duyet-chat-noi'), nut: $('duyet-chat-nut'),
+                              gui: $('duyet-chat-gui'), tat: $('duyet-chat-tat'), layTen: () => '🧾 Kiểm duyệt' });
 
   /* ---------- phòng thoại với quản trò ---------- */
   let duRa = doc('duyet.' + room + '.ra', false);
@@ -5402,6 +6479,7 @@ function khoiDongDuyet(room, biMat) {
     if (!m || typeof m !== 'object') return;
     if (S && typeof m.seq === 'number' && typeof S.seq === 'number' && m.seq < S.seq) return;
     S = m;
+    chatDuyet.ve();
     /* lệnh đã được áp dụng thì thôi gửi lại */
     for (const bid in dangCho) {
       if (!(S.cho || []).some(x => x.bid === bid)) { clearInterval(dangCho[bid].t); delete dangCho[bid]; }
@@ -5507,7 +6585,7 @@ function khoiDongDuyet(room, biMat) {
       /* cột thông tin */
       const phai = el('div');
       phai.appendChild(el('div', 'duyet-td', tienVN(y.so)));
-      phai.appendChild(el('div', null, (y.ten || 'Khán giả') + ' → ' + (nha ? nha.ten : '(nhà đã rời)')));
+      phai.appendChild(el('div', null, (y.ten || 'Khán giả') + ' → ' + (nha ? tenBuff(nha) : '(nhà đã rời)')));
       const ghi = [new Date(y.t).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })];
       if (y.lkNh) ghi.push(y.lkNh);
       phai.appendChild(el('div', 'lech', ghi.join(' · ')));
@@ -5533,7 +6611,7 @@ function khoiDongDuyet(room, biMat) {
       bd.disabled = !!dangCho[y.bid]; bb.disabled = !!dangCho[y.bid];
       bd.addEventListener('click', () => {
         guiLenh(y.bid, 'duyet');
-        ghiLog('✓ Duyệt ' + tienVN(y.so) + ' của ' + y.ten + ' cho ' + (nha ? nha.ten : '?'));
+        ghiLog('✓ Duyệt ' + tienVN(y.so) + ' của ' + y.ten + ' cho ' + (nha ? tenBuff(nha) : '?'));
       });
       bb.addEventListener('click', () => {
         guiLenh(y.bid, 'bo');
@@ -5583,14 +6661,17 @@ function dinhTuyen() {
     const room = Ma.tuMaDoi(ma);
     if (room === null) { toast('Mã đội không đúng'); location.hash = ''; return dinhTuyen(); }
     let ten = doc('doi.' + room + '.ten', '');
-    if (!ten) {                                   // vào bằng link: hỏi tên ngay trên trang chủ
+    let nha = doc('doi.' + room + '.nha', '');
+    if (!nha && nhaSan(ten)) nha = nhaSan(ten).ten;   // bản cũ: tên đội chính là tên nhà
+    if (!ten || !nha) {                           // vào bằng link: hỏi tên + nhà ngay trên trang chủ
       hienMan('v-home');
       $('in-ma-doi').value = Ma.cua(room).doi;
-      $('in-ten-doi').focus();
-      toast('Hãy đặt tên đội để vào phòng');
+      if (ten) $('in-ten-doi').value = ten;
+      (ten ? $('in-nha') : $('in-ten-doi')).focus();
+      toast('Hãy nhập tên và chọn nhà để vào phòng');
       return;
     }
-    hienMan('v-doi'); khoiDongDoi(room, ten); return;
+    hienMan('v-doi'); khoiDongDoi(room, ten, nha); return;
   }
 
   if (vai === 'duyet' && ma) {
@@ -5648,24 +6729,19 @@ $('btn-mo-lai').addEventListener('click', () => {
 /* danh sách nhà có sẵn cho các đội chọn khi vào game */
 (() => {
   const kn = $('in-nha');
-  const dau = el('option', null, '— Chọn nhà của bạn —'); dau.value = ''; kn.appendChild(dau);
-  NHA_SAN.forEach(n => { const o = el('option', null, n.ten); o.value = n.ten; kn.appendChild(o); });
-  const khac = el('option', null, 'Tên khác…'); khac.value = '__khac'; kn.appendChild(khac);
-  kn.addEventListener('change', () => {
-    const tuGo = kn.value === '__khac';
-    show($('in-ten-doi'), tuGo);
-    if (tuGo) $('in-ten-doi').focus();
-  });
+  const dau = el('option', null, '— Chọn nhà nhận buff luck —'); dau.value = ''; kn.appendChild(dau);
+  NHA_SAN.forEach(n => { const o = el('option', null, n.ten + (n.veBo ? ' (đã về bờ)' : '')); o.value = n.ten; kn.appendChild(o); });
 })();
 
 $('btn-vao-doi').addEventListener('click', () => {
   const room = Ma.tuMaDoi($('in-ma-doi').value);
   if (room === null) { toast('Mã đội phải có 4 ký tự'); $('in-ma-doi').focus(); return; }
-  const chon = $('in-nha').value;
-  if (!chon) { toast('Hãy chọn nhà của bạn trong danh sách'); $('in-nha').focus(); return; }
-  const ten = (chon === '__khac' ? $('in-ten-doi').value.trim() : chon).slice(0, 24);
-  if (!ten) { toast('Hãy đặt tên cho đội của bạn'); $('in-ten-doi').focus(); return; }
+  const ten = $('in-ten-doi').value.replace(/\s+/g, ' ').trim().slice(0, 24);
+  if (!ten) { toast('Hãy nhập tên của bạn'); $('in-ten-doi').focus(); return; }
+  const nha = $('in-nha').value;
+  if (!nha) { toast('Hãy chọn nhà để nhận buff luck'); $('in-nha').focus(); return; }
   luu('doi.' + room + '.ten', ten);
+  luu('doi.' + room + '.nha', nha);
   Am.moKhoa();
   location.hash = 'doi/' + Ma.cua(room).doi;
   location.reload();
