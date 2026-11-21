@@ -1642,7 +1642,11 @@ const nhaCua = d => (d && (d.nha || d.ten)) || '';
 const tenBuff = d => (d ? (d.nha && chuanTen(d.nha) !== chuanTen(d.ten) ? d.nha + ' (' + d.ten + ')' : (d.nha || d.ten)) : '');
 const chuanTen = t => String(t == null ? '' : t).toLowerCase().replace(/\s+/g, ' ').trim();
 /* tên cũ đã đổi -> tên mới (phòng/đội tạo trước khi đổi vẫn khớp đúng nhà) */
-const NHA_DOI_TEN = { 'chesse bộ đông cháu': 'Cheese bộ Đông Cháu', 'isol.huynhlap': 'ISOL_HUYNHLAP' };
+const NHA_DOI_TEN = {
+  'chesse bộ đông cháu': 'Cheese bộ Đông Cháu',
+  'isol.huynhlap': 'ISOL_HUYNHLAP', 'isol huỳnh lập': 'ISOL_HUYNHLAP',      // tên ở bản gốc / bản trước
+  'dearcheng': 'Cheng', 'ánthesis.tlmh': 'Ánthesis', 'cmbf_434': 'CMBF',
+};
 const nhaSan = ten => { const k = NHA_DOI_TEN[chuanTen(ten)] || ten; return NHA_SAN.find(n => chuanTen(n.ten) === chuanTen(k)) || null; };
 
 /* Link quỹ KHÁC link biên lai: giữ nguyên ?query và #hash vì nhiều link
