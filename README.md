@@ -9,7 +9,8 @@ Backend nhỏ trên Vercel (`/api`) ghi log realtime ra **Google Sheets** qua m�
 |---|---|---|
 | Lưu giao dịch buff: thông tin đơn + ảnh chuyển khoản (ảnh lưu Drive riêng) | Khán giả gửi | `Buff` |
 | Kết quả kiểm duyệt (Duyệt / Từ chối, tổng quỹ nhà sau duyệt), tự cập nhật cột Trạng thái ở `Buff` | Bàn MC (nhận lệnh từ trang Duyệt) | `Duyet` |
-| **Góp lửa**: mỗi lần chạm emoji = +1 hỏa lực cho nhà đang cổ vũ; lần đầu chạm sẽ hỏi chọn nhà; nút **Đổi nhà**. Quyền trợ giúp mở khi đạt **mốc donate HOẶC mốc hỏa lực** | Khán giả | `HoaLuc` (gộp mỗi 30 giây) |
+| **Góp lửa** — *đang TẮT* (`CO_HOA_LUC = false`): ẩn thanh emoji, quyền trợ giúp chỉ mở theo donate. Đổi thành `true` để bật lại: mỗi lần chạm emoji = +1 hỏa lực, mở quyền theo mốc donate HOẶC mốc hỏa lực | Khán giả | `HoaLuc` (gộp mỗi 30 giây) |
+| Màn khán giả: hàng dưới = Chat · **BXH BUFF LUCK** (xếp nhà theo tiền đã duyệt) · **BUFF LUCK** (chọn nhà + QR, bấm QR để phóng to) | Khán giả | — |
 | **Dự đoán nhà vô địch**: MC mở → popup cho mọi khán giả; Mở chuông lần đầu tự khoá; MC công bố → ai đoán đúng thấy pháo hoa | Khán giả + MC | `DuDoan`, `KetQua` |
 
 ## Cấu trúc

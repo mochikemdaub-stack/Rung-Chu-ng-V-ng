@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Rung Chuông Vàng — Đấu trường tri thức</title>
+<title>GAI VÀNG AWARDS — Đấu Trường Hội NGHỆ ÍT LIỀU NHIỀU</title>
 <meta name="theme-color" content="#FFD60A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -538,6 +538,40 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 .dd-dem .vach{grid-column:1 / -1; height:8px; border-radius:99px; background:rgba(59,42,5,.12); overflow:hidden}
 .dd-dem .vach i{display:block; height:100%; background:linear-gradient(90deg,#9B5CFF,#FF5FA2)}
 .phao-hoa{position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:80}
+/* ---- hàng dưới khán giả: [Chat | BXH Hỏa Lực] | BXH Buff Luck ---- */
+.kg-trai{display:grid; grid-template-columns:minmax(0,2fr) minmax(220px,1fr); gap:18px; min-height:0}
+.kg-trai > .the{display:flex; flex-direction:column; min-height:0}
+.lua-bang{overflow:hidden}
+.lua-ds{flex:1 1 auto; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:6px;
+  margin-top:8px; padding-right:4px}
+.lua-ds::-webkit-scrollbar{width:8px}
+.lua-ds::-webkit-scrollbar-thumb{background:rgba(59,42,5,.35); border-radius:999px}
+.lua-hang{display:grid; grid-template-columns:28px minmax(0,1fr) auto; gap:4px 8px; align-items:center;
+  padding:6px 10px; background:#FFFDF5; border:2.5px solid rgba(59,42,5,.35); border-radius:var(--r-nho);
+  cursor:pointer; font-weight:700; font-size:14px}
+.lua-hang:hover,.lua-hang:focus-visible{border-color:#FF6A2B; outline:none}
+.lua-hang .hs{font-family:var(--font-tt); text-align:center}
+.lua-hang .ten{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.lua-hang .so{font-family:var(--font-tt); color:#B34500; white-space:nowrap}
+.lua-hang .vach{grid-column:1 / -1; height:6px; border-radius:99px; background:rgba(59,42,5,.12); overflow:hidden}
+.lua-hang .vach i{display:block; height:100%; background:linear-gradient(90deg,#FFB36B,#FF3D00)}
+.lua-hang.tinh{cursor:default}
+.lua-hang.tinh:hover{border-color:rgba(59,42,5,.35)}
+.lua-hang .vach i.tien{background:linear-gradient(90deg,#8FE39B,#2E7D32)}
+.qr-hop img{cursor:zoom-in}
+#phong-to img{width:min(92vw,88vh,760px); height:auto; object-fit:contain; background:#fff}
+.phong-to{z-index:90}
+.lua-hang.cua-toi{background:linear-gradient(180deg,#FFE2C2,#FFC28A); border-color:#FF6A2B}
+.bl-xh{display:grid; gap:4px; margin-top:8px}
+.bl-xh .dong{display:grid; grid-template-columns:24px minmax(0,1fr) auto; gap:8px; align-items:center;
+  padding:4px 8px; background:#FFFDF5; border:2px solid rgba(59,42,5,.2); border-radius:8px;
+  font-weight:700; font-size:14px}
+.bl-xh .dong .ten{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bl-xh .dong .so{color:var(--do-dam); white-space:nowrap}
+@media(max-width:900px){
+  .kg-trai{grid-template-columns:1fr}
+  .lua-bang{max-height:320px}
+}
 </style>
 </head>
 <body>
@@ -551,8 +585,8 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 <section id="v-home">
   <div class="logo">
     <div class="chuong">🔔</div>
-    <h1>RUNG CHUÔNG VÀNG</h1>
-    <p class="phu" style="font-size:17px;margin-top:8px"><b>Đấu trường tri thức</b> — nhiều đội cùng chơi, ai rung trước được quyền trả lời</p>
+    <h1>GAI VÀNG AWARDS</h1>
+    <p class="phu" style="font-size:17px;margin-top:8px"><b>Đấu Trường Hội NGHỆ ÍT LIỀU NHIỀU</b> — Cùng Nhau Về Bờ</p>
   </div>
 
   <div class="vai">
@@ -829,7 +863,7 @@ D. Baht
         <h3>Thiết lập</h3>
         <div class="cot" style="margin-top:10px">
           <div><label for="mc-tieu-de">Tên cuộc thi (hiện trên màn khán giả)</label>
-            <input id="mc-tieu-de" maxlength="60" placeholder="Rung Chuông Vàng"></div>
+            <input id="mc-tieu-de" maxlength="60" placeholder="GAI VÀNG AWARDS"></div>
           <label class="hang" style="gap:8px;font-weight:600"><input type="checkbox" id="mc-an-xh" style="width:auto"> Ẩn bảng xếp hạng trên màn khán giả</label>
           <label class="hang" style="gap:8px;font-weight:600"><input type="checkbox" id="mc-tu-khoa" checked style="width:auto"> Tự khóa chuông khi có đội rung</label>
           <div><label for="mc-giay">Tự sang câu mới sau khi công bố (giây)</label>
@@ -926,7 +960,7 @@ D. Baht
   <div class="hang" style="justify-content:space-between;margin-bottom:12px">
     <div class="hang" style="gap:12px">
       <span style="font-size:30px">🔔</span>
-      <b class="tt" id="kg-tieu-de" style="font-size:clamp(20px,2.6vw,34px)">RUNG CHUÔNG VÀNG</b>
+      <b class="tt" id="kg-tieu-de" style="font-size:clamp(20px,2.6vw,34px)">GAI VÀNG AWARDS</b>
     </div>
     <div class="hang" style="gap:8px">
       <span class="tro-chip hidden" id="kg-tong-tien">💝 0đ</span>
@@ -965,13 +999,14 @@ D. Baht
   </div>
 
   <div class="kg-duoi" id="kg-duoi">
+   <div class="kg-trai">
     <div class="the chat-khung">
       <div class="hang" style="justify-content:space-between">
         <h3>💬 Chat trực tiếp</h3>
         <button class="nut-buff" id="kg-buff">🍀 Buff Luck cho nhà</button>
       </div>
-      <div class="cx-thanh" id="kg-cx"></div>
-      <div class="covu-dong" id="kg-covu">
+      <div class="cx-thanh hidden" id="kg-cx"></div>
+      <div class="covu-dong hidden" id="kg-covu">
         <span id="kg-covu-chu">🔥 Chạm emoji để góp lửa cho nhà bạn cổ vũ</span>
         <button class="b-nho" id="kg-covu-doi" type="button">Chọn nhà</button>
       </div>
@@ -987,8 +1022,14 @@ D. Baht
       <p class="phu hidden" id="kg-chat-tat" style="margin-top:8px">Quản trò đang tắt chat.</p>
     </div>
 
+    <div class="the lua-bang" id="kg-bxh-buff">
+      <h3>🍀 BXH BUFF LUCK</h3>
+      <div class="lua-ds" id="kg-bl-xh"></div>
+    </div>
+   </div>
+
     <div class="the bl-bang" id="kg-buff-bang">
-      <h3>🍀 Buff Luck cho nhà</h3>
+      <h3>🍀 BUFF LUCK</h3>
       <p class="phu" style="margin-top:6px">Chọn nhà bạn ủng hộ, quét QR chuyển khoản. Nhà đạt mốc donate sẽ mở được quyền trợ giúp.</p>
       <label for="kg-bl-nha" style="margin-top:10px">Chọn nhà</label>
       <select id="kg-bl-nha"></select>
@@ -1334,16 +1375,33 @@ const QR_CMBF = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUE
    Tên nhà, mã QR (ảnh trên Google Drive) và link theo dõi quỹ.
    Quản trò vẫn sửa lại được từng nhà ngay trong bàn quản trò. */
 const NHA_SAN = [
-  { ten: 'DearCheng',          drive: '', qr: QR_DEARCHENG, qrMo: QR_DEARCHENG, lk: 'https://quy.momo.vn/v2/AJcSlSmDHm?cover=6749' },
-  { ten: 'Ánh Dương - HR',     drive: '1TWTRnmXEFx0T_ORWiO-HvVQ8H8H7Kvxy',    lk: 'https://share.timo.vn/VN/transaction/skxwh0547dq1' },
-  { ten: 'Chạc Chíp',          drive: '1AM-q-46lpKNeOfLxCVg4EFvq16v5kk78',    lk: 'https://share.timo.vn/VN/transaction/t8a4gp2wldtl' },
-  { ten: 'Con của cha Chung',  drive: '1p6LcOdjkroQBpn3n1l4xN8lbXe2xnBbe',    lk: 'https://docs.google.com/spreadsheets/d/1DwYag-od0yYGH6ZaZP5FVlPVBKmxdQU78cDHFiojtwk/edit?gid=1919768403#gid=1919768403' },
-  { ten: 'Anh Tài Chỉ Thiên',  drive: '1RtZ8_cgRbL_wPzz_wpRDpa4KAJ4SVgPJ',    lk: '' },
-  { ten: 'ISOL Huỳnh Lập',     drive: '1m_ECFphWEkiGSlxUADghO_k2a4FM89jd',    lk: 'https://quy.momo.vn/v2/KXsca9FHlm?cover=6749' },
-  { ten: 'Minties',            drive: '1aFgz2WcHyHdfDP4ccveKpuImpqrfEEmk',    lk: '' },
-  { ten: 'Gai Con Trộm Vía',   drive: '1ViAtXcdqcXvyn2vwOxKUPNNnyKP1boqm',    lk: 'https://quy.momo.vn/v2/SJUemwzkLB?cover=da0c' },
-  { ten: 'Ánthesis.TLMH',      drive: '', qr: QR_ANTHESIS, qrMo: QR_ANTHESIS, lk: 'https://share.timo.vn/VN/transaction/rhjc7gs99w6t' },
-  { ten: 'CMBF_434',           drive: '', qr: QR_CMBF, qrMo: QR_CMBF, lk: 'https://docs.google.com/spreadsheets/d/1vQ-6y4LQcFRHtqoUTtWITeZg65pRrHJ4k36FUQUqZ34/edit?usp=drivesdk' },
+  { ten: 'PHÙNG MINH CƯƠNG',             drive: '', lk: '' },
+  { ten: 'ISOL.HUYNHLAP',                drive: '1m_ECFphWEkiGSlxUADghO_k2a4FM89jd',    lk: 'https://quy.momo.vn/v2/KXsca9FHlm?cover=6749' },
+  { ten: 'CMBF',                         drive: '', qr: QR_CMBF, qrMo: QR_CMBF, lk: 'https://docs.google.com/spreadsheets/d/1vQ-6y4LQcFRHtqoUTtWITeZg65pRrHJ4k36FUQUqZ34/edit?usp=drivesdk' },
+  { ten: 'Cheng',                        drive: '', qr: QR_DEARCHENG, qrMo: QR_DEARCHENG, lk: 'https://quy.momo.vn/v2/AJcSlSmDHm?cover=6749' },
+  { ten: 'Chạc Chíp',                    drive: '1AM-q-46lpKNeOfLxCVg4EFvq16v5kk78',    lk: 'https://share.timo.vn/VN/transaction/t8a4gp2wldtl' },
+  { ten: '8 Mile To Rabbit',             drive: '', lk: '' },
+  { ten: 'Ánh Dương - HR',               drive: '1TWTRnmXEFx0T_ORWiO-HvVQ8H8H7Kvxy',    lk: 'https://share.timo.vn/VN/transaction/skxwh0547dq1' },
+  { ten: 'TRẠM WILL',                    drive: '', lk: '' },
+  { ten: 'Anh Tài Chỉ Thiên',            drive: '1RtZ8_cgRbL_wPzz_wpRDpa4KAJ4SVgPJ',    lk: '' },
+  { ten: 'TIU',                          drive: '', lk: '' },
+  { ten: 'Con của cha Chung',            drive: '1p6LcOdjkroQBpn3n1l4xN8lbXe2xnBbe',    lk: 'https://docs.google.com/spreadsheets/d/1DwYag-od0yYGH6ZaZP5FVlPVBKmxdQU78cDHFiojtwk/edit?gid=1919768403#gid=1919768403' },
+  { ten: 'Minties',                      drive: '1aFgz2WcHyHdfDP4ccveKpuImpqrfEEmk',    lk: '' },
+  { ten: 'Ánthesis',                     drive: '', qr: QR_ANTHESIS, qrMo: QR_ANTHESIS, lk: 'https://share.timo.vn/VN/transaction/rhjc7gs99w6t' },
+  { ten: 'Chesse bộ Đông Cháu',          drive: '', lk: '' },
+  { ten: 'Carry My Burning Fire',        drive: '', lk: '' },
+  { ten: 'LUMIDUST.LAYLUNG',             drive: '', lk: '' },
+  { ten: 'Gai Con Trộm Vía',             drive: '1ViAtXcdqcXvyn2vwOxKUPNNnyKP1boqm',    lk: 'https://quy.momo.vn/v2/SJUemwzkLB?cover=da0c' },
+  { ten: 'LASIDO',                       drive: '', lk: '' },
+  { ten: 'Đối Tác Của Trịnh Tổng',       drive: '', lk: '' },
+  { ten: 'Vòng Tròn Nhỏ',                drive: '', lk: '' },
+  { ten: 'The Summer sang in me',        drive: '', lk: '' },
+  { ten: 'Hạt Muối Nhỏ Của KO',          drive: '', lk: '' },
+  { ten: 'Garetendre Osad',              drive: '', lk: '' },
+  { ten: 'Con cháu Nhà Nụi Nghĩa',       drive: '', lk: '' },
+  { ten: 'Những Kẻ Lãng Du',             drive: '', lk: '' },
+  { ten: 'Thơm Phức Yee Haw',            drive: '', lk: '' },
+  { ten: 'FC TOKI THÀNH THỎ',            drive: '', lk: '' },
 ];
 /* Drive không cho nhúng link /view vào thẻ ảnh — phải đổi sang dạng thumbnail.
    Ảnh chỉ hiện nếu tệp được chia sẻ "bất kỳ ai có đường liên kết". */
@@ -1369,8 +1427,9 @@ function veKhungQR(khung, nha, tuy) {
   khung.innerHTML = '';
   if (!nha) { khung.appendChild(el('p', 'phu', 'Chưa chọn nhà.')); return; }
   const san = nhaSan(nha.ten);
-  const anh = nha.qr || (san && san.drive ? qrAnh(san.drive) : '');
-  const mo  = nha.qrMo || (san && san.drive ? qrMo(san.drive) : '');
+  /* ảnh QR nhúng sẵn (data:) không đi qua state cho nhẹ — lấy lại từ NHA_SAN theo tên nhà */
+  const anh = nha.qr || (san && (san.qr || (san.drive ? qrAnh(san.drive) : ''))) || '';
+  const mo  = nha.qrMo || (san && (san.qrMo || (san.drive ? qrMo(san.drive) : ''))) || '';
   const quy = nha.lkSao || (san && san.lk) || '';
 
   const loi = el('p', 'phu', '');
@@ -1379,6 +1438,8 @@ function veKhungQR(khung, nha, tuy) {
     img.alt = 'Mã QR chuyển khoản của ' + nha.ten;
     img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
     img.src = anh;
+    img.title = 'Bấm để phóng to mã QR';
+    img.addEventListener('click', () => { $('phong-to-img').src = img.src; $('phong-to-img').alt = img.alt; show($('phong-to'), true); });
     img.addEventListener('error', () => {
       img.remove();
       loi.textContent = 'Không tải được ảnh QR ở đây — bấm “Mở mã QR” bên dưới.';
@@ -1427,6 +1488,9 @@ const tienVN = n => (Number(n) || 0).toLocaleString('vi-VN') + 'đ';
 /* Góp lửa: mỗi lần khán giả thả cảm xúc = +1 điểm hỏa lực cho nhà họ cổ vũ.
    Quyền thứ i mở khi nhà đạt mốc donate HOẶC mốc hỏa lực thứ i. */
 const MOC_LUA_MAC_DINH = [300, 800, 1500, 3000];
+/* Tắt Góp lửa: ẩn thanh emoji + hỏa lực, quyền trợ giúp chỉ mở theo donate.
+   Bật lại = đổi thành true (toàn bộ logic hỏa lực vẫn còn). */
+const CO_HOA_LUC = false;
 const mocTien = (moc, i) => (moc && moc[i] != null ? moc[i] : MOC_MAC_DINH[i]);
 const mocLuaI = (ml, i) => (ml && ml[i] != null ? ml[i] : MOC_LUA_MAC_DINH[i]);
 const soLua = n => (Number(n) || 0).toLocaleString('vi-VN');
@@ -1434,6 +1498,7 @@ const soLua = n => (Number(n) || 0).toLocaleString('vi-VN');
 /* đội đã mở khoá quyền thứ i chưa (mốc lấy từ thiết lập của quản trò) */
 function daMo(doi, i, moc, mocLua) {
   if ((Number(doi && doi.tien) || 0) >= mocTien(moc, i)) return true;
+  if (!CO_HOA_LUC) return false;
   return (Number(doi && doi.lua) || 0) >= mocLuaI(mocLua, i);
 }
 function daDung(doi, ma)   { return ((doi && doi.daDung) || []).indexOf(ma) >= 0; }
@@ -2708,7 +2773,7 @@ function veXepHang(khung, doi, idRung, hienOnline, hienTien) {
     const phu = [t.dung + ' câu đúng'];
     if (t.sai) phu.push(t.sai + ' câu sai');
     if (hienTien && t.tien) phu.push(tienVN(t.tien));
-    if (t.lua) phu.push('🔥 ' + soLua(t.lua));
+    if (CO_HOA_LUC && t.lua) phu.push('🔥 ' + soLua(t.lua));
     if (hienOnline && t.online === false) phu.push('mất kết nối');
     giua.appendChild(el('div', 'lech', phu.join(' · ')));
     const diem = el('div', 'sd', String(t.diem));
@@ -2799,7 +2864,7 @@ function khoiDongMC(room, biMat) {
   const net = taoNet();
   const KHOA = 'mc.' + room;
 
-  const mdOn = { seq: 0, luot: 0, tieuDe: 'Rung Chuông Vàng', pha: 'cho', qi: 0,
+  const mdOn = { seq: 0, luot: 0, tieuDe: 'GAI VÀNG AWARDS', pha: 'cho', qi: 0,
                  rung: [], giu: null, chon: null, doi: {}, loai: [], anXh: false,
                  moc: MOC_MAC_DINH.slice(), x2: null, hs: null, cd: null, anTien: false,
                  chatMo: true, chatTu: 0, cho: [], soNha: 0, daCK: [], dem: null,
@@ -2809,6 +2874,7 @@ function khoiDongMC(room, biMat) {
   if (!Array.isArray(S.moc) || S.moc.length !== 4) S.moc = MOC_MAC_DINH.slice();
   if (!Array.isArray(S.mocLua) || S.mocLua.length !== 4) S.mocLua = MOC_LUA_MAC_DINH.slice();
   if (S.duDoan && typeof S.duDoan.v !== 'number') S.duDoan = null;
+  if (!S.tieuDe || S.tieuDe === 'Rung Chuông Vàng') S.tieuDe = 'GAI VÀNG AWARDS';   // phòng tạo trước khi đổi tên
   S.soNha = Number(S.soNha) || 0;
   if (!Array.isArray(S.daCK)) S.daCK = [];
   if (!Array.isArray(S.micMo)) S.micMo = [];
@@ -2902,7 +2968,7 @@ function khoiDongMC(room, biMat) {
   $('mc-ma-doi').textContent = codes.doi;
   $('mc-ma-kg').textContent  = codes.kg;
   $('mc-ma-duyet').textContent = biMat;
-  $('mc-tieu-de').value = S.tieuDe || 'Rung Chuông Vàng';
+  $('mc-tieu-de').value = S.tieuDe || 'GAI VÀNG AWARDS';
   $('mc-an-xh').checked = !!S.anXh;
   $('mc-tu-khoa').checked = tuKhoa;
 
@@ -2913,6 +2979,19 @@ function khoiDongMC(room, biMat) {
   const linkDuyet = () => location.origin + location.pathname + '#duyet/' + codes.kg + '/' + biMat;
   const linkKg  = () => location.origin + location.pathname + '#man/' + codes.kg;
 
+  /* Bỏ ảnh QR nhúng (data:, 125–236 KB mỗi ảnh) khỏi bản state gửi đi: mọi máy đã có
+     sẵn ảnh đó trong NHA_SAN. Không bỏ thì state ~1 MB, broker công cộng sẽ vứt tin. */
+  function doiGon() {
+    const ra = {};
+    for (const id in S.doi) {
+      const g = Object.assign({}, S.doi[id]);
+      if (/^data:/i.test(g.qr || '')) delete g.qr;
+      if (/^data:/i.test(g.qrMo || '')) delete g.qrMo;
+      ra[id] = g;
+    }
+    return ra;
+  }
+
   function catState() {
     const q = cauHoi[S.qi];
     const cau = q ? { noiDung: q.noiDung, dapAn: q.dapAn,
@@ -2920,7 +2999,7 @@ function khoiDongMC(room, biMat) {
     return { seq: S.seq, luot: S.luot, tieuDe: S.tieuDe, pha: S.pha,
              qi: S.qi, qTong: cauHoi.length, cau: cau,
              rung: S.rung, giu: S.giu, chon: S.chon,
-             doi: S.doi, loai: S.loai, anXh: S.anXh,
+             doi: doiGon(), loai: S.loai, anXh: S.anXh,
              moc: S.moc, x2: S.x2, hs: S.hs, cd: S.cd, anTien: S.anTien,
              chatMo: S.chatMo !== false, chatTu: S.chatTu || 0, cho: S.cho || [], daCK: S.daCK || [],
              dem: S.dem, micMo: S.micMo || [], rxMo: S.rxMo !== false, khoaPhong: !!S.khoaPhong,
@@ -3529,7 +3608,7 @@ function khoiDongMC(room, biMat) {
     /* nhắc lại 4 mốc để quản trò luôn thấy luật đang áp dụng */
     const km = $('mc-moc-xem'); km.innerHTML = '';
     TRO.forEach((q, i) => {
-      km.appendChild(el('span', 'tro-chip', q.bi + ' ' + q.ten + ' · ' + tienVN(S.moc[i]) + ' hoặc 🔥' + soLua(S.mocLua[i])));
+      km.appendChild(el('span', 'tro-chip', q.bi + ' ' + q.ten + ' · ' + tienVN(S.moc[i]) + (CO_HOA_LUC ? ' hoặc 🔥' + soLua(S.mocLua[i]) : '')));
     });
 
     const khung = $('mc-tro-ds'); khung.innerHTML = '';
@@ -3543,8 +3622,8 @@ function khoiDongMC(room, biMat) {
       dau.appendChild(el('b', null, t.ten));
       dau.appendChild(el('span', 'tien-to', tienVN(t.tien)));
       o.appendChild(dau);
-      const keLua = mocLuaKeTiep(t, S.moc, S.mocLua);
-      o.appendChild(el('div', 'lua-tien', '🔥 ' + soLua(t.lua) + ' hỏa lực' +
+      const keLua = CO_HOA_LUC ? mocLuaKeTiep(t, S.moc, S.mocLua) : null;
+      if (CO_HOA_LUC) o.appendChild(el('div', 'lua-tien', '🔥 ' + soLua(t.lua) + ' hỏa lực' +
         (keLua ? ' · còn ' + soLua(keLua.thieu) + ' để mở “' + TRO[keLua.i].ten + '”' : '')));
 
       const ke = mocKeTiep(t, S.moc, S.mocLua);
@@ -3567,10 +3646,10 @@ function khoiDongMC(room, biMat) {
         chu.appendChild(el('span', 'ten-tro', q.ten));
         chu.appendChild(el('span', 'mo', xong ? 'đã dùng — bấm để hoàn lại'
                                    : mo ? 'sẵn sàng — bấm để đánh dấu đã dùng'
-                                        : 'chưa đủ ' + tienVN(S.moc[i]) + ' / 🔥' + soLua(S.mocLua[i])));
+                                        : 'chưa đủ ' + tienVN(S.moc[i]) + (CO_HOA_LUC ? ' / 🔥' + soLua(S.mocLua[i]) : '')));
         b.appendChild(chu);
         b.addEventListener('click', () => {
-          if (!mo) { toast('Nhà này chưa đạt mốc ' + tienVN(S.moc[i]) + ' hoặc 🔥' + soLua(S.mocLua[i])); return; }
+          if (!mo) { toast('Nhà này chưa đạt mốc ' + tienVN(S.moc[i]) + (CO_HOA_LUC ? ' hoặc 🔥' + soLua(S.mocLua[i]) : '')); return; }
           const d = S.doi[t.id]; if (!d) return;
           if (xong) d.daDung = d.daDung.filter(x => x !== q.ma);
           else d.daDung.push(q.ma);
@@ -3894,7 +3973,7 @@ function khoiDongMC(room, biMat) {
   $('mc-truoc').addEventListener('click', () => doiCau(-1));
   $('mc-sau').addEventListener('click', () => doiCau(1));
 
-  $('mc-tieu-de').addEventListener('change', e => { S.tieuDe = e.target.value.trim().slice(0, 60) || 'Rung Chuông Vàng'; phat(); });
+  $('mc-tieu-de').addEventListener('change', e => { S.tieuDe = e.target.value.trim().slice(0, 60) || 'GAI VÀNG AWARDS'; phat(); });
   $('mc-an-xh').addEventListener('change', e => { S.anXh = e.target.checked; phat(); });
   $('mc-turn').value = doc(KHOA + '.turn', '');
   $('mc-turn').addEventListener('change', e => {
@@ -3923,6 +4002,7 @@ function khoiDongMC(room, biMat) {
       khung.appendChild(o);
     });
   })();
+  if (!CO_HOA_LUC) { $('mc-moc-lua').parentElement.classList.add('hidden'); $('mc-cx-tat').classList.add('hidden'); }
   /* ô nhập 4 mốc hỏa lực */
   (() => {
     const khung = $('mc-moc-lua');
@@ -4103,7 +4183,7 @@ function khoiDongDoi(room, ten) {
   let rtCuaToi = null;
 
   $('doi-ten').textContent = ten;
-  document.title = ten + ' — Rung Chuông Vàng';
+  document.title = ten + ' — GAI VÀNG AWARDS';
   document.body.classList.add('doi');
   /* máy có bàn phím thật thì nhắc phím cách; điện thoại thì không */
   const coBanPhim = (() => { try { return matchMedia('(hover:hover) and (pointer:fine)').matches; } catch (e) { return false; } })();
@@ -4389,7 +4469,7 @@ function khoiDongDoi(room, ten) {
   function veTro(toi) {
     const moc = (S && Array.isArray(S.moc)) ? S.moc : MOC_MAC_DINH;
     const mocLua = (S && Array.isArray(S.mocLua)) ? S.mocLua : MOC_LUA_MAC_DINH;
-    $('doi-tien').textContent = tienVN(toi ? toi.tien : 0) + (toi && toi.lua ? ' · 🔥' + soLua(toi.lua) : '');
+    $('doi-tien').textContent = tienVN(toi ? toi.tien : 0) + (CO_HOA_LUC && toi && toi.lua ? ' · 🔥' + soLua(toi.lua) : '');
 
     const ke = toi ? mocKeTiep(toi, moc, mocLua) : { i: 0, moc: moc[0], thieu: moc[0], truoc: 0 };
     const thanh = $('doi-thanh').firstElementChild;
@@ -4407,13 +4487,13 @@ function khoiDongDoi(room, ten) {
       const b = el('button', 'tro-o' + (xong ? ' dadung' : mo ? (dungDuoc ? ' san' : '') : ' khoa'));
       b.title = xong ? q.ten + ' — đã dùng'
               : mo ? q.ten + ' — ' + q.mo
-                   : q.ten + ' — cần ' + tienVN(moc[i]) + ' donate hoặc ' + soLua(mocLua[i]) + ' hỏa lực';
+                   : q.ten + ' — cần ' + tienVN(moc[i]) + ' donate' + (CO_HOA_LUC ? ' hoặc ' + soLua(mocLua[i]) + ' hỏa lực' : '');
       b.appendChild(el('span', 'bi', q.bi));
       b.appendChild(el('span', 'ten-tro', q.ten));
       b.addEventListener('click', () => {
         if (!dungDuoc) {
           toast(xong ? 'Quyền “' + q.ten + '” đã dùng rồi'
-               : !mo ? 'Cần ' + tienVN(moc[i]) + ' donate hoặc ' + soLua(mocLua[i]) + ' hỏa lực để mở “' + q.ten + '”'
+               : !mo ? 'Cần ' + tienVN(moc[i]) + ' donate' + (CO_HOA_LUC ? ' hoặc ' + soLua(mocLua[i]) + ' hỏa lực' : '') + ' để mở “' + q.ten + '”'
                      : 'Chưa tới lúc dùng “' + q.ten + '”');
           return;
         }
@@ -4608,17 +4688,63 @@ function khoiDongKhanGia(room) {
       b.type = 'button';
       b.appendChild(document.createTextNode(t.ten));
       b.appendChild(el('span', 'lua-nho', '🔥 ' + soLua(t.lua)));
-      b.addEventListener('click', () => {
-        if (nhaCoVu !== t.id) { guiCx.xa(); luaTam = 0; }
-        nhaCoVu = t.id; luu(khoaCoVu, nhaCoVu);
-        show($('covu-lop'), false);
-        toast('Bạn đang góp lửa cho ' + t.ten + ' 🔥');
-        if (cxCho != null) { const i = cxCho; cxCho = null; thaCx(i); }
-        veCoVu();
-      });
+      b.addEventListener('click', () => chonNhaCoVu(t.id));
       khung.appendChild(b);
     });
     show($('covu-lop'), true);
+  }
+  function chonNhaCoVu(idNha) {
+    const t = S && S.doi && S.doi[idNha]; if (!t) return;
+    if (nhaCoVu !== idNha) { guiCx.xa(); luaTam = 0; }
+    nhaCoVu = idNha; luu(khoaCoVu, nhaCoVu);
+    show($('covu-lop'), false);
+    toast('Bạn đang góp lửa cho ' + t.ten + ' 🔥');
+    if (cxCho != null) { const i = cxCho; cxCho = null; thaCx(i); }
+    veCoVu(); veBxhLua();
+  }
+
+  /* BXH Hỏa Lực: xếp theo hỏa lực, chạm một nhà để cổ vũ nhà đó */
+  function veBxhLua() {
+    if (!$('kg-lua-ds')) return;
+    const ds = Object.values((S && S.doi) || {}).slice()
+      .sort((a, b) => ((Number(b.lua) || 0) - (Number(a.lua) || 0)) || String(a.ten).localeCompare(String(b.ten), 'vi'));
+    show($('kg-lua-trong'), ds.length === 0);
+    const khung = $('kg-lua-ds'); khung.innerHTML = '';
+    const max = Math.max(1, ...ds.map(t => Number(t.lua) || 0));
+    ds.forEach((t, i) => {
+      const lua = (Number(t.lua) || 0) + (t.id === nhaCoVu ? luaTam : 0);
+      const h = el('div', 'lua-hang' + (t.id === nhaCoVu ? ' cua-toi' : ''));
+      h.tabIndex = 0; h.setAttribute('role', 'button');
+      h.title = t.id === nhaCoVu ? 'Bạn đang cổ vũ ' + t.ten : 'Chạm để cổ vũ ' + t.ten;
+      h.appendChild(el('span', 'hs', lua > 0 && i < 3 ? ['🥇', '🥈', '🥉'][i] : String(i + 1)));
+      h.appendChild(el('span', 'ten', t.ten));
+      h.appendChild(el('span', 'so', '🔥 ' + soLua(lua)));
+      const vach = el('div', 'vach'); const v = el('i'); v.style.width = Math.min(100, lua * 100 / max) + '%';
+      vach.appendChild(v); h.appendChild(vach);
+      h.addEventListener('click', () => chonNhaCoVu(t.id));
+      h.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chonNhaCoVu(t.id); } });
+      khung.appendChild(h);
+    });
+  }
+
+  /* BXH Buff Luck: mọi nhà trong phòng, xếp theo tiền donate đã duyệt.
+     Quản trò bật "Ẩn số tiền" thì chỉ giữ thứ hạng, không hiện số. */
+  function veBxhBuff() {
+    const ds = Object.values((S && S.doi) || {}).slice()
+      .sort((a, b) => ((Number(b.tien) || 0) - (Number(a.tien) || 0)) || String(a.ten).localeCompare(String(b.ten), 'vi'));
+    const khung = $('kg-bl-xh'); khung.innerHTML = '';
+    if (!ds.length) { khung.appendChild(el('p', 'phu', 'Chưa có nhà nào trong phòng.')); return; }
+    const max = Math.max(1, ...ds.map(t => Number(t.tien) || 0));
+    ds.forEach((t, i) => {
+      const tien = Number(t.tien) || 0;
+      const h = el('div', 'lua-hang tinh');
+      h.appendChild(el('span', 'hs', tien > 0 && i < 3 ? ['🥇', '🥈', '🥉'][i] : String(i + 1)));
+      h.appendChild(el('span', 'ten', t.ten));
+      h.appendChild(el('span', 'so', S.anTien ? '' : tienVN(tien)));
+      const vach = el('div', 'vach'); const v = el('i', 'tien'); v.style.width = (tien * 100 / max) + '%';
+      vach.appendChild(v); h.appendChild(vach);
+      khung.appendChild(h);
+    });
   }
   function veCoVu() {
     const d = nhaHopLe() ? S.doi[nhaCoVu] : null;
@@ -4648,7 +4774,7 @@ function khoiDongKhanGia(room) {
     if (S && S.rxMo === false) { toast('Quản trò đang tắt thả cảm xúc'); return; }
     if (!nhaHopLe()) { cxCho = i; moChonNha(); return; }   // chưa chọn nhà: hỏi trước
     if (!guiCx(i)) { toast('Thả chậm thôi nhé 😄'); return; }
-    demCx[i]++; luaTam++; cx.tha(i, 1); veDemCx(); veCoVu();
+    demCx[i]++; luaTam++; cx.tha(i, 1); veDemCx(); veCoVu(); veBxhLua();
   }
   const demCx = CX.map(() => 0);
   const nutCx = CX.map((e, i) => {
@@ -4914,8 +5040,8 @@ function khoiDongKhanGia(room) {
 
   function ve() {
     if (!S) return;
-    $('kg-tieu-de').textContent = (S.tieuDe || 'Rung Chuông Vàng').toUpperCase();
-    document.title = (S.tieuDe || 'Rung Chuông Vàng') + ' — Màn hình khán giả';
+    $('kg-tieu-de').textContent = (S.tieuDe || 'GAI VÀNG AWARDS').toUpperCase();
+    document.title = (S.tieuDe || 'GAI VÀNG AWARDS') + ' — Màn hình khán giả';
 
     if (!S.cau) {
       $('kg-cau-so').textContent = 'Chờ quản trò';
@@ -4969,10 +5095,11 @@ function khoiDongKhanGia(room) {
 
     /* thả cảm xúc: quản trò có thể tắt */
     const cxMo = S.rxMo !== false;
-    show($('kg-cx'), cxMo);
-    show($('kg-covu'), cxMo && so > 0);
-    show($('kg-cx-tat'), !cxMo);
-    veCoVu();
+    show($('kg-cx'), CO_HOA_LUC && cxMo);
+    show($('kg-covu'), CO_HOA_LUC && cxMo && so > 0);
+    show($('kg-cx-tat'), CO_HOA_LUC && !cxMo);
+    if (CO_HOA_LUC) veCoVu();
+    veBxhBuff();
   }
 }
 
@@ -4991,7 +5118,7 @@ function khoiDongDuyet(room, biMat) {
   const dangCho = {};       // bid -> {t: hẹn gửi lại, tu: lúc bấm}
   let nhatKy = [];
 
-  document.title = 'Duyệt giao dịch — Rung Chuông Vàng';
+  document.title = 'Duyệt giao dịch — GAI VÀNG AWARDS';
 
   /* ---------- phòng thoại với quản trò ---------- */
   let duRa = doc('duyet.' + room + '.ra', false);
@@ -5297,7 +5424,6 @@ function khoiDongDuyet(room, biMat) {
     nhatKy.forEach(x => k.appendChild(el('div', null, x)));
   }
 
-  $('phong-to').addEventListener('click', () => show($('phong-to'), false));
   $('duyet-ve').addEventListener('click', () => { location.hash = ''; location.reload(); });
 }
 
@@ -5366,6 +5492,10 @@ function dinhTuyen() {
 
   hienMan('v-home');
 }
+
+/* ---------- ảnh phóng to (QR, ảnh chuyển khoản): chạm hoặc Esc để đóng ---------- */
+$('phong-to').addEventListener('click', () => show($('phong-to'), false));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') show($('phong-to'), false); });
 
 /* ---------- trang chủ ---------- */
 $('btn-tao-phong').addEventListener('click', () => {
