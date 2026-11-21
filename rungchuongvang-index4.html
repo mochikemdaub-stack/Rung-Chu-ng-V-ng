@@ -745,6 +745,7 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 .lua-hang.tinh:hover{border-color:rgba(59,42,5,.35)}
 .lua-hang .vach i.tien{background:linear-gradient(90deg,#8FE39B,#2E7D32)}
 .qr-hop img{cursor:zoom-in}
+.qr-goi-y{margin:0; font-size:12.5px; font-weight:700; color:var(--nau-nhat); text-align:center}
 .qr-hop img.qr-anh{width:min(260px,70vw); min-height:140px; height:auto; object-fit:contain; background:#fff}
 body.kg .bl-bang .qr-hop img.qr-anh{width:auto; max-width:100%; min-height:0}
 @media(max-width:900px){ body.kg .bl-bang .qr-hop img.qr-anh{width:min(280px,76vw); min-height:140px} }
@@ -1686,13 +1687,15 @@ function veKhungQR(khung, nha, tuy) {
     img.loading = 'eager'; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
     img.className = 'qr-anh';
     img.src = anh;
+    const goiY = el('p', 'qr-goi-y', '👆 Bấm vào ảnh để thấy hình mã QR to');
+    khung.appendChild(goiY);
     img.title = 'Bấm để phóng to mã QR';
     img.addEventListener('click', () => { $('phong-to-img').src = img.currentSrc || img.src; $('phong-to-img').alt = img.alt; show($('phong-to'), true); });
     const idDrive = (/drive\.google\.com\/thumbnail\?id=([^&]+)/.exec(anh) || [])[1];
     let daThuLai = false;
     img.addEventListener('error', () => {
       if (idDrive && !daThuLai) { daThuLai = true; img.src = 'https://lh3.googleusercontent.com/d/' + idDrive + '=w1000'; return; }   // đường dự phòng của Drive
-      img.remove();
+      img.remove(); goiY.remove();
       loi.textContent = 'Không tải được ảnh QR ở đây — bấm “Mở mã QR” bên dưới.';
       if (!loi.parentNode) khung.insertBefore(loi, khung.firstChild);   // lúc đầu chưa gắn vì chưa có lỗi
       hang.classList.remove('hidden');                                  // ảnh hỏng thì cần nút ngay
