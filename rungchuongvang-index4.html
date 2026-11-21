@@ -1515,7 +1515,8 @@ function taoHangLog(phong, khoaLuu, layKhoa, onTrangThai) {
 
 /* ---------- pháo hoa (canvas, nhẹ cho máy yếu) ---------- */
 function phaoHoa(giay) {
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  /* người bật "giảm chuyển động" vẫn được pháo hoa, nhưng ngắn hơn */
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) giay = Math.min(giay || 5, 2.5);
   const c = document.createElement('canvas'); c.className = 'phao-hoa';
   document.body.appendChild(c);
   const g = c.getContext('2d');
@@ -1563,10 +1564,11 @@ function phaoHoa(giay) {
 }
 
 /* mốc kế tiếp chưa đạt -> dùng cho thanh tiến độ */
-function mocKeTiep(doi, moc) {
+function mocKeTiep(doi, moc, mocLua) {
   const tien = Number(doi && doi.tien) || 0;
   for (let i = 0; i < TRO.length; i++) {
     const m = moc[i] != null ? moc[i] : MOC_MAC_DINH[i];
+    if (mocLua && daMo(doi, i, moc, mocLua)) continue;      // đã mở nhờ hỏa lực thì bỏ qua
     if (tien < m) return { i, moc: m, thieu: m - tien, truoc: i === 0 ? 0 : (moc[i-1] != null ? moc[i-1] : MOC_MAC_DINH[i-1]) };
   }
   return null;
@@ -3511,6 +3513,7 @@ function khoiDongMC(room, biMat) {
     });
     show($('mc-chua-doi'), Object.keys(S.doi).length === 0);
     veQuyMC();
+    veDuDoanMC();
     veCho();
     veThoaiMC();
   }
@@ -3526,7 +3529,7 @@ function khoiDongMC(room, biMat) {
     /* nhắc lại 4 mốc để quản trò luôn thấy luật đang áp dụng */
     const km = $('mc-moc-xem'); km.innerHTML = '';
     TRO.forEach((q, i) => {
-      km.appendChild(el('span', 'tro-chip', q.bi + ' ' + q.ten + ' · ' + tienVN(S.moc[i])));
+      km.appendChild(el('span', 'tro-chip', q.bi + ' ' + q.ten + ' · ' + tienVN(S.moc[i]) + ' hoặc 🔥' + soLua(S.mocLua[i])));
     });
 
     const khung = $('mc-tro-ds'); khung.innerHTML = '';
@@ -3540,8 +3543,11 @@ function khoiDongMC(room, biMat) {
       dau.appendChild(el('b', null, t.ten));
       dau.appendChild(el('span', 'tien-to', tienVN(t.tien)));
       o.appendChild(dau);
+      const keLua = mocLuaKeTiep(t, S.moc, S.mocLua);
+      o.appendChild(el('div', 'lua-tien', '🔥 ' + soLua(t.lua) + ' hỏa lực' +
+        (keLua ? ' · còn ' + soLua(keLua.thieu) + ' để mở “' + TRO[keLua.i].ten + '”' : '')));
 
-      const ke = mocKeTiep(t, S.moc);
+      const ke = mocKeTiep(t, S.moc, S.mocLua);
       const ghi = el('div', 'phu');
       if (ke) {
         ghi.textContent = 'Còn ' + tienVN(ke.thieu) + ' nữa để mở \u201C' + TRO[ke.i].ten + '\u201D';
@@ -3554,17 +3560,17 @@ function khoiDongMC(room, biMat) {
       /* quyền trợ giúp: bấm để xử tranh chấp */
       const hang = el('div', 'tro-hang');
       TRO.forEach((q, i) => {
-        const mo = daMo(t, i, S.moc), xong = daDung(t, q.ma);
+        const mo = daMo(t, i, S.moc, S.mocLua), xong = daDung(t, q.ma);
         const b = el('button', 'tro-nut' + (xong ? ' dadung' : mo ? '' : ' khoa'));
         b.appendChild(el('span', 'bi', q.bi));
         const chu = el('span');
         chu.appendChild(el('span', 'ten-tro', q.ten));
         chu.appendChild(el('span', 'mo', xong ? 'đã dùng — bấm để hoàn lại'
                                    : mo ? 'sẵn sàng — bấm để đánh dấu đã dùng'
-                                        : 'chưa đủ ' + tienVN(S.moc[i])));
+                                        : 'chưa đủ ' + tienVN(S.moc[i]) + ' / 🔥' + soLua(S.mocLua[i])));
         b.appendChild(chu);
         b.addEventListener('click', () => {
-          if (!mo) { toast('Nhà này chưa đạt mốc ' + tienVN(S.moc[i])); return; }
+          if (!mo) { toast('Nhà này chưa đạt mốc ' + tienVN(S.moc[i]) + ' hoặc 🔥' + soLua(S.mocLua[i])); return; }
           const d = S.doi[t.id]; if (!d) return;
           if (xong) d.daDung = d.daDung.filter(x => x !== q.ma);
           else d.daDung.push(q.ma);
@@ -3917,6 +3923,34 @@ function khoiDongMC(room, biMat) {
       khung.appendChild(o);
     });
   })();
+  /* ô nhập 4 mốc hỏa lực */
+  (() => {
+    const khung = $('mc-moc-lua');
+    TRO.forEach((q, i) => {
+      const o = el('div');
+      o.appendChild(el('label', null, q.bi + ' ' + q.ten));
+      const inp = el('input'); inp.type = 'text'; inp.inputMode = 'numeric'; inp.value = S.mocLua[i];
+      inp.addEventListener('change', () => {
+        const v = parseInt(String(inp.value).replace(/\D/g, ''), 10);
+        if (!isFinite(v) || v <= 0 || v > 100000000) { inp.value = S.mocLua[i]; toast('Mốc hỏa lực không hợp lệ'); return; }
+        S.mocLua[i] = v; inp.value = v;
+        for (const id in S.doi) soMoCu[id] = TRO.filter((t, k) => daMo(S.doi[id], k, S.moc, S.mocLua)).length;
+        phat();
+      });
+      o.appendChild(inp);
+      khung.appendChild(o);
+    });
+  })();
+
+  /* khoá ghi log (tuỳ chọn) + kiểm tra backend đã nối Google Sheets chưa */
+  $('mc-log-key').value = doc('logkey', '');
+  $('mc-log-key').addEventListener('change', e => { luu('logkey', e.target.value.trim()); toast('Đã lưu khoá ghi log trên máy này'); });
+  goiApi('/api/health', undefined, { hen: 20000 }).then(r => {
+    const j = r.j || {};
+    if (!r.status) { $('mc-log-tt').textContent = '⚠️ Không gọi được backend /api (đang mở file ngoài Vercel?).'; return; }
+    veLogTT(j.sheets ? 'on' : j.reason === 'chua_cau_hinh' ? 'chua' : 'loi');
+  });
+
   $('mc-tu-khoa').addEventListener('change', e => { tuKhoa = e.target.checked; luu(KHOA + '.tukhoa', tuKhoa); });
   $('mc-giay').value = giayChuyen;
   $('mc-giay').addEventListener('change', e => {
@@ -4354,9 +4388,10 @@ function khoiDongDoi(room, ten) {
 
   function veTro(toi) {
     const moc = (S && Array.isArray(S.moc)) ? S.moc : MOC_MAC_DINH;
-    $('doi-tien').textContent = tienVN(toi ? toi.tien : 0);
+    const mocLua = (S && Array.isArray(S.mocLua)) ? S.mocLua : MOC_LUA_MAC_DINH;
+    $('doi-tien').textContent = tienVN(toi ? toi.tien : 0) + (toi && toi.lua ? ' · 🔥' + soLua(toi.lua) : '');
 
-    const ke = toi ? mocKeTiep(toi, moc) : { i: 0, moc: moc[0], thieu: moc[0], truoc: 0 };
+    const ke = toi ? mocKeTiep(toi, moc, mocLua) : { i: 0, moc: moc[0], thieu: moc[0], truoc: 0 };
     const thanh = $('doi-thanh').firstElementChild;
     if (ke) {
       $('doi-moc').textContent = 'Còn ' + tienVN(ke.thieu) + ' để mở ' + TRO[ke.i].bi + ' ' + TRO[ke.i].ten;
@@ -4366,19 +4401,19 @@ function khoiDongDoi(room, ten) {
 
     const khung = $('doi-tro'); khung.innerHTML = '';
     TRO.forEach((q, i) => {
-      const mo = daMo(toi, i, moc), xong = daDung(toi, q.ma);
+      const mo = daMo(toi, i, moc, mocLua), xong = daDung(toi, q.ma);
       const dungDuoc = mo && !xong && dungDuocQuyen(q.ma);
       /* không disable: chạm vào quyền chưa dùng được vẫn phải nói rõ lý do */
       const b = el('button', 'tro-o' + (xong ? ' dadung' : mo ? (dungDuoc ? ' san' : '') : ' khoa'));
       b.title = xong ? q.ten + ' — đã dùng'
               : mo ? q.ten + ' — ' + q.mo
-                   : q.ten + ' — cần ' + tienVN(moc[i]) + ' donate';
+                   : q.ten + ' — cần ' + tienVN(moc[i]) + ' donate hoặc ' + soLua(mocLua[i]) + ' hỏa lực';
       b.appendChild(el('span', 'bi', q.bi));
       b.appendChild(el('span', 'ten-tro', q.ten));
       b.addEventListener('click', () => {
         if (!dungDuoc) {
           toast(xong ? 'Quyền “' + q.ten + '” đã dùng rồi'
-               : !mo ? 'Cần ' + tienVN(moc[i]) + ' donate để mở “' + q.ten + '”'
+               : !mo ? 'Cần ' + tienVN(moc[i]) + ' donate hoặc ' + soLua(mocLua[i]) + ' hỏa lực để mở “' + q.ten + '”'
                      : 'Chưa tới lúc dùng “' + q.ten + '”');
           return;
         }
@@ -4554,19 +4589,75 @@ function khoiDongKhanGia(room) {
   /* ---------- thả cảm xúc ---------- */
   const cx = taoCamXuc({ toiDa: 110, to: 1.25 });
   const sid = 'k' + Math.random().toString(36).slice(2, 10);
-  const guiCx = taoGuiCamXuc(net, T, sid);
+
+  /* ---------- góp lửa: chọn nhà cổ vũ, mỗi cú chạm emoji = +1 hỏa lực ---------- */
+  const khoaCoVu = 'kg.' + room + '.covu';
+  let nhaCoVu = doc(khoaCoVu, null);
+  let cxCho = null;                                   // emoji bấm lúc chưa chọn nhà -> gửi sau khi chọn
+  let luaTam = 0;                                      // điểm mình vừa góp, chưa thấy trong state
+  let luaThay = null;                                  // {id, v}: hỏa lực của nhà lần vẽ trước
+  const nhaHopLe = () => !!(nhaCoVu && S && S.doi && S.doi[nhaCoVu]);
+  const guiCx = taoGuiCamXuc(net, T, sid, () => (nhaHopLe() ? nhaCoVu : null));
+
+  function moChonNha() {
+    const ds = xepHang((S && S.doi) || {});
+    if (!ds.length) { toast('Chưa có nhà nào trong phòng'); return; }
+    const khung = $('covu-ds'); khung.innerHTML = '';
+    ds.forEach(t => {
+      const b = el('button', 'b-nho' + (t.id === nhaCoVu ? ' chon' : ''));
+      b.type = 'button';
+      b.appendChild(document.createTextNode(t.ten));
+      b.appendChild(el('span', 'lua-nho', '🔥 ' + soLua(t.lua)));
+      b.addEventListener('click', () => {
+        if (nhaCoVu !== t.id) { guiCx.xa(); luaTam = 0; }
+        nhaCoVu = t.id; luu(khoaCoVu, nhaCoVu);
+        show($('covu-lop'), false);
+        toast('Bạn đang góp lửa cho ' + t.ten + ' 🔥');
+        if (cxCho != null) { const i = cxCho; cxCho = null; thaCx(i); }
+        veCoVu();
+      });
+      khung.appendChild(b);
+    });
+    show($('covu-lop'), true);
+  }
+  function veCoVu() {
+    const d = nhaHopLe() ? S.doi[nhaCoVu] : null;
+    const chu = $('kg-covu-chu'); chu.innerHTML = '';
+    if (!d) {
+      chu.textContent = '🔥 Chạm emoji để góp lửa cho nhà bạn cổ vũ';
+      $('kg-covu-doi').textContent = 'Chọn nhà';
+      return;
+    }
+    /* điểm của mình đã được bàn quản trò cộng vào state thì bớt phần tạm */
+    const hien = Number(d.lua) || 0;
+    if (luaThay && luaThay.id === d.id && hien > luaThay.v) luaTam = Math.max(0, luaTam - (hien - luaThay.v));
+    luaThay = { id: d.id, v: hien };
+    chu.appendChild(document.createTextNode('🔥 Đang cổ vũ '));
+    chu.appendChild(el('b', null, d.ten));
+    chu.appendChild(document.createTextNode(' '));
+    chu.appendChild(el('span', 'lua-so', soLua((Number(d.lua) || 0) + luaTam)));
+    const ke = mocLuaKeTiep(d, S.moc, S.mocLua);
+    if (ke) chu.appendChild(el('span', 'lua-tien', ' còn ' + soLua(Math.max(0, ke.thieu - luaTam)) + ' để mở “' + TRO[ke.i].ten + '”'));
+    $('kg-covu-doi').textContent = 'Đổi nhà';
+  }
+  $('kg-covu-doi').addEventListener('click', moChonNha);
+  $('covu-dong').addEventListener('click', () => { cxCho = null; show($('covu-lop'), false); });
+  $('covu-lop').addEventListener('click', e => { if (e.target === $('covu-lop')) { cxCho = null; show($('covu-lop'), false); } });
+
+  function thaCx(i) {
+    if (S && S.rxMo === false) { toast('Quản trò đang tắt thả cảm xúc'); return; }
+    if (!nhaHopLe()) { cxCho = i; moChonNha(); return; }   // chưa chọn nhà: hỏi trước
+    if (!guiCx(i)) { toast('Thả chậm thôi nhé 😄'); return; }
+    demCx[i]++; luaTam++; cx.tha(i, 1); veDemCx(); veCoVu();
+  }
   const demCx = CX.map(() => 0);
   const nutCx = CX.map((e, i) => {
     const b = el('button', 'cx-nut');
     b.type = 'button';
     b.appendChild(document.createTextNode(e));
     b.appendChild(el('span', 'so', ''));
-    b.title = 'Thả ' + e;
-    b.addEventListener('click', () => {
-      if (S && S.rxMo === false) { toast('Quản trò đang tắt thả cảm xúc'); return; }
-      if (!guiCx(i)) { toast('Thả chậm thôi nhé 😄'); return; }
-      demCx[i]++; cx.tha(i, 1); veDemCx();
-    });
+    b.title = 'Thả ' + e + ' — +1 hỏa lực cho nhà bạn cổ vũ';
+    b.addEventListener('click', () => thaCx(i));
     $('kg-cx').appendChild(b);
     return b;
   });
@@ -4586,6 +4677,76 @@ function khoiDongKhanGia(room) {
     });
     veDemCx();
   });
+
+  /* ---------- dự đoán nhà vô địch ---------- */
+  /* id dự đoán giữ cố định theo máy + phòng, để tải lại trang vẫn là một người */
+  const khoaDd = 'kg.' + room + '.dd';
+  let ddId = doc(khoaDd + '.id', '');
+  if (!/^d[a-z0-9]{8,20}$/.test(ddId)) { ddId = 'd' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); luu(khoaDd + '.id', ddId); }
+  let ddCua = doc(khoaDd, null);                      // {v, n, ten} — dự đoán của mình
+  let ddChonTam = null, ddBoQua = 0, ddPhaoDaBan = '';
+
+  function moDuDoanKG() {
+    const dd = S && S.duDoan;
+    if (!dd || !dd.mo) return;
+    const ds = xepHang(S.doi || {});
+    const cua = ddCua && ddCua.v === dd.v ? ddCua.n : null;
+    ddChonTam = ddChonTam || cua;
+    $('dd-ten').value = $('dd-ten').value || (ddCua && ddCua.ten) || $('kg-chat-ten').value || '';
+    const khung = $('dd-ds'); khung.innerHTML = '';
+    ds.forEach(t => {
+      const b = el('button', 'b-nho' + (t.id === ddChonTam ? ' chon' : ''), t.ten);
+      b.type = 'button';
+      b.addEventListener('click', () => { ddChonTam = t.id; moDuDoanKG(); });
+      khung.appendChild(b);
+    });
+    $('dd-ghi').textContent = cua && S.doi[cua] ? 'Bạn đã chọn ' + S.doi[cua].ten + '. Đổi được cho tới khi trận đấu bắt đầu.' : '';
+    show($('dd-lop'), true);
+  }
+  $('dd-gui').addEventListener('click', () => {
+    const dd = S && S.duDoan;
+    if (!dd || !dd.mo) { toast('Dự đoán đã khoá'); show($('dd-lop'), false); return; }
+    if (!ddChonTam || !S.doi[ddChonTam]) { toast('Hãy chọn một nhà'); return; }
+    const ten = $('dd-ten').value.trim().slice(0, 18) || 'Khán giả';
+    if (!$('kg-chat-ten').value.trim()) { $('kg-chat-ten').value = ten; luu(khoaTen, ten); }
+    ddCua = { v: dd.v, n: ddChonTam, ten };
+    luu(khoaDd, ddCua);
+    net.gui(T + 'dd/' + ddId, { v: dd.v, n: ddChonTam, ten, t: Date.now() }, true);   // tin giữ lại
+    show($('dd-lop'), false);
+    toast('Đã ghi nhận: bạn đoán ' + S.doi[ddChonTam].ten + ' vô địch 🔮');
+    veDuDoan();
+  });
+  $('dd-dong').addEventListener('click', () => { ddBoQua = S && S.duDoan ? S.duDoan.v : 0; show($('dd-lop'), false); veDuDoan(); });
+  $('dd-lop').addEventListener('click', e => { if (e.target === $('dd-lop')) $('dd-dong').click(); });
+  $('kg-dd-chip').addEventListener('click', moDuDoanKG);
+
+  function veDuDoan() {
+    const dd = S && S.duDoan;
+    const cua = dd && ddCua && ddCua.v === dd.v ? ddCua : null;
+    const tenNha = id => (S.doi && S.doi[id] ? S.doi[id].ten : '');
+    /* chip: mở popup lại khi đang nhận dự đoán, hoặc nhắc mình đã đoán nhà nào */
+    const chip = $('kg-dd-chip');
+    if (dd && dd.mo) chip.textContent = cua ? '🔮 Bạn đoán: ' + tenNha(cua.n) + ' — đổi' : '🔮 Dự đoán nhà vô địch';
+    else if (dd && !dd.thang && cua) chip.textContent = '🔮 Bạn đoán: ' + tenNha(cua.n);
+    show($('kg-dd-hang'), !!(dd && !dd.thang && (dd.mo || cua)));
+    chip.disabled = !(dd && dd.mo);
+    if (!(dd && dd.mo)) show($('dd-lop'), false);
+
+    /* popup tự bật một lần mỗi vòng cho ai chưa đoán */
+    if (dd && dd.mo && !cua && ddBoQua !== dd.v && $('dd-lop').classList.contains('hidden')) moDuDoanKG();
+
+    /* kết quả chung cuộc */
+    const ket = $('kg-dd-ket');
+    if (!dd || !dd.thang) { show(ket, false); return; }
+    const dung = !!(cua && cua.n === dd.thang);
+    ket.className = 'dd-ket' + (dung ? ' dung' : '');
+    ket.textContent = dung ? '🎉 Bạn đoán đúng! ' + dd.tenThang + ' là nhà vô địch 🏆'
+                    : '🏆 Nhà vô địch: ' + dd.tenThang + (cua ? ' — bạn đã đoán ' + (tenNha(cua.n) || 'nhà khác') : '')
+                      + ' · ' + (dd.soDung || 0) + '/' + (dd.so || 0) + ' người đoán đúng';
+    show(ket, true);
+    const dau = dd.v + '|' + dd.thang;                        // mỗi lần công bố chỉ bắn một lần
+    if (dung && ddPhaoDaBan !== dau) { ddPhaoDaBan = dau; Am.dung(); phaoHoa(6); }
+  }
 
   /* ---------- buff luck ---------- */
   const TIEN_SAN = [20000, 50000, 100000, 200000, 500000];
@@ -4618,7 +4779,7 @@ function khoiDongKhanGia(room) {
     const nha = ((S && S.doi) || {})[idNha] || null;
     veKhungQR(khungQR, nha, { gonNut: !!gonNut });
     const moc = (S && S.moc) || MOC_MAC_DINH;
-    const ke = nha ? mocKeTiep(nha, moc) : null;
+    const ke = nha ? mocKeTiep(nha, moc, (S && S.mocLua) || MOC_LUA_MAC_DINH) : null;
     const tien = Number(nha && nha.tien) || 0;
     if (!nha) { thanh.firstChild.style.width = '0'; chu.textContent = ''; return; }
     if (!ke) {
@@ -4716,6 +4877,18 @@ function khoiDongKhanGia(room) {
         .then(goi => net.gui(T + 'anh/' + bid, goi, true))
         .catch(() => toast('Không mã hoá được ảnh — hãy báo quản trò'));
     }
+    /* lưu đơn + ảnh lên backend (Google Sheets + Drive riêng) qua HTTPS, không qua máy chủ công cộng */
+    const nhaTen = ((S && S.doi) || {})[buffNha] ? S.doi[buffNha].ten : '';
+    const anhGui = anhDaChon;
+    (async () => {
+      let r = null;
+      for (let lan = 0; lan < 3; lan++) {
+        r = await goiApi('/api/buff', { phong: Ma.cua(room).kg, bid, ten, so, nha: nhaTen, lk, anh: anhGui || '' }, { hen: 35000 });
+        if (r.ok || (r.status >= 400 && r.status < 500 && r.status !== 429) || r.status === 503) break;
+        await new Promise(ok => setTimeout(ok, 2000 * (lan + 1)));
+      }
+      if (!r.ok && r.status !== 503) toast('Đã gửi cho quản trò, nhưng chưa lưu được vào sổ giao dịch — nếu cần hãy báo ban kiểm duyệt.');
+    })();
     anhDaChon = null;
     $('buff-anh').value = ''; $('buff-lk').value = ''; show($('buff-anh-xem'), false);
     show($('buff-lop'), false);
@@ -4792,11 +4965,14 @@ function khoiDongKhanGia(room) {
     veBangBuff();
     veNghe();
     veCuu();
+    veDuDoan();
 
     /* thả cảm xúc: quản trò có thể tắt */
     const cxMo = S.rxMo !== false;
     show($('kg-cx'), cxMo);
+    show($('kg-covu'), cxMo && so > 0);
     show($('kg-cx-tat'), !cxMo);
+    veCoVu();
   }
 }
 
