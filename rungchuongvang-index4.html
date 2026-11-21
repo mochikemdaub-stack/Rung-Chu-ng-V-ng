@@ -2135,16 +2135,28 @@ function taoNetKep(T, dsChuyen) {
     if (daChuyen.size > 3000) { const han = Date.now() - MOI * 2; for (const [x, t] of daChuyen) if (t < han) daChuyen.delete(x); }
   }
   /* đăng ký nghe riêng từng máy để biết tin đến từ đâu */
+  /* máy chủ nào đang có người? (người xem điểm danh 9 s/lần, đội 12 s/lần, người nghe thoại 6 s/lần)
+     -> tiếng (nặng) chỉ gửi / chuyển tới máy chủ chính và máy chủ có người trong 45 s gần nhất.
+     ĐĂNG KÝ TRƯỚC phần chuyển tiếp để tin dội về của chính mình không bị tính là "có người". */
+  const hoatDong = ds.map(() => 0);
+  ds.forEach((n, i) => ['kgco/+', 'vao', 'co/+', 'chat', 'dd/+', 'rung'].forEach(f =>
+    n.theo(T + f, (topic, body) => { if (!vuaThay(khoaTin(topic, body))) hoatDong[i] = Date.now(); })));
+  const laTieng = topic => topic.indexOf('/am/') >= 0;
+  const nenGui = (j, topic) => j === 0 || !laTieng(topic) || Date.now() - hoatDong[j] < 45000;
   (dsChuyen || []).forEach(c => {
     ds.forEach((n, i) => n.theo(T + c.loc, (topic, body) => {
       const k = khoaTin(topic, body);
       if (vuaThay(k)) return;                         // tin do chính mình gửi / chuyển -> không chuyển ngược
       ghiNho(k);
-      ds.forEach((m, j) => { if (j !== i) m.guiTho(topic, body, !!c.giu); });
+      hoatDong[i] = Date.now();
+      ds.forEach((m, j) => { if (j !== i && nenGui(j, topic)) m.guiTho(topic, body, !!c.giu); });
     }));
   });
-  /* tin bàn quản trò tự gửi lên cả hai máy: ghi nhớ trước để bản dội về không bị chuyển tiếp lần nữa */
-  const guiCaHai = (topic, body, giu) => { ghiNho(khoaTin(topic, body)); ds.forEach(n => n.guiTho(topic, body, giu)); };
+  /* tin bàn quản trò tự gửi lên các máy: ghi nhớ trước để bản dội về không bị chuyển tiếp lần nữa */
+  const guiCaHai = (topic, body, giu) => {
+    ghiNho(khoaTin(topic, body));
+    ds.forEach((n, j) => { if (nenGui(j, topic)) n.guiTho(topic, body, giu); });
+  };
   return {
     batDau(cb) {
       const tt = ds.map(() => 'dang');
@@ -2653,12 +2665,20 @@ function taoThoai(o) {
    phòng, nên tường lửa nào cho trang chạy thì cũng cho tiếng đi qua.
    Đổi lại: trễ khoảng nửa giây và chất lượng cỡ điện thoại.
    ============================================================ */
-const AM_HZ      = 16000;   // tần số lấy mẫu khi gửi đi
+/* 8 kHz µ-law = chuẩn thoại điện thoại (G.711): giọng nói vẫn rõ, nhẹ bằng 1/2 so với 16 kHz.
+   Cộng với gói kiểu mới (mã hoá thẳng byte, không base64 hai lần): ~90 kbps / người nói thay vì ~230 kbps
+   -> máy chủ công cộng và 4G chuyển kịp, không dồn gói rồi bỏ (nguyên nhân chính của "nghe từng chữ"). */
+const AM_HZ      = 8000;    // tần số lấy mẫu khi gửi đi
 const AM_GOI_MS  = 250;     // mỗi gói chứa bấy nhiêu mili giây tiếng
-const AM_NGUONG  = 0.012;   // dưới mức này coi như im lặng, không gửi
-const AM_DUOI_MS = 1200;    // im rồi vẫn gửi thêm chừng này, khỏi cụt tiếng
-const AM_DEM_MS  = 300;     // đệm trước khi phát, bù mạng giật
-const AM_TRE_MAX = 2500;    // tiếng đến trễ hơn mức này thì bỏ, khỏi dồn ứ
+const AM_NGUONG  = 0.010;   // dưới mức này coi như im lặng, không gửi
+const AM_DUOI_MS = 1500;    // im rồi vẫn gửi thêm chừng này, khỏi cụt cuối câu
+/* bộ đệm chống giật TỰ ĐIỀU CHỈNH theo mạng: bắt đầu 0,6 s; hễ cạn hàng (gói đến trễ) thì
+   tăng thêm, mạng êm lâu thì giảm dần. Đệm cố định 0,3 s cũ quá nhỏ cho máy chủ công cộng + 4G,
+   gói nào trễ là chèn khoảng lặng -> nghe "từng chữ một". */
+const AM_DEM_MS  = 600;     // đệm ban đầu
+const AM_DEM_MIN = 350;     // không giảm dưới mức này
+const AM_DEM_MAX = 1600;    // không tăng quá mức này
+const AM_TRE_MAX = 3200;    // hàng chờ dài quá mức này thì bỏ bớt, khỏi trễ dồn
 
 /* G.711 µ-law: 1 byte một mẫu, giọng nói nghe vẫn rõ */
 function nenMu(x) {
@@ -2755,11 +2775,18 @@ function taoTiengMayChu(o) {
     xuLy.connect(cam); cam.connect(a.destination);
     dangGui = true;
   }
-  async function guiGoi(byte) {
-    try {
-      const k = await layKhoa();
-      o.net.gui(o.T + 'am/' + o.id, await boc(k, { t: o.ten, s: ++stt, d: b64(byte) }));
-    } catch (e) {}
+  let chuoiGui = Promise.resolve();                  // gửi tuần tự: gói sau không bao giờ vượt gói trước
+  function guiGoi(byte) {
+    const s = ++stt;
+    chuoiGui = chuoiGui.then(async () => {
+      try {
+        const k = await layKhoa();
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, k, byte);
+        /* gói v2: mã hoá thẳng byte µ-law (gói cũ JSON+base64 lồng nhau nặng gần gấp đôi) */
+        o.net.gui(o.T + 'am/' + o.id, { v: 2, t: o.ten, s, r: AM_HZ, iv: b64(iv), d: b64(ct) });
+      } catch (e) {}
+    });
   }
   function tatGui() {
     dangGui = false; con = [];
@@ -2783,8 +2810,16 @@ function taoTiengMayChu(o) {
         if (ai === o.id) return;                    // tiếng của chính mình thì bỏ
         let g; try { g = JSON.parse(body); } catch (e) { return; }
         if (!g || !g.iv || !g.d) return;
-        let m; try { m = await moBoc(khoa, g); } catch (e) { return; }
-        if (!m || typeof m.d !== 'string') return;
+        let m;
+        if (g.v === 2) {                              // gói mới: byte µ-law mã hoá trực tiếp
+          try {
+            const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(g.iv) }, khoa, unb64(g.d));
+            m = { t: g.t, s: g.s, r: g.r, byte: new Uint8Array(pt) };
+          } catch (e) { return; }
+        } else {                                      // gói cũ (máy chưa tải lại trang)
+          try { m = await moBoc(khoa, g); } catch (e) { return; }
+          if (!m || typeof m.d !== 'string') return;
+        }
         phatGoi(ai, m);
       });
     }
@@ -2805,14 +2840,16 @@ function taoTiengMayChu(o) {
   }
   function phatGoi(ai, m) {
     const a = layAc(); if (!a) return;
-    let byte; try { byte = unb64(m.d); } catch (e) { return; }
+    let byte = m.byte;
+    if (!byte) { try { byte = unb64(m.d); } catch (e) { return; } }
     const mau = new Float32Array(byte.length);
     for (let i = 0; i < byte.length; i++) mau[i] = giaiMu(byte[i]);
+    const hz = Number(m.r) > 3000 && Number(m.r) < 96000 ? Number(m.r) : 16000;   // gói cũ không ghi r: 16 kHz
     let b;
-    try { b = a.createBuffer(1, mau.length, AM_HZ); b.getChannelData(0).set(mau); }
+    try { b = a.createBuffer(1, mau.length, hz); b.getChannelData(0).set(mau); }
     catch (e) {
-      /* Safari/iOS đời cũ không nhận buffer 16 kHz -> nội suy lên đúng tần số của máy */
-      const ti = a.sampleRate / AM_HZ, n = Math.max(1, Math.floor(mau.length * ti));
+      /* Safari/iOS đời cũ không nhận buffer tần số thấp -> nội suy lên đúng tần số của máy */
+      const ti = a.sampleRate / hz, n = Math.max(1, Math.floor(mau.length * ti));
       try { b = a.createBuffer(1, n, a.sampleRate); } catch (e2) { return; }
       const d = b.getChannelData(0);
       for (let i = 0; i < n; i++) {
@@ -2830,9 +2867,20 @@ function taoTiengMayChu(o) {
     ng.ten = String(m.t || '').slice(0, 24) || ai;
     const dai = b.duration;
     const bayGio = a.currentTime;
-    /* đến sớm thì xếp hàng, đến trễ quá thì bỏ cho khỏi dồn ứ */
-    if (ng.keTiep < bayGio + AM_DEM_MS / 1000) ng.keTiep = bayGio + AM_DEM_MS / 1000;
-    else if (ng.keTiep > bayGio + AM_TRE_MAX / 1000) { ng.keTiep = bayGio + AM_DEM_MS / 1000; }
+    /* ---- bộ đệm chống giật tự điều chỉnh (mỗi người nói một bộ) ----
+       cạn hàng giữa câu (gói đến trễ) -> tăng đệm; 40 gói liền đến kịp -> giảm nhẹ.
+       Câu mới sau khoảng im (> 1,2 s không có gói) không tính là giật. */
+    if (ng.dem == null) { ng.dem = AM_DEM_MS / 1000; ng.kip = 0; }
+    const cauMoi = !ng.denCuoi || bayGioMs - ng.denCuoi > 1200;
+    ng.denCuoi = bayGioMs;
+    if (ng.keTiep < bayGio + 0.03) {                               // hết hàng
+      if (!cauMoi) ng.dem = Math.min(AM_DEM_MAX / 1000, ng.dem + 0.15);
+      ng.keTiep = bayGio + ng.dem; ng.kip = 0;
+    } else if (ng.keTiep > bayGio + AM_TRE_MAX / 1000) {           // dồn quá nhiều -> bỏ bớt, đuổi kịp thời gian thực
+      ng.keTiep = bayGio + ng.dem; ng.kip = 0;
+    } else if (++ng.kip >= 40 && ng.dem > AM_DEM_MIN / 1000) {     // mạng êm lâu -> bớt trễ
+      ng.dem = Math.max(AM_DEM_MIN / 1000, ng.dem - 0.05); ng.kip = 0;
+    }
     const ngu = a.createBufferSource();
     ngu.buffer = b;
     const am = a.createGain(); am.gain.value = amLuong;
