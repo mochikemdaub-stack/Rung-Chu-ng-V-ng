@@ -1604,7 +1604,7 @@ function docBienLai(v) {
    Quản trò vẫn sửa lại được từng nhà ngay trong bàn quản trò. */
 const NHA_SAN = [
   { ten: 'PHÙNG MINH CƯƠNG',            drive: '1xz0Q2GXE2zDzFYBivFmDANED4KC6gNbO', lk: '' },
-  { ten: 'ISOL.HUYNHLAP',               drive: '1LrycYKJqFXMZrdcT64XTm8esrttXzu1Y', lk: 'https://quy.momo.vn/v2/KXsca9FHlm?cover=6749' },
+  { ten: 'ISOL_HUYNHLAP',               drive: '1LrycYKJqFXMZrdcT64XTm8esrttXzu1Y', lk: 'https://quy.momo.vn/v2/KXsca9FHlm?cover=6749' },
   { ten: 'CMBF',                        drive: '1wnWzcBhqeFiULWGNj__8zcHTWU-ccOfd', lk: 'https://docs.google.com/spreadsheets/d/1vQ-6y4LQcFRHtqoUTtWITeZg65pRrHJ4k36FUQUqZ34/edit?usp=drivesdk' },
   { ten: 'Cheng',                       drive: '10U6HKXXijEioQxW0nbjSR63g7R98Skhj', lk: 'https://quy.momo.vn/v2/AJcSlSmDHm?cover=6749' },
   { ten: 'Chạc Chíp',                   drive: '1ByPLXwNj5yErt8aruFkewYy6V1PenZxB', lk: 'https://share.timo.vn/VN/transaction/t8a4gp2wldtl' },
@@ -1642,7 +1642,7 @@ const nhaCua = d => (d && (d.nha || d.ten)) || '';
 const tenBuff = d => (d ? (d.nha && chuanTen(d.nha) !== chuanTen(d.ten) ? d.nha + ' (' + d.ten + ')' : (d.nha || d.ten)) : '');
 const chuanTen = t => String(t == null ? '' : t).toLowerCase().replace(/\s+/g, ' ').trim();
 /* tên cũ đã đổi -> tên mới (phòng/đội tạo trước khi đổi vẫn khớp đúng nhà) */
-const NHA_DOI_TEN = { 'chesse bộ đông cháu': 'Cheese bộ Đông Cháu' };
+const NHA_DOI_TEN = { 'chesse bộ đông cháu': 'Cheese bộ Đông Cháu', 'isol.huynhlap': 'ISOL_HUYNHLAP' };
 const nhaSan = ten => { const k = NHA_DOI_TEN[chuanTen(ten)] || ten; return NHA_SAN.find(n => chuanTen(n.ten) === chuanTen(k)) || null; };
 
 /* Link quỹ KHÁC link biên lai: giữ nguyên ?query và #hash vì nhiều link
