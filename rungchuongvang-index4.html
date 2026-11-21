@@ -519,6 +519,25 @@ body.doi .cuu-dai{padding:6px 10px; font-size:12px; margin-bottom:8px}
 .mach-nhan{margin-left:auto; flex:0 0 auto; font-size:11px; font-weight:800; color:#1B5E20;
   background:#C8F5CE; border:2px solid #2E7D32; border-radius:999px; padding:1px 8px; white-space:nowrap}
 body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
+
+/* ---- góp lửa (hỏa lực) ---- */
+.covu-dong{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0 8px;
+  font-weight:700; font-size:14px}
+.covu-dong .lua-so{background:linear-gradient(180deg,#FFB36B,#FF6A2B); color:#fff; border:2.5px solid #3B2A05;
+  border-radius:999px; padding:1px 10px; font-family:var(--font-tt)}
+.chon-nha .lua-nho{display:block; font-size:12px; font-weight:700; opacity:.8; margin-top:2px}
+.lua-tien{font-size:12px; font-weight:700; color:#B34500}
+/* ---- dự đoán nhà vô địch ---- */
+.dd-chip{cursor:pointer; border:none}
+.dd-ket{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px; padding:10px 14px;
+  background:linear-gradient(180deg,#FFF3B0,#FFD54A); border:var(--vien); border-radius:var(--r);
+  box-shadow:var(--do-bong-nho); font-weight:800}
+.dd-ket.dung{background:linear-gradient(180deg,#C8F5CE,#8FE39B)}
+.dd-dem{display:grid; gap:6px; margin-top:10px}
+.dd-dem .dong{display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; font-weight:700}
+.dd-dem .vach{grid-column:1 / -1; height:8px; border-radius:99px; background:rgba(59,42,5,.12); overflow:hidden}
+.dd-dem .vach i{display:block; height:100%; background:linear-gradient(90deg,#9B5CFF,#FF5FA2)}
+.phao-hoa{position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:80}
 </style>
 </head>
 <body>
@@ -687,6 +706,23 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 
       <div class="the">
         <div class="hang" style="justify-content:space-between">
+          <h3>🔮 Dự đoán nhà vô địch <span class="chip" id="mc-dd-tt">Chưa mở</span></h3>
+          <span class="chip" id="mc-dd-so">0 lượt</span>
+        </div>
+        <p class="phu" style="margin-top:8px">Mở trước khi bắt đầu thi: mọi khán giả thấy popup chọn nhà sẽ thắng chung cuộc. Bấm <b>Mở chuông</b> lần đầu thì dự đoán tự khoá. Cuối trận công bố nhà vô địch — ai đoán đúng sẽ thấy pháo hoa.</p>
+        <div class="hang" style="margin-top:10px;gap:6px">
+          <button class="b-chinh" id="mc-dd-mo">Mở dự đoán</button>
+          <button class="b-nho" id="mc-dd-khoa">Khoá dự đoán</button>
+        </div>
+        <div class="hang" style="margin-top:10px;gap:6px">
+          <select id="mc-dd-thang" style="flex:1;min-width:160px"></select>
+          <button class="b-xanh" id="mc-dd-cong-bo">🏆 Công bố nhà vô địch</button>
+        </div>
+        <div class="dd-dem" id="mc-dd-dem"></div>
+      </div>
+
+      <div class="the">
+        <div class="hang" style="justify-content:space-between">
           <h3>🎙️ Phòng thoại</h3>
           <div class="hang" style="gap:6px">
             <button class="b-nho hidden" id="mc-th-mic">Tắt mic của tôi</button>
@@ -808,6 +844,16 @@ D. Baht
             <label>Mốc donate mở quyền trợ giúp (đồng)</label>
             <div class="gian" id="mc-moc" style="grid-template-columns:1fr 1fr"></div>
           </div>
+          <div>
+            <label>Mốc hỏa lực 🔥 mở quyền trợ giúp (số lần khán giả thả cảm xúc)</label>
+            <div class="gian" id="mc-moc-lua" style="grid-template-columns:1fr 1fr"></div>
+            <p class="phu" style="margin-top:6px">Mỗi quyền mở khi nhà đạt <b>mốc donate HOẶC mốc hỏa lực</b>.</p>
+          </div>
+          <div>
+            <label for="mc-log-key">Khoá ghi log Google Sheets (không bắt buộc)</label>
+            <input id="mc-log-key" type="password" autocomplete="off" placeholder="Trùng ADMIN_KEY trên Vercel thì dòng log được đánh dấu “Xác thực MC”">
+            <p class="phu" id="mc-log-tt" style="margin-top:6px">Đang kiểm tra kết nối Google Sheets…</p>
+          </div>
         </div>
       </div>
     </div>
@@ -899,6 +945,10 @@ D. Baht
   </div>
   <div id="kg-bang-rung" class="hidden" style="margin-bottom:14px"></div>
   <div class="hang hidden" id="kg-tro" style="margin-bottom:14px"></div>
+  <div class="dd-ket hidden" id="kg-dd-ket"></div>
+  <div class="hang hidden" id="kg-dd-hang" style="margin-bottom:14px">
+    <button class="tro-chip dd-chip" id="kg-dd-chip" type="button">🔮 Dự đoán nhà vô địch</button>
+  </div>
 
   <div class="kg-luoi">
     <div class="the">
@@ -921,6 +971,10 @@ D. Baht
         <button class="nut-buff" id="kg-buff">🍀 Buff Luck cho nhà</button>
       </div>
       <div class="cx-thanh" id="kg-cx"></div>
+      <div class="covu-dong" id="kg-covu">
+        <span id="kg-covu-chu">🔥 Chạm emoji để góp lửa cho nhà bạn cổ vũ</span>
+        <button class="b-nho" id="kg-covu-doi" type="button">Chọn nhà</button>
+      </div>
       <p class="phu hidden" id="kg-cx-tat" style="margin:0 0 6px">Quản trò đang tắt thả cảm xúc.</p>
       <div class="chat-ds" id="kg-chat">
         <div class="chat-trong" id="kg-chat-trong">Chưa có tin nhắn nào. Hãy là người đầu tiên cổ vũ!</div>
@@ -1006,6 +1060,35 @@ D. Baht
     <h3 class="cau-hoi" id="cuu-cau-hoi" style="margin-top:14px">…</h3>
     <div class="dap-an" id="cuu-dap-an"></div>
     <p class="phu" id="cuu-xong" style="margin-top:12px"></p>
+  </div>
+</div>
+
+<!-- ======================= HỘP THOẠI CHỌN NHÀ GÓP LỬA ======================= -->
+<div class="lop-phu hidden" id="covu-lop">
+  <div class="hop-thoai">
+    <div class="hang hop-dau" style="justify-content:space-between">
+      <h2>🔥 Góp lửa cho nhà nào?</h2>
+      <button class="b-nho" id="covu-dong">Đóng</button>
+    </div>
+    <p class="phu" style="margin-top:8px">Mỗi lần bạn chạm emoji = <b>+1 điểm hỏa lực</b> cho nhà bạn chọn. Đủ hỏa lực, nhà đó mở khoá quyền trợ giúp. Bạn đổi nhà được bất cứ lúc nào.</p>
+    <div class="chon-nha" id="covu-ds"></div>
+  </div>
+</div>
+
+<!-- ======================= HỘP THOẠI DỰ ĐOÁN NHÀ VÔ ĐỊCH ======================= -->
+<div class="lop-phu hidden" id="dd-lop">
+  <div class="hop-thoai">
+    <div class="hang hop-dau" style="justify-content:space-between">
+      <h2>🔮 Dự đoán nhà vô địch</h2>
+      <button class="b-nho" id="dd-dong">Để sau</button>
+    </div>
+    <p class="phu" style="margin-top:8px">Bạn nghĩ nhà nào sẽ <b>thắng chung cuộc</b>? Chọn trước khi trận đấu bắt đầu — đoán đúng sẽ có pháo hoa dành riêng cho bạn 🎆</p>
+    <label for="dd-ten" style="margin-top:12px">Tên của bạn</label>
+    <input id="dd-ten" maxlength="18" autocomplete="off" placeholder="Để ghi nhận dự đoán của bạn">
+    <label style="margin-top:12px">Chọn nhà</label>
+    <div class="chon-nha" id="dd-ds"></div>
+    <button class="b-chinh b-khoi" id="dd-gui" style="margin-top:14px;width:100%">Gửi dự đoán</button>
+    <p class="phu" id="dd-ghi" style="margin-top:8px"></p>
   </div>
 </div>
 
@@ -1341,10 +1424,143 @@ const TRO = [
 const troTheoMa = ma => TRO.find(t => t.ma === ma) || null;
 const tienVN = n => (Number(n) || 0).toLocaleString('vi-VN') + 'đ';
 
+/* Góp lửa: mỗi lần khán giả thả cảm xúc = +1 điểm hỏa lực cho nhà họ cổ vũ.
+   Quyền thứ i mở khi nhà đạt mốc donate HOẶC mốc hỏa lực thứ i. */
+const MOC_LUA_MAC_DINH = [300, 800, 1500, 3000];
+const mocTien = (moc, i) => (moc && moc[i] != null ? moc[i] : MOC_MAC_DINH[i]);
+const mocLuaI = (ml, i) => (ml && ml[i] != null ? ml[i] : MOC_LUA_MAC_DINH[i]);
+const soLua = n => (Number(n) || 0).toLocaleString('vi-VN');
+
 /* đội đã mở khoá quyền thứ i chưa (mốc lấy từ thiết lập của quản trò) */
-function daMo(doi, i, moc) { return (Number(doi && doi.tien) || 0) >= (moc[i] != null ? moc[i] : MOC_MAC_DINH[i]); }
+function daMo(doi, i, moc, mocLua) {
+  if ((Number(doi && doi.tien) || 0) >= mocTien(moc, i)) return true;
+  return (Number(doi && doi.lua) || 0) >= mocLuaI(mocLua, i);
+}
 function daDung(doi, ma)   { return ((doi && doi.daDung) || []).indexOf(ma) >= 0; }
-function conDung(doi, i, moc, ma) { return daMo(doi, i, moc) && !daDung(doi, ma); }
+function conDung(doi, i, moc, ma, mocLua) { return daMo(doi, i, moc, mocLua) && !daDung(doi, ma); }
+
+/* mốc hỏa lực kế tiếp của quyền chưa mở (bỏ qua quyền đã mở nhờ donate) */
+function mocLuaKeTiep(doi, moc, mocLua) {
+  const lua = Number(doi && doi.lua) || 0;
+  for (let i = 0; i < TRO.length; i++) {
+    if (daMo(doi, i, moc, mocLua)) continue;
+    const m = mocLuaI(mocLua, i);
+    return { i, moc: m, thieu: m - lua, truoc: i === 0 ? 0 : mocLuaI(mocLua, i - 1) };
+  }
+  return null;
+}
+
+/* ---------- backend: Vercel API -> Google Sheets ----------
+   Mở từ file:// thì gọi thẳng bản deploy; còn lại gọi cùng tên miền. */
+const API_GOC = /^https?:$/.test(location.protocol) ? '' : 'https://rung-chuong-vang-pearl.vercel.app';
+
+async function goiApi(duong, body, tuy) {
+  tuy = tuy || {};
+  const ctl = ('AbortController' in window) ? new AbortController() : null;
+  const hen = setTimeout(() => { if (ctl) ctl.abort(); }, tuy.hen || 30000);
+  try {
+    const r = await fetch(API_GOC + duong, {
+      method: body === undefined ? 'GET' : 'POST',
+      headers: Object.assign(body === undefined ? {} : { 'Content-Type': 'application/json' }, tuy.headers || {}),
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal: ctl ? ctl.signal : undefined,
+    });
+    let j = null; try { j = await r.json(); } catch (e) {}
+    return { ok: r.ok && !!(j && j.ok), status: r.status, j };
+  } catch (e) { return { ok: false, status: 0, j: null }; }
+  finally { clearTimeout(hen); }
+}
+
+/* Hàng đợi log của bàn quản trò: gom theo loại, gửi theo lô, lỗi thì thử lại.
+   Lưu vào máy để tải lại trang không mất log chưa gửi. */
+function taoHangLog(phong, khoaLuu, layKhoa, onTrangThai) {
+  const hang = doc(khoaLuu, {}) || {};
+  let dangGui = false, nghiDen = 0, thayDoi = false;
+  const bao = tt => { try { onTrangThai && onTrangThai(tt); } catch (e) {} };
+  async function xa() {
+    if (dangGui || Date.now() < nghiDen) return;
+    dangGui = true;
+    try {
+      for (const loai of Object.keys(hang)) {
+        while (hang[loai] && hang[loai].length) {
+          const lo = hang[loai].slice(0, 200);
+          const k = layKhoa();
+          const r = await goiApi('/api/log', { phong, loai, rows: lo }, { headers: k ? { 'x-rcv-key': k } : {} });
+          if (r.ok) { hang[loai].splice(0, lo.length); thayDoi = true; bao('on'); continue; }
+          if (r.status === 503) { nghiDen = Date.now() + 60000; bao('chua'); return; }       // chưa nối Sheets
+          if (r.status >= 400 && r.status < 500 && r.status !== 429) {                       // lô hỏng: bỏ, khỏi kẹt mãi
+            hang[loai].splice(0, lo.length); thayDoi = true; bao('loi'); continue;
+          }
+          nghiDen = Date.now() + 8000; bao('loi'); return;                                    // mạng/Sheets lỗi: thử lại sau
+        }
+      }
+    } finally {
+      dangGui = false;
+      if (thayDoi) { thayDoi = false; luu(khoaLuu, hang); }
+    }
+  }
+  setInterval(xa, 4000);
+  setInterval(() => { if (thayDoi) { thayDoi = false; luu(khoaLuu, hang); } }, 5000);
+  return {
+    them(loai, dong) {
+      const ds = (hang[loai] = hang[loai] || []);
+      ds.push(dong);
+      if (ds.length > 5000) ds.splice(0, ds.length - 5000);
+      thayDoi = true;
+    },
+    xa,
+    con: () => Object.values(hang).reduce((a, d) => a + d.length, 0),
+  };
+}
+
+/* ---------- pháo hoa (canvas, nhẹ cho máy yếu) ---------- */
+function phaoHoa(giay) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = document.createElement('canvas'); c.className = 'phao-hoa';
+  document.body.appendChild(c);
+  const g = c.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  const co = () => { c.width = innerWidth * dpr; c.height = innerHeight * dpr; };
+  co(); addEventListener('resize', co);
+  const MAU = ['#FFD54A', '#FF5FA2', '#9B5CFF', '#4FC3F7', '#69F0AE', '#FF8A3D'];
+  const hat = [], ten = [];
+  const het = performance.now() + (giay || 5) * 1000;
+  let banCuoi = 0, khung = 0;
+  function ban() {
+    ten.push({ x: c.width * (0.15 + Math.random() * 0.7), y: c.height, vx: (Math.random() - .5) * 2 * dpr,
+               vy: -(c.height / 55) * (0.85 + Math.random() * 0.3), dinh: c.height * (0.18 + Math.random() * 0.3),
+               mau: MAU[Math.floor(Math.random() * MAU.length)] });
+  }
+  function no(t) {
+    const so = 46;
+    for (let i = 0; i < so; i++) {
+      const goc = (Math.PI * 2 * i) / so, toc = (2 + Math.random() * 3.2) * dpr;
+      hat.push({ x: t.x, y: t.y, vx: Math.cos(goc) * toc, vy: Math.sin(goc) * toc, song: 1,
+                 mau: Math.random() < .3 ? '#FFFFFF' : t.mau });
+    }
+  }
+  function ve(tg) {
+    g.globalCompositeOperation = 'destination-out';
+    g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(0, 0, c.width, c.height);
+    g.globalCompositeOperation = 'lighter';
+    if (tg < het && tg - banCuoi > 380) { banCuoi = tg; ban(); if (Math.random() < .4) ban(); }
+    for (let i = ten.length - 1; i >= 0; i--) {
+      const t = ten[i]; t.x += t.vx; t.y += t.vy; t.vy += 0.12 * dpr;
+      g.fillStyle = t.mau; g.fillRect(t.x - 2 * dpr, t.y - 2 * dpr, 4 * dpr, 6 * dpr);
+      if (t.y <= t.dinh || t.vy >= 0) { no(t); ten.splice(i, 1); }
+    }
+    for (let i = hat.length - 1; i >= 0; i--) {
+      const h = hat[i]; h.x += h.vx; h.y += h.vy; h.vy += 0.05 * dpr; h.vx *= .985; h.vy *= .985; h.song -= .012;
+      if (h.song <= 0) { hat.splice(i, 1); continue; }
+      g.globalAlpha = Math.max(0, h.song); g.fillStyle = h.mau;
+      g.beginPath(); g.arc(h.x, h.y, 2.2 * dpr, 0, Math.PI * 2); g.fill();
+    }
+    g.globalAlpha = 1;
+    if (tg < het || hat.length || ten.length) { if (++khung < 2400) return requestAnimationFrame(ve); }
+    removeEventListener('resize', co); c.remove();
+  }
+  requestAnimationFrame(ve);
+}
 
 /* mốc kế tiếp chưa đạt -> dùng cho thanh tiến độ */
 function mocKeTiep(doi, moc) {
@@ -1547,22 +1763,28 @@ function taoCamXuc(tuy) {
   };
 }
 
-/* gom nhiều lần bấm thành một tin, chặn spam */
-function taoGuiCamXuc(net, T, sid) {
-  const cho = {}; let hen = null, mocGiay = 0, trongGiay = 0;
-  return function (i) {
+/* gom nhiều lần bấm thành một tin, chặn spam.
+   layNha (tuỳ chọn) trả về id nhà đang cổ vũ -> bàn quản trò cộng hỏa lực cho nhà đó. */
+function taoGuiCamXuc(net, T, sid, layNha) {
+  const cho = {}; let hen = null, mocGiay = 0, trongGiay = 0, nhaGom = null;
+  function xa() {
+    clearTimeout(hen); hen = null;
+    const ds = [];
+    for (const k in cho) { ds.push([Number(k), cho[k]]); delete cho[k]; }
+    if (ds.length) net.gui(T + 'cx', nhaGom ? { s: sid, ds, n: nhaGom } : { s: sid, ds });
+  }
+  const gui = function (i) {
     const gio = Date.now();
     if (gio - mocGiay > 1000) { mocGiay = gio; trongGiay = 0; }
     if (++trongGiay > CX_GIAY_TOI_DA) return false;
+    const nha = layNha ? (layNha() || null) : null;
+    if (nha !== nhaGom) { xa(); nhaGom = nha; }          // đổi nhà giữa chừng: gửi phần cũ trước
     cho[i] = (cho[i] || 0) + 1;
-    if (!hen) hen = setTimeout(() => {
-      hen = null;
-      const ds = [];
-      for (const k in cho) { ds.push([Number(k), cho[k]]); delete cho[k]; }
-      if (ds.length) net.gui(T + 'cx', { s: sid, ds });
-    }, CX_GOM);
+    if (!hen) hen = setTimeout(xa, CX_GOM);
     return true;
   };
+  gui.xa = xa;
+  return gui;
 }
 
 /* ---------- phòng thoại (WebRTC, báo hiệu qua MQTT, mã hoá bằng mã đội) ---------- */
@@ -2484,6 +2706,7 @@ function veXepHang(khung, doi, idRung, hienOnline, hienTien) {
     const phu = [t.dung + ' câu đúng'];
     if (t.sai) phu.push(t.sai + ' câu sai');
     if (hienTien && t.tien) phu.push(tienVN(t.tien));
+    if (t.lua) phu.push('🔥 ' + soLua(t.lua));
     if (hienOnline && t.online === false) phu.push('mất kết nối');
     giua.appendChild(el('div', 'lech', phu.join(' · ')));
     const diem = el('div', 'sd', String(t.diem));
@@ -2578,9 +2801,12 @@ function khoiDongMC(room, biMat) {
                  rung: [], giu: null, chon: null, doi: {}, loai: [], anXh: false,
                  moc: MOC_MAC_DINH.slice(), x2: null, hs: null, cd: null, anTien: false,
                  chatMo: true, chatTu: 0, cho: [], soNha: 0, daCK: [], dem: null,
-                 micMo: [], rxMo: true, khoaPhong: false, kieuThoai: 'mc', cuu: null };
+                 micMo: [], rxMo: true, khoaPhong: false, kieuThoai: 'mc', cuu: null,
+                 mocLua: MOC_LUA_MAC_DINH.slice(), duDoan: null };
   let S = Object.assign({}, mdOn, doc(KHOA + '.state', {}));
   if (!Array.isArray(S.moc) || S.moc.length !== 4) S.moc = MOC_MAC_DINH.slice();
+  if (!Array.isArray(S.mocLua) || S.mocLua.length !== 4) S.mocLua = MOC_LUA_MAC_DINH.slice();
+  if (S.duDoan && typeof S.duDoan.v !== 'number') S.duDoan = null;
   S.soNha = Number(S.soNha) || 0;
   if (!Array.isArray(S.daCK)) S.daCK = [];
   if (!Array.isArray(S.micMo)) S.micMo = [];
@@ -2590,6 +2816,7 @@ function khoiDongMC(room, biMat) {
   for (const id in S.doi) {                       // nạp lại phòng cũ: bổ sung trường mới
     const d = S.doi[id];
     if (d.tien == null) d.tien = 0;
+    if (d.lua == null) d.lua = 0;
     if (d.diem == null) d.diem = d.dung || 0;
     if (!Array.isArray(d.daDung)) d.daDung = [];
     if (!d.ma) d.ma = maNha(++S.soNha);
@@ -2600,6 +2827,18 @@ function khoiDongMC(room, biMat) {
   let giayChuyen = doc(KHOA + '.giay', 6);
   let nhipCuoi = {};   // teamId -> thời điểm nhận tin cuối
   const kgCoMat = {};  // id khán giả -> {ten, luc} — ai đang xem và đã xưng tên
+
+  /* ---------- log Google Sheets (qua /api/log) ---------- */
+  const veLogTT = tt => {
+    const o = $('mc-log-tt'); if (!o) return;
+    o.textContent = tt === 'on' ? '✅ Đang ghi log realtime vào Google Sheets.'
+                  : tt === 'chua' ? '⚠️ Backend chưa nối Google Sheets (thiếu GAS_URL/GAS_SECRET trên Vercel). Log được giữ lại trên máy này và tự gửi khi nối xong.'
+                  : '⚠️ Gửi log lỗi — đang thử lại. Log chưa gửi vẫn giữ trên máy này.';
+  };
+  const hangLog = taoHangLog(codes.kg, KHOA + '.hanglog', () => doc('logkey', ''), veLogTT);
+  /* số quyền đã mở của từng nhà -> phát hiện lúc vừa mở thêm quyền */
+  const soMoCu = {};
+  for (const id in S.doi) soMoCu[id] = TRO.filter((t, i) => daMo(S.doi[id], i, S.moc, S.mocLua)).length;
 
   /* chỉ gọi người thân trong số khán giả ĐÃ NHẬP TÊN — màn chiếu không nhập tên
      nên sẽ không bị gọi trúng. */
@@ -2683,7 +2922,8 @@ function khoiDongMC(room, biMat) {
              moc: S.moc, x2: S.x2, hs: S.hs, cd: S.cd, anTien: S.anTien,
              chatMo: S.chatMo !== false, chatTu: S.chatTu || 0, cho: S.cho || [], daCK: S.daCK || [],
              dem: S.dem, micMo: S.micMo || [], rxMo: S.rxMo !== false, khoaPhong: !!S.khoaPhong,
-             kieuThoai: S.kieuThoai === 'p2p' ? 'p2p' : 'mc', cuu: S.cuu || null };
+             kieuThoai: S.kieuThoai === 'p2p' ? 'p2p' : 'mc', cuu: S.cuu || null,
+             mocLua: S.mocLua, duDoan: S.duDoan || null };
              /* KHÔNG gửi token đối soát: nó chỉ được lưu ở máy quản trò */
   }
 
@@ -2705,7 +2945,7 @@ function khoiDongMC(room, biMat) {
     if (!cu) {
       if (S.khoaPhong) { daTuChoi.add(id); net.gui(T + 'rieng/' + id, { khoaPhong: true }, true); return; }
       const san = nhaSan(ten);
-      S.doi[id] = { id, ten, dung: 0, sai: 0, diem: 0, tien: 0, daDung: [], online: true, ma: maNha(++S.soNha),
+      S.doi[id] = { id, ten, dung: 0, sai: 0, diem: 0, tien: 0, lua: 0, daDung: [], online: true, ma: maNha(++S.soNha),
                     lkSao: (san && san.lk) || '',
                     qr:   (san && (san.qr   || (san.drive && qrAnh(san.drive)))) || '',
                     qrMo: (san && (san.qrMo || (san.drive && qrMo(san.drive)))) || '' };
@@ -2753,7 +2993,7 @@ function khoiDongMC(room, biMat) {
     if (!d) return;
     const i = TRO.findIndex(t => t.ma === m.ma);
     if (i < 0) return;
-    if (!daMo(d, i, S.moc)) return;                 // chưa đủ mốc donate
+    if (!daMo(d, i, S.moc, S.mocLua)) return;       // chưa đủ mốc donate / hỏa lực
     if (daDung(d, m.ma)) return;                    // mỗi quyền chỉ dùng một lần
     if (!dungQuyen(id, m.ma)) return;               // sai thời điểm
     d.daDung.push(m.ma);
@@ -2889,9 +3129,10 @@ function khoiDongMC(room, biMat) {
     const d = S.doi[id]; if (!d) return;
     so = Math.round(Number(so));
     if (!isFinite(so) || so === 0) { toast('Số tiền không hợp lệ'); return; }
-    const truoc = TRO.filter((t, i) => daMo(d, i, S.moc)).length;
+    const truoc = TRO.filter((t, i) => daMo(d, i, S.moc, S.mocLua)).length;
     d.tien = Math.max(0, (Number(d.tien) || 0) + so);
-    const sau = TRO.filter((t, i) => daMo(d, i, S.moc)).length;
+    const sau = TRO.filter((t, i) => daMo(d, i, S.moc, S.mocLua)).length;
+    soMoCu[id] = sau;
     (nhatKy[id] = nhatKy[id] || []).unshift({ so, nguoi: String(nguoi || '').slice(0, 30), t: Date.now(), lk: lk || '' });
     if (nhatKy[id].length > 60) nhatKy[id].length = 60;
     luu(KHOA + '.nhatky', nhatKy);
@@ -2912,9 +3153,12 @@ function khoiDongMC(room, biMat) {
     if (i < 0) return;
     const y = S.cho[i];
     S.cho.splice(i, 1);
-    if (!nhan) { phat(); toast('Đã bỏ yêu cầu buff'); return; }
     const d = S.doi[y.teamId];
-    if (!d) { phat(); toast('Nhà này không còn trong phòng'); return; }
+    const ghiDuyet = kq => hangLog.them('duyet', {
+      bid: y.bid, ketQua: kq, ten: y.ten, nha: d ? d.ten : '(nhà đã rời)', so: y.so,
+      tongNha: d ? (Number(d.tien) || 0) : 0, luc: Date.now() });
+    if (!nhan) { ghiDuyet('Từ chối'); phat(); toast('Đã bỏ yêu cầu buff'); return; }
+    if (!d) { ghiDuyet('Từ chối'); phat(); toast('Nhà này không còn trong phòng'); return; }
     if (y.lk) {
       const bl = docBienLai(y.lk);
       if (bl && (S.daCK || []).indexOf(bl.khoa) < 0) {
@@ -2923,13 +3167,160 @@ function khoiDongMC(room, biMat) {
       }
     }
     themTien(y.teamId, y.so, y.ten, y.lk);           /* themTien đã gọi phat() */
+    ghiDuyet('Duyệt');                                /* sau themTien: tổng quỹ đã cộng */
     guiChatHeThong('🍀 ' + y.ten + ' vừa buff ' + tienVN(y.so) + ' cho ' + d.ten + '!');
   }
+
+  /* ============================================================
+     GÓP LỬA — cộng hỏa lực từ cảm xúc của khán giả
+     Bàn quản trò là nơi duy nhất cộng điểm; khán giả chỉ gửi số lần bấm.
+     ============================================================ */
+  const luaSid = {};                 // sid -> {tu, so}: chặn một máy bấm quá CX_GIAY_TOI_DA/giây
+  let luaDoi = false;
+  let luaLog = {};                   // teamId -> điểm cộng thêm chưa ghi log
+  net.theo(T + 'cx', (_t, body) => {
+    if (S.rxMo === false) return;
+    let m; try { m = JSON.parse(body); } catch (e) { return; }
+    if (!m || typeof m.n !== 'string' || !Array.isArray(m.ds)) return;
+    const d = S.doi[m.n.slice(0, 40)]; if (!d) return;
+    let so = 0;
+    m.ds.forEach(c => { if (Array.isArray(c)) so += Math.max(0, Math.min(CX_GIAY_TOI_DA, Math.floor(Number(c[1]) || 0))); });
+    const sid = String(m.s || '').slice(0, 24) || '?';
+    const gio = Date.now();
+    const r = luaSid[sid] || (luaSid[sid] = { tu: gio, so: 0 });
+    if (gio - r.tu > 1000) { r.tu = gio; r.so = 0; }
+    const duoc = Math.max(0, Math.min(so, CX_GIAY_TOI_DA - r.so));
+    if (!duoc) return;
+    r.so += duoc;
+    d.lua = (Number(d.lua) || 0) + duoc;
+    luaLog[d.id] = (luaLog[d.id] || 0) + duoc;
+    luaDoi = true;
+  });
+  /* phát lại tối đa 2 giây/lần thay vì mỗi cú bấm — 2000 người bấm cùng lúc vẫn nhẹ */
+  setInterval(() => {
+    if (!luaDoi) return;
+    luaDoi = false;
+    for (const id in S.doi) {
+      const d = S.doi[id];
+      const sau = TRO.filter((t, i) => daMo(d, i, S.moc, S.mocLua)).length;
+      if (sau > (soMoCu[id] || 0)) {
+        Am.dung();
+        toast(d.ten + ' đủ hỏa lực, mở khoá “' + TRO[sau - 1].ten + '”!');
+        guiChatHeThong('🔥 Khán giả góp lửa giúp ' + d.ten + ' mở khoá “' + TRO[sau - 1].ten + '”!');
+      }
+      soMoCu[id] = sau;
+    }
+    phat();
+  }, 2000);
+  setInterval(() => {                 // ghi log hỏa lực mỗi 30 giây, gộp theo nhà
+    const gio = Date.now();
+    for (const sid in luaSid) if (gio - luaSid[sid].tu > 10000) delete luaSid[sid];
+    for (const id in luaLog) {
+      const d = S.doi[id];
+      if (d && luaLog[id] > 0) hangLog.them('hoaluc', { nha: d.ten, cong: luaLog[id], tong: Number(d.lua) || 0 });
+    }
+    luaLog = {};
+  }, 30000);
+
+  /* ============================================================
+     DỰ ĐOÁN NHÀ VÔ ĐỊCH
+     Mỗi khán giả giữ một tin "giữ lại" (retained) ở rcvang/<phòng>/dd/<id>,
+     nên bàn quản trò tải lại trang vẫn nhận đủ, và chỉ bàn quản trò nghe topic này.
+     ============================================================ */
+  let duDoanDs = doc(KHOA + '.dudoan', {});          // {vong: {kgId: {n, ten, t}}}
+  let ddDoi = false;
+  const dsVong = () => (S.duDoan ? (duDoanDs[S.duDoan.v] = duDoanDs[S.duDoan.v] || {}) : {});
+  net.theo(T + 'dd/+', (topic, body) => {
+    if (!body || !S.duDoan) return;
+    const ai = topic.slice(topic.lastIndexOf('/') + 1).slice(0, 40);
+    let m; try { m = JSON.parse(body); } catch (e) { return; }
+    if (!m || m.v !== S.duDoan.v || typeof m.n !== 'string') return;
+    const d = S.doi[m.n.slice(0, 40)]; if (!d) return;
+    const ds = dsVong();
+    const cu = ds[ai];
+    if (cu && cu.n === d.id) return;                                  // tin giữ lại nhận lần nữa
+    /* đã khoá: chỉ nhận tin được gửi trước lúc khoá (tin giữ lại đến muộn khi tải lại trang) */
+    if (!S.duDoan.mo && !(Number(m.t) > 0 && Number(m.t) <= (S.duDoan.khoaLuc || 0))) return;
+    if (S.duDoan.thang) return;                                       // đã công bố thì thôi
+    const ten = String(m.ten == null ? '' : m.ten).trim().slice(0, 24) || 'Khán giả';
+    ds[ai] = { n: d.id, ten, t: Date.now() };
+    hangLog.them('dudoan', { vong: S.duDoan.v, kgId: ai, ten, nha: d.ten, luc: Number(m.t) || Date.now() });
+    ddDoi = true;
+  });
+  setInterval(() => {
+    if (!ddDoi) return;
+    ddDoi = false;
+    luu(KHOA + '.dudoan', duDoanDs);
+    if (S.duDoan) S.duDoan.so = Object.keys(dsVong()).length;
+    phat();
+  }, 2000);
+
+  function moDuDoan() {
+    if (!Object.keys(S.doi).length) { toast('Chưa có nhà nào trong phòng để dự đoán'); return; }
+    if (S.duDoan && S.duDoan.mo) { toast('Dự đoán đang mở rồi'); return; }
+    if (S.duDoan && !S.duDoan.thang && !confirm('Vòng dự đoán hiện tại chưa công bố. Mở vòng mới? (dự đoán cũ vẫn còn trong Google Sheets)')) return;
+    const v = (S.duDoan ? S.duDoan.v : 0) + 1;
+    S.duDoan = { v, mo: true, khoaLuc: 0, thang: null, tenThang: '', so: 0, soDung: 0 };
+    duDoanDs[v] = {};
+    luu(KHOA + '.dudoan', duDoanDs);
+    Am.mo(); phat();
+    guiChatHeThong('🔮 Dự đoán nhà vô địch đã mở — chọn nhà bạn tin sẽ thắng chung cuộc!');
+    toast('Đã mở dự đoán vòng ' + v);
+  }
+  function khoaDuDoan(tuDong) {
+    if (!S.duDoan || !S.duDoan.mo) { if (!tuDong) toast('Dự đoán không mở'); return; }
+    S.duDoan.mo = false; S.duDoan.khoaLuc = Date.now();
+    phat();
+    toast((tuDong ? 'Trận đấu bắt đầu — ' : '') + 'đã khoá dự đoán (' + (S.duDoan.so || 0) + ' lượt)');
+  }
+  function congBoVoDich(id) {
+    if (!S.duDoan) { toast('Chưa mở dự đoán nào'); return; }
+    const d = S.doi[id]; if (!d) { toast('Hãy chọn nhà vô địch'); return; }
+    if (S.duDoan.thang && !confirm('Đã công bố ' + S.duDoan.tenThang + '. Công bố lại thành ' + d.ten + '?')) return;
+    if (S.duDoan.mo) { S.duDoan.mo = false; S.duDoan.khoaLuc = Date.now(); }
+    const ds = dsVong();
+    const tong = Object.keys(ds).length;
+    const dung = Object.values(ds).filter(x => x.n === id).length;
+    Object.assign(S.duDoan, { thang: id, tenThang: d.ten, so: tong, soDung: dung });
+    hangLog.them('ketqua', { vong: S.duDoan.v, nha: d.ten, soDuDoan: tong, soDung: dung });
+    hangLog.xa();
+    Am.dung(); phat();
+    guiChatHeThong('🏆 ' + d.ten + ' vô địch! ' + dung + '/' + tong + ' khán giả đã đoán đúng 🎆');
+  }
+  function veDuDoanMC() {
+    const dd = S.duDoan;
+    $('mc-dd-tt').textContent = !dd ? 'Chưa mở' : dd.thang ? 'Vòng ' + dd.v + ' · đã công bố' : dd.mo ? 'Vòng ' + dd.v + ' · đang mở' : 'Vòng ' + dd.v + ' · đã khoá';
+    $('mc-dd-so').textContent = (dd ? (dd.so || 0) : 0) + ' lượt';
+    $('mc-dd-mo').textContent = dd && !dd.mo ? 'Mở vòng dự đoán mới' : 'Mở dự đoán';
+    $('mc-dd-khoa').disabled = !(dd && dd.mo);
+    const ds = xepHang(S.doi);
+    const kn = $('mc-dd-thang'); const cu = kn.value;
+    kn.innerHTML = '';
+    ds.forEach(t => { const o = el('option', null, '#' + t.hang + ' ' + t.ten + ' (' + t.diem + ' điểm)'); o.value = t.id; kn.appendChild(o); });
+    kn.value = dd && dd.thang && S.doi[dd.thang] ? dd.thang : (ds.some(t => t.id === cu) ? cu : ((ds[0] && ds[0].id) || ''));
+    const dem = {}; Object.values(dsVong()).forEach(x => { dem[x.n] = (dem[x.n] || 0) + 1; });
+    const tong = Object.values(dem).reduce((a, b) => a + b, 0);
+    const khung = $('mc-dd-dem'); khung.innerHTML = '';
+    if (!dd) return;
+    ds.forEach(t => {
+      const n = dem[t.id] || 0;
+      const dong = el('div', 'dong');
+      dong.appendChild(el('span', null, (dd.thang === t.id ? '🏆 ' : '') + t.ten));
+      dong.appendChild(el('span', null, n + (tong ? ' · ' + Math.round(n * 100 / tong) + '%' : '')));
+      const vach = el('div', 'vach'); const i = el('i'); i.style.width = (tong ? n * 100 / tong : 0) + '%';
+      vach.appendChild(i); dong.appendChild(vach);
+      khung.appendChild(dong);
+    });
+  }
+  $('mc-dd-mo').addEventListener('click', moDuDoan);
+  $('mc-dd-khoa').addEventListener('click', () => khoaDuDoan(false));
+  $('mc-dd-cong-bo').addEventListener('click', () => congBoVoDich($('mc-dd-thang').value));
 
   /* ---------- các hành động ---------- */
   function moChuong() {
     if (!cauHoi.length) { toast('Chưa có câu hỏi nào'); return; }
     xoaDem();
+    if (S.duDoan && S.duDoan.mo) khoaDuDoan(true);     // trận bắt đầu -> khoá dự đoán
     S.luot++; S.pha = 'mo'; S.rung = []; S.giu = null; S.chon = null; S.loai = [];
     Am.mo(); phat();   /* giữ nguyên quyền trợ giúp: chúng gắn với câu hỏi, không phải lượt rung */
   }
