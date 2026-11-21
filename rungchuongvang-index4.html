@@ -577,6 +577,11 @@ body.doi .mach-nhan{font-size:9.5px; padding:1px 6px}
 .lua-hang .vach i.tien{background:linear-gradient(90deg,#8FE39B,#2E7D32)}
 .qr-hop img{cursor:zoom-in}
 #phong-to img{width:min(92vw,88vh,760px); height:auto; object-fit:contain; background:#fff}
+#phong-to button.phong-to-x{position:fixed; top:max(14px, env(safe-area-inset-top)); right:14px; z-index:91;
+  width:48px; height:48px; padding:0 0 4px; border-radius:50%; background:#fff; color:#3B2A05;
+  border:3px solid #3B2A05; box-shadow:0 4px 0 #3B2A05; font:700 34px/1 Arial, sans-serif;
+  display:grid; place-items:center; cursor:pointer}
+#phong-to button.phong-to-x:hover{background:#FFF3B0}
 .phong-to{z-index:90}
 .lua-hang.cua-toi{background:linear-gradient(180deg,#FFE2C2,#FFC28A); border-color:#FF6A2B}
 .bl-xh{display:grid; gap:4px; margin-top:8px}
@@ -1104,7 +1109,7 @@ D. Baht
   </div>
 </section>
 
-<div class="phong-to hidden" id="phong-to"><img id="phong-to-img" alt="Ảnh chuyển khoản"></div>
+<div class="phong-to hidden" id="phong-to"><button type="button" class="phong-to-x" id="phong-to-dong" aria-label="Đóng">×</button><img id="phong-to-img" alt="Ảnh chuyển khoản"></div>
 
 <!-- ======================= HỘP THOẠI NGƯỜI THÂN HỖ TRỢ ======================= -->
 <div class="lop-phu hidden" id="cuu-lop">
